@@ -51,6 +51,238 @@ void selectionSort(int arr[], int n);
 // Bubble Sort
 void bubbleSort(int arr[], int n);
 
+int main() {
+    int choice, size, value, key, maxSize, top = -1, front = -1, rear = -1;
+    int *arr, *queue, *stack;
+    Node *head = NULL;
+    int running = 1;
+
+    printf("Welcome to the Data Structures and Algorithms Menu!\n");
+
+    while (running) {
+        printf("\nChoose an option:\n");
+        printf("1. Queue Operations\n");
+        printf("2. Stack Operations\n");
+        printf("3. Linked List Operations\n");
+        printf("4. Array Display\n");
+        printf("5. Linear Search\n");
+        printf("6. Binary Search\n");
+        printf("7. Heap Sort\n");
+        printf("8. Radix Sort\n");
+        printf("9. Quick Sort\n");
+        printf("10. Insertion Sort\n");
+        printf("11. Selection Sort\n");
+        printf("12. Bubble Sort\n");
+        printf("0. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1: // Queue Operations
+                printf("Enter maximum queue size: ");
+                scanf("%d", &maxSize);
+                queue = (int *)malloc(maxSize * sizeof(int));
+                int queueRunning = 1;
+                while (queueRunning) {
+                    printf("\nQueue Operations:\n");
+                    printf("1. Enqueue\n2. Dequeue\n3. Exit Queue Menu\nEnter choice: ");
+                    scanf("%d", &choice);
+                    if (choice == 1) {
+                        printf("Enter value to enqueue: ");
+                        scanf("%d", &value);
+                        enqueue(queue, &front, &rear, maxSize, value);
+                    } else if (choice == 2) {
+                        int dequeued = dequeue(queue, &front, &rear);
+                        if (dequeued != -1)
+                            printf("Dequeued: %d\n", dequeued);
+                    } else if (choice == 3) {
+                        queueRunning = 0;
+                    }
+                }
+                free(queue);
+                break;
+
+            case 2: // Stack Operations
+                printf("Enter maximum stack size: ");
+                scanf("%d", &maxSize);
+                stack = (int *)malloc(maxSize * sizeof(int));
+                int stackRunning = 1;
+                while (stackRunning) {
+                    printf("\nStack Operations:\n");
+                    printf("1. Push\n2. Pop\n3. Exit Stack Menu\nEnter choice: ");
+                    scanf("%d", &choice);
+                    if (choice == 1) {
+                        printf("Enter value to push: ");
+                        scanf("%d", &value);
+                        push(stack, &top, maxSize, value);
+                    } else if (choice == 2) {
+                        int popped = pop(stack, &top);
+                        if (popped != -1)
+                            printf("Popped: %d\n", popped);
+                    } else if (choice == 3) {
+                        stackRunning = 0;
+                    }
+                }
+                free(stack);
+                break;
+
+            case 3: // Linked List Operations
+                printf("\nLinked List Operations:\n");
+                printf("1. Insert Node\n2. Display List\nEnter choice: ");
+                scanf("%d", &choice);
+                if (choice == 1) {
+                    printf("Enter value to insert: ");
+                    scanf("%d", &value);
+                    head = insertLinkedList(head, value);
+                } else if (choice == 2) {
+                    displayLinkedList(head);
+                }
+                break;
+
+            case 4: // Array Display
+                printf("Enter size of array: ");
+                scanf("%d", &size);
+                arr = (int *)malloc(size * sizeof(int));
+                printf("Enter %d elements: ", size);
+                for (int i = 0; i < size; i++) {
+                    scanf("%d", &arr[i]);
+                }
+                displayArray(arr, size);
+                free(arr);
+                break;
+
+            case 5: // Linear Search
+                printf("Enter size of array: ");
+                scanf("%d", &size);
+                arr = (int *)malloc(size * sizeof(int));
+                printf("Enter %d elements: ", size);
+                for (int i = 0; i < size; i++) {
+                    scanf("%d", &arr[i]);
+                }
+                printf("Enter key to search: ");
+                scanf("%d", &key);
+                int linearIndex = linearSearch(arr, size, key);
+                if (linearIndex != -1)
+                    printf("Key found at index: %d\n", linearIndex);
+                else
+                    printf("Key not found.\n");
+                free(arr);
+                break;
+
+            case 6: // Binary Search
+                printf("Enter size of sorted array: ");
+                scanf("%d", &size);
+                arr = (int *)malloc(size * sizeof(int));
+                printf("Enter %d sorted elements: ", size);
+                for (int i = 0; i < size; i++) {
+                    scanf("%d", &arr[i]);
+                }
+                printf("Enter key to search: ");
+                scanf("%d", &key);
+                int binaryIndex = binarySearch(arr, 0, size - 1, key);
+                if (binaryIndex != -1)
+                    printf("Key found at index: %d\n", binaryIndex);
+                else
+                    printf("Key not found.\n");
+                free(arr);
+                break;
+
+            case 7: // Heap Sort
+                printf("Enter size of array: ");
+                scanf("%d", &size);
+                arr = (int *)malloc(size * sizeof(int));
+                printf("Enter %d elements: ", size);
+                for (int i = 0; i < size; i++) {
+                    scanf("%d", &arr[i]);
+                }
+                heapSort(arr, size);
+                printf("Sorted Array: ");
+                displayArray(arr, size);
+                free(arr);
+                break;
+
+            case 8: // Radix Sort
+                printf("Enter size of array: ");
+                scanf("%d", &size);
+                arr = (int *)malloc(size * sizeof(int));
+                printf("Enter %d elements: ", size);
+                for (int i = 0; i < size; i++) {
+                    scanf("%d", &arr[i]);
+                }
+                radixSort(arr, size);
+                printf("Sorted Array: ");
+                displayArray(arr, size);
+                free(arr);
+                break;
+
+            case 9: // Quick Sort
+                printf("Enter size of array: ");
+                scanf("%d", &size);
+                arr = (int *)malloc(size * sizeof(int));
+                printf("Enter %d elements: ", size);
+                for (int i = 0; i < size; i++) {
+                    scanf("%d", &arr[i]);
+                }
+                quickSort(arr, 0, size - 1);
+                printf("Sorted Array: ");
+                displayArray(arr, size);
+                free(arr);
+                break;
+
+            case 10: // Insertion Sort
+                printf("Enter size of array: ");
+                scanf("%d", &size);
+                arr = (int *)malloc(size * sizeof(int));
+                printf("Enter %d elements: ", size);
+                for (int i = 0; i < size; i++) {
+                    scanf("%d", &arr[i]);
+                }
+                insertionSort(arr, size);
+                printf("Sorted Array: ");
+                displayArray(arr, size);
+                free(arr);
+                break;
+
+            case 11: // Selection Sort
+                printf("Enter size of array: ");
+                scanf("%d", &size);
+                arr = (int *)malloc(size * sizeof(int));
+                printf("Enter %d elements: ", size);
+                for (int i = 0; i < size; i++) {
+                    scanf("%d", &arr[i]);
+                }
+                selectionSort(arr, size);
+                printf("Sorted Array: ");
+                displayArray(arr, size);
+                free(arr);
+                break;
+
+            case 12: // Bubble Sort
+                printf("Enter size of array: ");
+                scanf("%d", &size);
+                arr = (int *)malloc(size * sizeof(int));
+                printf("Enter %d elements: ", size);
+                for (int i = 0; i < size; i++) {
+                    scanf("%d", &arr[i]);
+                }
+                bubbleSort(arr, size);
+                printf("Sorted Array: ");
+                displayArray(arr, size);
+                free(arr);
+                break;
+
+            case 0:
+                running = 0;
+                printf("Exiting program. Goodbye!\n");
+                break;
+
+            default:
+                printf("Invalid choice. Try again.\n");
+        }
+    }
+    return 0;
+}
+
 // 1. Queue
 void enqueue(int queue[], int* front, int* rear, int maxSize, int value) {
     if (*rear == maxSize - 1) {
