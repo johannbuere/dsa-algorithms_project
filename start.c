@@ -22,27 +22,31 @@ void sortingMenu();
 void searchingMenu();
 void treeMenu();
 
+
+//print array func prototype
+void printArray(int arr[], int n, const char *sortType, int iterations);
+
 // Sorting Algo's
 
 // Heap Sort
-void maxHeapify(int arr[], int n, int i, int* iterations);
-void minHeapify(int arr[], int n, int i, int* iterations);
+void maxHeapify(int arr[], int n, int i, int *iterations, const char *sortType);
+void minHeapify(int arr[], int n, int i, int *iterations, const char *sortType);
 void heapSort();
 
 // radix Sort
-void countSortRadix(int arr[], int n, int exp, int* iterations);
-void lsdRadixSort(int arr[], int n, int* iterations);
+void countSortRadix(int arr[], int n, int exp, int* iterations, const char *sortType);
+void lsdRadixSort(int arr[], int n, int* iterations, const char *sortType);
 void radixSort();
 
 // quick Sort
-int lomutoPartition(int arr[], int low, int high, int* iterations);
-int hoarePartition(int arr[], int low, int high, int* iterations);
-void quickSortHelper(int arr[], int low, int high, int* iterations, int partitionType);
+int lomutoPartition(int arr[], int low, int high, int* iterations, const char *sortType);
+int hoarePartition(int arr[], int low, int high, int* iterations, const char *sortType);
+void quickSortHelper(int arr[], int low, int high, int* iterations, int partitionType, const char *sortType);
 void quickSort();
 
 // Merge Sort
-void mergeSortHelper(int arr[], int left, int right);
-void merge(int arr[], int left, int mid, int right);  
+void mergeSortHelper(int arr[], int l, int r, int* iterations, const char *sortType);
+void merge(int arr[], int l, int m, int r, int* iterations, const char *sortType);
 void mergeSort();
 
 // random sort
@@ -332,9 +336,19 @@ void treeMenu(){
 }
 
 
+// printing array func
+void printArray(int arr[], int n, const char *sortType, int iterations) {
+    printf("%s - Iteration %d: ", sortType, iterations);
+    for (int i = 0; i < n; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+}
+
+
 
 // Heap Sort 
-void maxHeapify(int arr[], int n, int i, int *iterations) {
+void maxHeapify(int arr[], int n, int i, int *iterations, const char *sortType) {
     int largest = i;
     int left = 2 * i + 1;
     int right = 2 * i + 2;
@@ -349,13 +363,12 @@ void maxHeapify(int arr[], int n, int i, int *iterations) {
         arr[i] = arr[largest];
         arr[largest] = temp;
         (*iterations)++;
-        maxHeapify(arr, n, largest, iterations);
+        printArray(arr, n, sortType, *iterations);  // Print after swap
+        maxHeapify(arr, n, largest, iterations, sortType);
     }
 }
 
-
-// Heap sort
-void minHeapify(int arr[], int n, int i, int *iterations) {
+void minHeapify(int arr[], int n, int i, int *iterations, const char *sortType) {
     int smallest = i;
     int left = 2 * i + 1;
     int right = 2 * i + 2;
@@ -370,7 +383,8 @@ void minHeapify(int arr[], int n, int i, int *iterations) {
         arr[i] = arr[smallest];
         arr[smallest] = temp;
         (*iterations)++;
-        minHeapify(arr, n, smallest, iterations);
+        printArray(arr, n, sortType, *iterations);  // Print after swap
+        minHeapify(arr, n, smallest, iterations, sortType);
     }
 }
 
@@ -383,31 +397,34 @@ void heapSort() {
     for (int i = 0; i < n; i++)
         scanf("%d", &arr[i]);
 
-    // Ask for Heap Type (Max or Min)
     printf("Choose Heap Type (1 for Max Heap, 2 for Min Heap): ");
     scanf("%d", &type);
-    
 
-    // Build the heap based on the chosen type
+    const char *sortType = (type == 1) ? "Max Heap Sort" : "Min Heap Sort";
+
     if (type == 1) {
-        // Max Heap
-        for (int i = n / 2 - 1; i >= 0; i--)
-            maxHeapify(arr, n, i, &iterations);
+        for (int i = n / 2 - 1; i >= 0; i--) {
+            maxHeapify(arr, n, i, &iterations, sortType);  // Pass pointer
+        }
         for (int i = n - 1; i > 0; i--) {
             int temp = arr[0];
             arr[0] = arr[i];
             arr[i] = temp;
-            maxHeapify(arr, i, 0, &iterations);
+            iterations++;  // Increment iterations directly
+            printArray(arr, n, sortType, iterations);  // Print after each swap
+            maxHeapify(arr, i, 0, &iterations, sortType);  // Pass pointer
         }
     } else {
-        // Min Heap
-        for (int i = n / 2 - 1; i >= 0; i--)
-            minHeapify(arr, n, i, &iterations);
+        for (int i = n / 2 - 1; i >= 0; i--) {
+            minHeapify(arr, n, i, &iterations, sortType);  // Pass pointer
+        }
         for (int i = n - 1; i > 0; i--) {
             int temp = arr[0];
             arr[0] = arr[i];
             arr[i] = temp;
-            minHeapify(arr, i, 0, &iterations);
+            iterations++;  // Increment iterations directly
+            printArray(arr, n, sortType, iterations);  // Print after each swap
+            minHeapify(arr, i, 0, &iterations, sortType);  // Pass pointer
         }
     }
 
@@ -417,8 +434,9 @@ void heapSort() {
     printf("\nIterations: %d\n", iterations);
 }
 
+
 //Radix sort
-void countSortRadix(int arr[], int n, int exp, int* iterations) {
+void countSortRadix(int arr[], int n, int exp, int* iterations, const char *sortType) {
     int output[n];
     int count[10] = {0};
     (*iterations)++;
@@ -433,15 +451,16 @@ void countSortRadix(int arr[], int n, int exp, int* iterations) {
     }
     for (int i = 0; i < n; i++)
         arr[i] = output[i];
+    printArray(arr, n, sortType, *iterations);  // Print after each iteration
 }
 
-void lsdRadixSort(int arr[], int n, int* iterations) {
+void lsdRadixSort(int arr[], int n, int* iterations, const char *sortType) {
     int max = arr[0];
     for (int i = 1; i < n; i++)
         if (arr[i] > max)
             max = arr[i];
     for (int exp = 1; max / exp > 0; exp *= 10)
-        countSortRadix(arr, n, exp, iterations);
+        countSortRadix(arr, n, exp, iterations, sortType);
 }
 
 void radixSort() {
@@ -456,8 +475,10 @@ void radixSort() {
     printf("Choose Radix Type (1 for LSD, 2 for MSD): ");
     scanf("%d", &type);
 
+    const char *sortType = "Radix Sort";
+
     if (type == 1) {
-        lsdRadixSort(arr, n, &iterations);
+        lsdRadixSort(arr, n, &iterations, sortType);
     } else {
         printf("MSD Radix Sort is not implemented yet.\n");
     }
@@ -468,8 +489,9 @@ void radixSort() {
     printf("\nIterations: %d\n", iterations);
 }
 
+
 // Quick Sort
-int lomutoPartition(int arr[], int low, int high, int* iterations) {
+int lomutoPartition(int arr[], int low, int high, int* iterations, const char *sortType) {
     int pivot = arr[high];
     int i = low - 1;
     for (int j = low; j < high; j++) {
@@ -479,6 +501,7 @@ int lomutoPartition(int arr[], int low, int high, int* iterations) {
             int temp = arr[i];
             arr[i] = arr[j];
             arr[j] = temp;
+            printArray(arr, high + 1, sortType, *iterations);  // Print after each iteration
         }
     }
     int temp = arr[i + 1];
@@ -487,7 +510,7 @@ int lomutoPartition(int arr[], int low, int high, int* iterations) {
     return i + 1;
 }
 
-int hoarePartition(int arr[], int low, int high, int* iterations) {
+int hoarePartition(int arr[], int low, int high, int* iterations, const char *sortType) {
     int pivot = arr[low];
     int i = low - 1, j = high + 1;
     while (1) {
@@ -504,18 +527,19 @@ int hoarePartition(int arr[], int low, int high, int* iterations) {
         int temp = arr[i];
         arr[i] = arr[j];
         arr[j] = temp;
+        printArray(arr, high + 1, sortType, *iterations);  // Print after each iteration
     }
 }
 
-void quickSortHelper(int arr[], int low, int high, int* iterations, int partitionType) {
+void quickSortHelper(int arr[], int low, int high, int* iterations, int partitionType, const char *sortType) {
     if (low < high) {
         int pi;
         if (partitionType == 1)
-            pi = lomutoPartition(arr, low, high, iterations);
+            pi = lomutoPartition(arr, low, high, iterations, sortType);
         else
-            pi = hoarePartition(arr, low, high, iterations);
-        quickSortHelper(arr, low, pi - 1, iterations, partitionType);
-        quickSortHelper(arr, pi + 1, high, iterations, partitionType);
+            pi = hoarePartition(arr, low, high, iterations, sortType);
+        quickSortHelper(arr, low, pi - 1, iterations, partitionType, sortType);
+        quickSortHelper(arr, pi + 1, high, iterations, partitionType, sortType);
     }
 }
 
@@ -531,7 +555,9 @@ void quickSort() {
     printf("Choose Partition Type (1 for Lomuto, 2 for Hoare): ");
     scanf("%d", &type);
 
-    quickSortHelper(arr, 0, n - 1, &iterations, type);
+    const char *sortType = "Quick Sort";
+
+    quickSortHelper(arr, 0, n - 1, &iterations, type, sortType);
 
     printf("Sorted Array: ");
     for (int i = 0; i < n; i++)
@@ -540,49 +566,76 @@ void quickSort() {
 }
 
 
+
 // Merge 
-void merge(int arr[], int left, int mid, int right) {
-    int n1 = mid - left + 1;
-    int n2 = right - mid;
+void merge(int arr[], int l, int m, int r, int* iterations, const char *sortType) {
+    int n1 = m - l + 1;
+    int n2 = r - m;
     int L[n1], R[n2];
 
-    for (int i = 0; i < n1; i++) L[i] = arr[left + i];
-    for (int i = 0; i < n2; i++) R[i] = arr[mid + 1 + i];
+    for (int i = 0; i < n1; i++)
+        L[i] = arr[l + i];
+    for (int i = 0; i < n2; i++)
+        R[i] = arr[m + 1 + i];
 
-    int i = 0, j = 0, k = left;
+    int i = 0, j = 0, k = l;
     while (i < n1 && j < n2) {
-        arr[k++] = (L[i] <= R[j]) ? L[i++] : R[j++];
+        (*iterations)++;
+        if (L[i] <= R[j]) {
+            arr[k] = L[i];
+            i++;
+        } else {
+            arr[k] = R[j];
+            j++;
+        }
+        k++;
+        printArray(arr, r + 1, sortType, *iterations);  // Print after each merge step
     }
-    while (i < n1) arr[k++] = L[i++];
-    while (j < n2) arr[k++] = R[j++];
+
+    while (i < n1) {
+        arr[k] = L[i];
+        i++;
+        k++;
+        (*iterations)++;
+        printArray(arr, r + 1, sortType, *iterations);  // Print after adding remaining elements
+    }
+
+    while (j < n2) {
+        arr[k] = R[j];
+        j++;
+        k++;
+        (*iterations)++;
+        printArray(arr, r + 1, sortType, *iterations);  // Print after adding remaining elements
+    }
 }
 
-void mergeSortHelper(int arr[], int left, int right) {
-    if (left < right) {
-        int mid = left + (right - left) / 2;
-        mergeSortHelper(arr, left, mid);
-        mergeSortHelper(arr, mid + 1, right);
-        merge(arr, left, mid, right);
+void mergeSortHelper(int arr[], int l, int r, int* iterations, const char *sortType) {
+    if (l < r) {
+        int m = l + (r - l) / 2;
+        mergeSortHelper(arr, l, m, iterations, sortType);
+        mergeSortHelper(arr, m + 1, r, iterations, sortType);
+        merge(arr, l, m, r, iterations, sortType);
     }
 }
 
-
-//Merge Sort
 void mergeSort() {
-    int n;
-    printf("Enter the size of the array: ");
+    int n, iterations = 0;
+    printf("Enter the number of elements: ");
     scanf("%d", &n);
-
     int arr[n];
-    printf("Enter %d elements: ", n);
-    for (int i = 0; i < n; i++) scanf("%d", &arr[i]);
+    printf("Enter the elements: ");
+    for (int i = 0; i < n; i++)
+        scanf("%d", &arr[i]);
 
-    mergeSortHelper(arr, 0, n - 1);
+    const char *sortType = "Merge Sort";
+    mergeSortHelper(arr, 0, n - 1, &iterations, sortType);
 
     printf("Sorted Array: ");
-    for (int i = 0; i < n; i++) printf("%d ", arr[i]);
-    printf("\n");
+    for (int i = 0; i < n; i++)
+        printf("%d ", arr[i]);
+    printf("\nIterations: %d\n", iterations);
 }
+
 
 // Random Sort
 void randSort() {
@@ -623,13 +676,15 @@ void randSort() {
 
 // Insertion Sort
 void insertSort() {
-    int n;
+    int n, iterations = 0;  
     printf("Enter the size of the array: ");
     scanf("%d", &n);
 
     int arr[n];
     printf("Enter %d elements: ", n);
     for (int i = 0; i < n; i++) scanf("%d", &arr[i]);
+
+    const char *sortType = "Insertion Sort";  
 
     for (int i = 1; i < n; i++) {
         int key = arr[i];
@@ -640,6 +695,9 @@ void insertSort() {
             j--;
         }
         arr[j + 1] = key;
+
+        iterations++;  
+        printArray(arr, n, sortType, iterations);  
     }
 
     printf("Sorted Array: ");
@@ -647,9 +705,9 @@ void insertSort() {
     printf("\n");
 }
 
-// Counting Sort
+
 void countSort() {
-    int n;
+    int n, iterations = 0;  // Add iterations counter
     printf("Enter the size of the array: ");
     scanf("%d", &n);
 
@@ -664,15 +722,28 @@ void countSort() {
     int count[max + 1];
     for (int i = 0; i <= max; i++) count[i] = 0;
 
-    for (int i = 0; i < n; i++) count[arr[i]]++;
+    // Count the occurrences of each element
+    for (int i = 0; i < n; i++) {
+        count[arr[i]]++;
+    }
 
+    iterations++;  // Increment iteration after count array is filled
+    printArray(count, max + 1, "Counting Sort - Count Array", iterations);  // Print count array after counting
+
+    // Update count array with cumulative counts
     for (int i = 1; i <= max; i++) count[i] += count[i - 1];
+
+    iterations++;  // Increment iteration after cumulative count
+    printArray(count, max + 1, "Counting Sort - Cumulative Count", iterations);  // Print cumulative count array
 
     int output[n];
     for (int i = n - 1; i >= 0; i--) {
         output[count[arr[i]] - 1] = arr[i];
         count[arr[i]]--;
     }
+
+    iterations++;  // Increment iteration after placing elements in output array
+    printArray(output, n, "Counting Sort - Output Array", iterations);  // Print output array
 
     printf("Sorted Array: ");
     for (int i = 0; i < n; i++) printf("%d ", output[i]);
@@ -682,7 +753,7 @@ void countSort() {
 
 // selection sort
 void selecSort() {
-    int n;
+    int n, iterations = 0;
     printf("Enter the number of elements: ");
     scanf("%d", &n);
     
@@ -692,12 +763,9 @@ void selecSort() {
         scanf("%d", &arr[i]);
     }
     
-    printf("Initial Array: ");
-    for (int i = 0; i < n; i++) {
-        printf("%d ", arr[i]);
-    }
-    printf("\n");
-    
+    // Initial array print
+    printArray(arr, n, "Selection Sort - Initial Array", ++iterations);
+
     // Selection Sort Algorithm with display after each iteration
     for (int i = 0; i < n - 1; i++) {
         int minIdx = i;
@@ -710,26 +778,19 @@ void selecSort() {
         int temp = arr[minIdx];
         arr[minIdx] = arr[i];
         arr[i] = temp;
-        
+
         // Display array after the iteration
-        printf("After iteration %d: ", i + 1);
-        for (int k = 0; k < n; k++) {
-            printf("%d ", arr[k]);
-        }
-        printf("\n");
+        printArray(arr, n, "Selection Sort - After Iteration", ++iterations);
     }
 
+    // Final sorted array print
     printf("Sorted Array: ");
-    for (int i = 0; i < n; i++) {
-        printf("%d ", arr[i]);
-    }
-    printf("\n");
+    printArray(arr, n, "Selection Sort - Sorted Array", ++iterations);
 }
-
 
 // bubble sort
 void bubbleSort() {
-    int n;
+    int n, iterations = 0;
     printf("Enter the number of elements: ");
     scanf("%d", &n);
     
@@ -739,12 +800,9 @@ void bubbleSort() {
         scanf("%d", &arr[i]);
     }
     
-    printf("Initial Array: ");
-    for (int i = 0; i < n; i++) {
-        printf("%d ", arr[i]);
-    }
-    printf("\n");
-    
+    // Initial Array print
+    printArray(arr, n, "Bubble Sort - Initial Array", ++iterations);
+
     // Bubble Sort Algorithm with display after each iteration
     for (int i = 0; i < n - 1; i++) {
         for (int j = 0; j < n - i - 1; j++) {
@@ -756,16 +814,10 @@ void bubbleSort() {
             }
         }
         // Display array after the iteration
-        printf("After iteration %d: ", i + 1);
-        for (int k = 0; k < n; k++) {
-            printf("%d ", arr[k]);
-        }
-        printf("\n");
+        printArray(arr, n, "Bubble Sort - After Iteration", ++iterations);
     }
 
+    // Final sorted array print
     printf("Sorted Array: ");
-    for (int i = 0; i < n; i++) {
-        printf("%d ", arr[i]);
-    }
-    printf("\n");
+    printArray(arr, n, "Bubble Sort - Sorted Array", ++iterations);
 }
