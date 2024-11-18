@@ -5,6 +5,8 @@ Progress Report:
 The sorting algorithms have been completed and integrated into the program. 
 Menus for selecting sorting methods and options are also functional. 
 The next step is to refine the program by addressing any remaining errors and improving the user experience for better usability and clarity.
+
+Every other feature other than "Sorting" in the Main Menu is still undergoing development.
 */
 
 
@@ -109,10 +111,10 @@ int main() {
 void mainMenu() {
     printf("\n=== Main Menu ===\n");
     printf("1) Linear DS\n");
-    printf("2) Non-Linear DS\n");
-    printf("3) Strings\n");
+    printf("2) Non-Linear DS [Not Yet]\n");
+    printf("3) Strings[Not Yet]\n");
     printf("4) Sorting\n");
-    printf("5) Searching\n");
+    printf("5) Searching[Not Yet]\n");
     printf("6) Quit\n");
 }
 
