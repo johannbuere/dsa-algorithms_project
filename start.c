@@ -363,7 +363,7 @@ void maxHeapify(int arr[], int n, int i, int *iterations, const char *sortType) 
         arr[i] = arr[largest];
         arr[largest] = temp;
         (*iterations)++;
-        printArray(arr, n, sortType, *iterations);  // Print after swap
+        printArray(arr, n, sortType, *iterations);  
         maxHeapify(arr, n, largest, iterations, sortType);
     }
 }
@@ -383,7 +383,7 @@ void minHeapify(int arr[], int n, int i, int *iterations, const char *sortType) 
         arr[i] = arr[smallest];
         arr[smallest] = temp;
         (*iterations)++;
-        printArray(arr, n, sortType, *iterations);  // Print after swap
+        printArray(arr, n, sortType, *iterations);  
         minHeapify(arr, n, smallest, iterations, sortType);
     }
 }
@@ -398,8 +398,8 @@ void heapSort() {
         scanf("%d", &arr[i]);
 
     printf("Choose Heap Type (1 for Max Heap, 2 for Min Heap): ");
+    while (getchar() != '\n'); // Clear the input buffer
     scanf("%d", &type);
-
     const char *sortType = (type == 1) ? "Max Heap Sort" : "Min Heap Sort";
 
     if (type == 1) {
