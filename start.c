@@ -334,8 +334,6 @@ void treeMenu(){
 
 
 // Heap Sort 
-#include <stdio.h>
-
 void maxHeapify(int arr[], int n, int i, int *iterations) {
     int largest = i;
     int left = 2 * i + 1;
