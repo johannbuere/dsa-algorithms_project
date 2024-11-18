@@ -17,50 +17,19 @@ void linearDSMenu();
 void nonlinDSMenu();
 void treeMenu();
 
-/*
-Function prototypes for my pre-made codes for the program. Will be using after finishing the program flow and main loops:
-
-// Queue
-void enqueue(int queue[], int* front, int* rear, int maxSize, int value);
-int dequeue(int queue[], int* front, int* rear);
-
-// Stack
-void push(int stack[], int* top, int maxSize, int value);
-int pop(int stack[], int* top);
-
-// Linked List
-typedef struct Node Node;
-Node* insertLinkedList(Node* head, int value);
-void displayLinkedList(Node* head);
-
-// Array
-void displayArray(int arr[], int size);
-
-// Binary & Linear Search
-int linearSearch(int arr[], int size, int key);
-int binarySearch(int arr[], int left, int right, int key);
+// Sorting Algo's
 
 // Heap Sort
-void heapify(int arr[], int n, int i);
-void heapSort(int arr[], int n);
-
-// Radix Sort
-int getMax(int arr[], int n);
-void countSort(int arr[], int n, int exp);
-void radixSort(int arr[], int n);
-
-// Quick Sort
-void quickSort(int arr[], int low, int high);
-
-// Insertion Sort
-void insertionSort(int arr[], int n);
-
-// Selection Sort
-void selectionSort(int arr[], int n);
-
-// Bubble Sort
-void bubbleSort(int arr[], int n);
-*/
+void maxHeapify(int arr[], int n, int i, int* iterations);
+void minHeapify(int arr[], int n, int i, int* iterations);
+void heapSort();
+void countSortRadix(int arr[], int n, int exp, int* iterations);
+void lsdRadixSort(int arr[], int n, int* iterations);
+void radixSort();
+int lomutoPartition(int arr[], int low, int high, int* iterations);
+int hoarePartition(int arr[], int low, int high, int* iterations);
+void quickSortHelper(int arr[], int low, int high, int* iterations, int partitionType);
+void quickSort();
 
 
 
@@ -335,129 +304,88 @@ void treeMenu(){
 
 
 
-/*
-The following code are my pre-made code for the inmplemenetions. Will change, edit, add, or delete a few parts after fixing the program flow:
-
-// 1. Queue
-void enqueue(int queue[], int* front, int* rear, int maxSize, int value) {
-    if (*rear == maxSize - 1) {
-        printf("Queue Overflow\n");
-        return;
-    }
-    if (*front == -1) *front = 0;
-    queue[++(*rear)] = value;
-}
-
-int dequeue(int queue[], int* front, int* rear) {
-    if (*front == -1 || *front > *rear) {
-        printf("Queue Underflow\n");
-        return -1;
-    }
-    return queue[(*front)++];
-}
-
-// 2. Stack
-void push(int stack[], int* top, int maxSize, int value) {
-    if (*top == maxSize - 1) {
-        printf("Stack Overflow\n");
-        return;
-    }
-    stack[++(*top)] = value;
-}
-
-int pop(int stack[], int* top) {
-    if (*top == -1) {
-        printf("Stack Underflow\n");
-        return -1;
-    }
-    return stack[(*top)--];
-}
-
-// 3. Linked List
-typedef struct Node {
-    int data;
-    struct Node* next;
-} Node;
-
-Node* insertLinkedList(Node* head, int value) {
-    Node* newNode = (Node*)malloc(sizeof(Node));
-    newNode->data = value;
-    newNode->next = NULL;
-    if (!head) return newNode;
-    Node* temp = head;
-    while (temp->next) temp = temp->next;
-    temp->next = newNode;
-    return head;
-}
-
-void displayLinkedList(Node* head) {
-    while (head) {
-        printf("%d -> ", head->data);
-        head = head->next;
-    }
-    printf("NULL\n");
-}
-
-// 4. Array
-void displayArray(int arr[], int size) {
-    for (int i = 0; i < size; i++) {
-        printf("%d ", arr[i]);
-    }
-    printf("\n");
-}
-
-// 5. Binary & Linear Search
-int linearSearch(int arr[], int size, int key) {
-    for (int i = 0; i < size; i++) {
-        if (arr[i] == key) return i;
-    }
-    return -1;
-}
-
-int binarySearch(int arr[], int left, int right, int key) {
-    while (left <= right) {
-        int mid = left + (right - left) / 2;
-        if (arr[mid] == key) return mid;
-        else if (arr[mid] < key) left = mid + 1;
-        else right = mid - 1;
-    }
-    return -1;
-}
-
-// 6. Heap Sort
-void heapify(int arr[], int n, int i) {
-    int largest = i, left = 2 * i + 1, right = 2 * i + 2;
-    if (left < n && arr[left] > arr[largest]) largest = left;
-    if (right < n && arr[right] > arr[largest]) largest = right;
+// Heap Sort 
+void maxHeapify(int arr[], int n, int i, int* iterations) {
+    int largest = i;
+    int left = 2 * i + 1;
+    int right = 2 * i + 2;
+    (*iterations)++;
+    if (left < n && arr[left] > arr[largest])
+        largest = left;
+    if (right < n && arr[right] > arr[largest])
+        largest = right;
     if (largest != i) {
         int temp = arr[i];
         arr[i] = arr[largest];
         arr[largest] = temp;
-        heapify(arr, n, largest);
+        maxHeapify(arr, n, largest, iterations);
     }
 }
 
-void heapSort(int arr[], int n) {
-    for (int i = n / 2 - 1; i >= 0; i--)
-        heapify(arr, n, i);
-    for (int i = n - 1; i > 0; i--) {
-        int temp = arr[0];
-        arr[0] = arr[i];
-        arr[i] = temp;
-        heapify(arr, i, 0);
+void minHeapify(int arr[], int n, int i, int* iterations) {
+    int smallest = i;
+    int left = 2 * i + 1;
+    int right = 2 * i + 2;
+    (*iterations)++;
+    if (left < n && arr[left] < arr[smallest])
+        smallest = left;
+    if (right < n && arr[right] < arr[smallest])
+        smallest = right;
+    if (smallest != i) {
+        int temp = arr[i];
+        arr[i] = arr[smallest];
+        arr[smallest] = temp;
+        minHeapify(arr, n, smallest, iterations);
     }
 }
 
-// 7. Radix Sort
-int getMax(int arr[], int n) {
-    int max = arr[0];
-    for (int i = 1; i < n; i++)
-        if (arr[i] > max) max = arr[i];
-    return max;
+
+// Radix Sort
+void heapSort() {
+    int n, type, iterations = 0;
+    printf("Enter the number of elements: ");
+    scanf("%d", &n);
+    int arr[n];
+    printf("Enter the elements: ");
+    for (int i = 0; i < n; i++)
+        scanf("%d", &arr[i]);
+
+    printf("Choose Heap Type (1 for Max Heap, 2 for Min Heap): ");
+    scanf("%d", &type);
+
+    if (type == 1) {
+        // Max Heap
+        for (int i = n / 2 - 1; i >= 0; i--)
+            maxHeapify(arr, n, i, &iterations);
+        for (int i = n - 1; i > 0; i--) {
+            int temp = arr[0];
+            arr[0] = arr[i];
+            arr[i] = temp;
+            maxHeapify(arr, i, 0, &iterations);
+        }
+    } else {
+        // Min Heap
+        for (int i = n / 2 - 1; i >= 0; i--)
+            minHeapify(arr, n, i, &iterations);
+        for (int i = n - 1; i > 0; i--) {
+            int temp = arr[0];
+            arr[0] = arr[i];
+            arr[i] = temp;
+            minHeapify(arr, i, 0, &iterations);
+        }
+    }
+
+    printf("Sorted Array: ");
+    for (int i = 0; i < n; i++)
+        printf("%d ", arr[i]);
+    printf("\nIterations: %d\n", iterations);
 }
 
-void countSort(int arr[], int n, int exp) {
-    int output[n], count[10] = {0};
+void countSortRadix(int arr[], int n, int exp, int* iterations) {
+    int output[n];
+    int count[10] = {0};
+    (*iterations)++;
+
     for (int i = 0; i < n; i++)
         count[(arr[i] / exp) % 10]++;
     for (int i = 1; i < 10; i++)
@@ -470,69 +398,106 @@ void countSort(int arr[], int n, int exp) {
         arr[i] = output[i];
 }
 
-void radixSort(int arr[], int n) {
-    int m = getMax(arr, n);
-    for (int exp = 1; m / exp > 0; exp *= 10)
-        countSort(arr, n, exp);
+void lsdRadixSort(int arr[], int n, int* iterations) {
+    int max = arr[0];
+    for (int i = 1; i < n; i++)
+        if (arr[i] > max)
+            max = arr[i];
+    for (int exp = 1; max / exp > 0; exp *= 10)
+        countSortRadix(arr, n, exp, iterations);
 }
 
-// 8. Quick Sort
-void quickSort(int arr[], int low, int high) {
-    if (low < high) {
-        int pivot = arr[high], i = low - 1;
-        for (int j = low; j < high; j++) {
-            if (arr[j] < pivot) {
-                i++;
-                int temp = arr[i];
-                arr[i] = arr[j];
-                arr[j] = temp;
-            }
-        }
-        int temp = arr[i + 1];
-        arr[i + 1] = arr[high];
-        arr[high] = temp;
+void radixSort() {
+    int n, type, iterations = 0;
+    printf("Enter the number of elements: ");
+    scanf("%d", &n);
+    int arr[n];
+    printf("Enter the elements: ");
+    for (int i = 0; i < n; i++)
+        scanf("%d", &arr[i]);
 
-        int pi = i + 1;
-        quickSort(arr, low, pi - 1);
-        quickSort(arr, pi + 1, high);
+    printf("Choose Radix Type (1 for LSD, 2 for MSD): ");
+    scanf("%d", &type);
+
+    if (type == 1) {
+        lsdRadixSort(arr, n, &iterations);
+    } else {
+        printf("MSD Radix Sort is not implemented yet.\n");
     }
+
+    printf("Sorted Array: ");
+    for (int i = 0; i < n; i++)
+        printf("%d ", arr[i]);
+    printf("\nIterations: %d\n", iterations);
 }
 
-// 9. Insertion Sort
-void insertionSort(int arr[], int n) {
-    for (int i = 1; i < n; i++) {
-        int key = arr[i];
-        int j = i - 1;
-        while (j >= 0 && arr[j] > key) {
-            arr[j + 1] = arr[j];
+// Quick Sort
+int lomutoPartition(int arr[], int low, int high, int* iterations) {
+    int pivot = arr[high];
+    int i = low - 1;
+    for (int j = low; j < high; j++) {
+        (*iterations)++;
+        if (arr[j] < pivot) {
+            i++;
+            int temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
+        }
+    }
+    int temp = arr[i + 1];
+    arr[i + 1] = arr[high];
+    arr[high] = temp;
+    return i + 1;
+}
+
+int hoarePartition(int arr[], int low, int high, int* iterations) {
+    int pivot = arr[low];
+    int i = low - 1, j = high + 1;
+    while (1) {
+        do {
+            i++;
+            (*iterations)++;
+        } while (arr[i] < pivot);
+        do {
             j--;
-        }
-        arr[j + 1] = key;
+            (*iterations)++;
+        } while (arr[j] > pivot);
+        if (i >= j)
+            return j;
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
     }
 }
 
-// 10. Selection Sort
-void selectionSort(int arr[], int n) {
-    for (int i = 0; i < n - 1; i++) {
-        int minIdx = i;
-        for (int j = i + 1; j < n; j++)
-            if (arr[j] < arr[minIdx]) minIdx = j;
-        int temp = arr[minIdx];
-        arr[minIdx] = arr[i];
-        arr[i] = temp;
+void quickSortHelper(int arr[], int low, int high, int* iterations, int partitionType) {
+    if (low < high) {
+        int pi;
+        if (partitionType == 1)
+            pi = lomutoPartition(arr, low, high, iterations);
+        else
+            pi = hoarePartition(arr, low, high, iterations);
+        quickSortHelper(arr, low, pi - 1, iterations, partitionType);
+        quickSortHelper(arr, pi + 1, high, iterations, partitionType);
     }
 }
 
-// 11. Bubble Sort
-void bubbleSort(int arr[], int n) {
-    for (int i = 0; i < n - 1; i++) {
-        for (int j = 0; j < n - i - 1; j++) {
-            if (arr[j] > arr[j + 1]) {
-                int temp = arr[j];
-                arr[j] = arr[j + 1];
-                arr[j + 1] = temp;
-            }
-        }
-    }
+void quickSort() {
+    int n, type, iterations = 0;
+    printf("Enter the number of elements: ");
+    scanf("%d", &n);
+    int arr[n];
+    printf("Enter the elements: ");
+    for (int i = 0; i < n; i++)
+        scanf("%d", &arr[i]);
+
+    printf("Choose Partition Type (1 for Lomuto, 2 for Hoare): ");
+    scanf("%d", &type);
+
+    quickSortHelper(arr, 0, n - 1, &iterations, type);
+
+    printf("Sorted Array: ");
+    for (int i = 0; i < n; i++)
+        printf("%d ", arr[i]);
+    printf("\nIterations: %d\n", iterations);
 }
-*/
