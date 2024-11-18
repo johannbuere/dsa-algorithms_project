@@ -1,12 +1,39 @@
 /* 
-Johann Reuel D. Buere || BSCS 2A (Lab 1)
+✨ Johann Reuel D. Buere || BSCS 2A ✨ 
+📚 Lab 2: Progress Report 🛠️ 
 
-Progress Report: 
-The sorting algorithms have been completed and integrated into the program. 
-Menus for selecting sorting methods and options are also functional. 
-The next step is to refine the program by addressing any remaining errors and improving the user experience for better usability and clarity.
+Lab 2 is wrapping up, and I’ve made some serious progress on the program during this time. Let’s break down what’s been achieved so far and what’s left to do!
 
-Every other feature other than "Sorting" in the Main Menu is still undergoing development.
+🎉 Updates in Lab 2:
+- Sorting: Fully implemented and refined! 🎯 The sorting algorithms now feature polished user input handling and better usability. No more messy inputs; it’s all smooth sailing now!
+
+- Searching: 🎉 New feature alert! Searching algorithms have been added to the program and are fully functional—finding data is a breeze. 🚀
+
+- Linear DS: 1 out of 5 tasks complete! A small step forward, but still plenty of work to finish here. 🛤️
+- Others: Still under construction, but I’ll be taking the reins solo after Lab 2 to complete them. 🚧
+
+📊 Main Menu Progress:
+    === Main Menu ===
+
+    Linear DS [1/5 Done] 🟩⬜⬜⬜⬜
+    Non-Linear DS [Not Yet] 🚧
+    Strings [Not Yet] 🚧
+    Sorting [Done! ✅]
+    Searching [Done! ✅]
+    Quit
+
+    
+📈 Comparison Since Lab 1:
+- Sorting was basic and clunky in Lab 1. Now it’s optimized with precise user controls and a clean interface! 💡
+- Searching didn’t even exist back then. Now, it’s fully functional and makes finding data intuitive and simple! ✨
+- The Main Menu now reflects real-time progress with percentages and markers to show what’s done and what’s still being worked on.
+
+✨ Overall Progress:
+    [█████-----] 40% Complete!  
+    Still more to finish, but we’re making solid strides! 💪  
+
+🌟 Next Steps:  
+    After Lab 2, I’ll be working on the remaining features (Linear DS, Non-Linear DS, and Strings) on my own time. 
 */
 
 
@@ -33,6 +60,11 @@ void clearInputBuffer();
 
 // input
 void getInput(int *n);
+
+// Searching Algo's
+void linSearch(int arr[], int size, int target);
+void binSearch(int arr[], int size, int target);
+void binaryInsertionSort(int arr[], int size);
 
 // Sorting Algo's
 
@@ -117,11 +149,11 @@ int main() {
 // Main Menu
 void mainMenu() {
     printf("\n=== Main Menu ===\n");
-    printf("1) Linear DS\n");
+    printf("1) Linear DS[1/5 Done]\n");
     printf("2) Non-Linear DS [Not Yet]\n");
     printf("3) Strings[Not Yet]\n");
     printf("4) Sorting\n");
-    printf("5) Searching[Not Yet]\n");
+    printf("5) Searching\n");
     printf("6) Quit\n");
 }
 
@@ -288,7 +320,7 @@ void sortingMenu(){
 }
 
 void searchingMenu(){
-    int choice;
+    int choice, n, target;
     do {
         printf("\n=== Searching Menu ===\n");
         printf("1) Linear Search\n");
@@ -296,14 +328,43 @@ void searchingMenu(){
         printf("3) Exit to Main Menu\n");
         printf("Choose Option: ");
         scanf("%d", &choice);
+        int arr[n];
 
         switch (choice) {
-        /*case 1:
-            linSearch(); // To be made
+        case 1:
+        getInput(&n);
+        printf("Enter the elements: ");
+        for (int i = 0; i < n; i++) {
+            while (1) {
+                if (scanf("%d", &arr[i]) != 1) {
+                    printf("Invalid input. \nPlease enter an integer: ");
+                    clearInputBuffer();
+                } else {
+                    break;
+                }
+            }
+        }
+            printf("Enter the element to search for: ");
+            scanf("%d", &target);
+            linSearch(arr, n, target);
             break;
         case 2:
-            binSearch(); // To be made
-            break;*/
+        getInput(&n);
+        printf("Enter the elements: ");
+        for (int i = 0; i < n; i++) {
+            while (1) {
+                if (scanf("%d", &arr[i]) != 1) {
+                    printf("Invalid input. \nPlease enter an integer: ");
+                    clearInputBuffer();
+                } else {
+                    break;
+                }
+            }
+        }
+            printf("Enter the element to search for: ");
+            scanf("%d", &target);
+            binSearch(arr, n, target);
+            break;
         case 3:
             printf("Returning to Main Menu...\n");
             break;
@@ -369,7 +430,7 @@ void getInput(int *n) {
     while (!validInput) {
         printf("Enter the number of elements: ");
         if (scanf("%d", n) != 1 || *n <= 0) {
-            printf("Invalid input. Please enter a positive integer.\n");
+            printf("Invalid input. \nPlease enter a positive integer.\n");
             clearInputBuffer();
         } else if (*n >= 30) {
             char confirm;
@@ -379,13 +440,83 @@ void getInput(int *n) {
             if (confirm == 'y' || confirm == 'Y') {
                 validInput = 1;
             } else {
-                printf("Please enter a smaller number of elements.\n");
+                printf("\nPlease enter a smaller number of elements.\n");
             }
         } else {
             validInput = 1;
         }
     }
 }
+
+// Searching Algorithm
+void linSearch(int arr[], int size, int target) {
+    int found = 0;
+    for (int i = 0; i < size; i++) {
+        if (arr[i] == target) {
+            printf("Element %d found at index %d.\n", target, i);
+            found = 1;
+            break;
+        }
+    }
+    if (!found) {
+        printf("Element %d not found in the array.\n", target);
+    }
+}
+
+// Binary search function
+void binSearch(int arr[], int size, int target) {
+    // Perform binary insertion sort before binary search
+    binaryInsertionSort(arr, size);
+
+    int low = 0, high = size - 1;
+    int found = 0;
+
+    while (low <= high) {
+        int mid = (low + high) / 2;
+
+        if (arr[mid] == target) {
+            printf("Element %d found at index %d.\n", target, mid);
+            found = 1;
+            break;
+        } else if (arr[mid] < target) {
+            low = mid + 1;
+        } else {
+            high = mid - 1;
+        }
+    }
+
+    if (!found) {
+        printf("Element %d not found in the array.\n", target);
+    }
+}
+
+// Binary Insertion Sort function
+void binaryInsertionSort(int arr[], int size) {
+    for (int i = 1; i < size; i++) {
+        int key = arr[i];
+        int low = 0, high = i - 1;
+        
+        // Binary search to find the correct position
+        while (low <= high) {
+            int mid = (low + high) / 2;
+            if (arr[mid] < key) {
+                low = mid + 1;
+            } else {
+                high = mid - 1;
+            }
+        }
+
+        // Move all elements after the found position to one place ahead
+        for (int j = i - 1; j >= low; j--) {
+            arr[j + 1] = arr[j];
+        }
+
+        // Insert the key at its correct position
+        arr[low] = key;
+    }
+}
+
+
 
 
 // Heap Sort 
@@ -437,7 +568,7 @@ void heapSort() {
     for (int i = 0; i < n; i++) {
         while (1) {
             if (scanf("%d", &arr[i]) != 1) {
-                printf("Invalid input. Please enter an integer: ");
+                printf("Invalid input. \nPlease enter an integer: ");
                 clearInputBuffer();
             } else {
                 break;
@@ -551,7 +682,7 @@ void radixSort() {
     for (int i = 0; i < n; i++) {
         while (1) {
             if (scanf("%d", &arr[i]) != 1) {
-                printf("Invalid input. Please enter an integer: ");
+                printf("Invalid input. \nPlease enter an integer: ");
                 clearInputBuffer();
             } else {
                 break;
@@ -643,7 +774,7 @@ void quickSort() {
     for (int i = 0; i < n; i++) {
         while (1) {
             if (scanf("%d", &arr[i]) != 1) {
-                printf("Invalid input. Please enter an integer: ");
+                printf("Invalid input. \nPlease enter an integer: ");
                 clearInputBuffer();
             } else {
                 break;
@@ -725,7 +856,7 @@ void mergeSort() {
     for (int i = 0; i < n; i++) {
         while (1) {
             if (scanf("%d", &arr[i]) != 1) {
-                printf("Invalid input. Please enter an integer: ");
+                printf("Invalid input. \nPlease enter an integer: ");
                 clearInputBuffer();
             } else {
                 break;
@@ -752,7 +883,7 @@ void randSort() {
     for (int i = 0; i < n; i++) {
         while (1) {
             if (scanf("%d", &arr[i]) != 1) {
-                printf("Invalid input. Please enter an integer: ");
+                printf("Invalid input. \nPlease enter an integer: ");
                 clearInputBuffer();
             } else {
                 break;
@@ -796,7 +927,7 @@ void insertSort() {
     for (int i = 0; i < n; i++) {
         while (1) {
             if (scanf("%d", &arr[i]) != 1) {
-                printf("Invalid input. Please enter an integer: ");
+                printf("Invalid input. \nPlease enter an integer: ");
                 clearInputBuffer();
             } else {
                 break;
@@ -834,7 +965,7 @@ void countSort() {
     for (int i = 0; i < n; i++) {
         while (1) {
             if (scanf("%d", &arr[i]) != 1) {
-                printf("Invalid input. Please enter an integer: ");
+                printf("Invalid input. \nPlease enter an integer: ");
                 clearInputBuffer();
             } else {
                 break;
@@ -887,7 +1018,7 @@ void selecSort() {
     for (int i = 0; i < n; i++) {
         while (1) {
             if (scanf("%d", &arr[i]) != 1) {
-                printf("Invalid input. Please enter an integer: ");
+                printf("Invalid input. \nPlease enter an integer: ");
                 clearInputBuffer();
             } else {
                 break;
@@ -929,7 +1060,7 @@ void bubbleSort() {
     for (int i = 0; i < n; i++) {
         while (1) {
             if (scanf("%d", &arr[i]) != 1) {
-                printf("Invalid input. Please enter an integer: ");
+                printf("Invalid input. \nPlease enter an integer: ");
                 clearInputBuffer();
             } else {
                 break;
