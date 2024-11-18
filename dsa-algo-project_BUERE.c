@@ -28,6 +28,12 @@ void treeMenu();
 //print array func prototype
 void printArray(int arr[], int n, const char *sortType, int iterations);
 
+// Function to clear the input buffer
+void clearInputBuffer();
+
+// input
+void getInput(int *n);
+
 // Sorting Algo's
 
 // Heap Sort
@@ -36,7 +42,8 @@ void minHeapify(int arr[], int n, int i, int *iterations, const char *sortType);
 void heapSort();
 
 // radix Sort
-void countSortRadix(int arr[], int n, int exp, int* iterations, const char *sortType);
+void countSortRadix(int arr[], int n, int exp, int* iterations, const char *sortType, int isMSD);
+void msdRadixSort(int arr[], int n, int* iterations, const char *sortType);
 void lsdRadixSort(int arr[], int n, int* iterations, const char *sortType);
 void radixSort();
 
@@ -347,6 +354,38 @@ void printArray(int arr[], int n, const char *sortType, int iterations) {
     printf("\n");
 }
 
+// Function to clear the input buffer
+void clearInputBuffer() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF) {
+        // Consume remaining characters in the input buffer
+    }
+}
+
+// checks input for uncertainties
+void getInput(int *n) {
+    int validInput = 0;
+    // Validate the number of elements
+    while (!validInput) {
+        printf("Enter the number of elements: ");
+        if (scanf("%d", n) != 1 || *n <= 0) {
+            printf("Invalid input. Please enter a positive integer.\n");
+            clearInputBuffer();
+        } else if (*n >= 30) {
+            char confirm;
+            printf("That's quite a large number of elements. Are you sure you want to continue? (y/n): ");
+            scanf(" %c", &confirm);
+            clearInputBuffer();
+            if (confirm == 'y' || confirm == 'Y') {
+                validInput = 1;
+            } else {
+                printf("Please enter a smaller number of elements.\n");
+            }
+        } else {
+            validInput = 1;
+        }
+    }
+}
 
 
 // Heap Sort 
@@ -392,15 +431,22 @@ void minHeapify(int arr[], int n, int i, int *iterations, const char *sortType) 
 
 void heapSort() {
     int n, type, iterations = 0;
-    printf("Enter the number of elements: ");
-    scanf("%d", &n);
+    getInput(&n);
     int arr[n];
     printf("Enter the elements: ");
-    for (int i = 0; i < n; i++)
-        scanf("%d", &arr[i]);
+    for (int i = 0; i < n; i++) {
+        while (1) {
+            if (scanf("%d", &arr[i]) != 1) {
+                printf("Invalid input. Please enter an integer: ");
+                clearInputBuffer();
+            } else {
+                break;
+            }
+        }
+    }
 
     printf("Choose Heap Type (1 for Max Heap, 2 for Min Heap): ");
-    while (getchar() != '\n'); // Clear the input buffer
+    clearInputBuffer();
     scanf("%d", &type);
     const char *sortType = (type == 1) ? "Max Heap Sort" : "Min Heap Sort";
 
@@ -438,22 +484,41 @@ void heapSort() {
 
 
 //Radix sort
-void countSortRadix(int arr[], int n, int exp, int* iterations, const char *sortType) {
+void countSortRadix(int arr[], int n, int exp, int* iterations, const char *sortType, int isMSD) {
     int output[n];
     int count[10] = {0};
     (*iterations)++;
 
+    // Count occurrences of each digit
     for (int i = 0; i < n; i++)
         count[(arr[i] / exp) % 10]++;
+    
+    // Convert counts to positions
     for (int i = 1; i < 10; i++)
         count[i] += count[i - 1];
+    
+    // Build the output array (stable sort)
     for (int i = n - 1; i >= 0; i--) {
         output[count[(arr[i] / exp) % 10] - 1] = arr[i];
         count[(arr[i] / exp) % 10]--;
     }
+
+    // Copy sorted elements back to the original array
     for (int i = 0; i < n; i++)
         arr[i] = output[i];
+
     printArray(arr, n, sortType, *iterations);  // Print after each iteration
+
+    // For MSD: Recursively sort buckets if needed
+    if (isMSD) {
+        for (int i = 0; i < 10; i++) {
+            int start = (i == 0) ? 0 : count[i - 1];
+            int end = count[i];
+            if (start < end) {  // Non-empty bucket
+                countSortRadix(arr + start, end - start, exp / 10, iterations, sortType, isMSD);
+            }
+        }
+    }
 }
 
 void lsdRadixSort(int arr[], int n, int* iterations, const char *sortType) {
@@ -462,27 +527,51 @@ void lsdRadixSort(int arr[], int n, int* iterations, const char *sortType) {
         if (arr[i] > max)
             max = arr[i];
     for (int exp = 1; max / exp > 0; exp *= 10)
-        countSortRadix(arr, n, exp, iterations, sortType);
+        countSortRadix(arr, n, exp, iterations, sortType, 0);  // LSD does not use recursion
+}
+
+void msdRadixSort(int arr[], int n, int* iterations, const char *sortType) {
+    int max = arr[0];
+    for (int i = 1; i < n; i++)  // Find the maximum number
+        if (arr[i] > max)
+            max = arr[i];
+
+    int exp = 1;
+    while (max / exp > 9)
+        exp *= 10;  // Find the most significant digit's place value
+
+    countSortRadix(arr, n, exp, iterations, sortType, 1);  // MSD uses recursion
 }
 
 void radixSort() {
     int n, type, iterations = 0;
-    printf("Enter the number of elements: ");
-    scanf("%d", &n);
+     getInput(&n);
     int arr[n];
     printf("Enter the elements: ");
-    for (int i = 0; i < n; i++)
-        scanf("%d", &arr[i]);
+    for (int i = 0; i < n; i++) {
+        while (1) {
+            if (scanf("%d", &arr[i]) != 1) {
+                printf("Invalid input. Please enter an integer: ");
+                clearInputBuffer();
+            } else {
+                break;
+            }
+        }
+    }
 
     printf("Choose Radix Type (1 for LSD, 2 for MSD): ");
     scanf("%d", &type);
+    clearInputBuffer();
 
     const char *sortType = "Radix Sort";
 
     if (type == 1) {
         lsdRadixSort(arr, n, &iterations, sortType);
+    } else if (type == 2) {
+        msdRadixSort(arr, n, &iterations, sortType);
     } else {
-        printf("MSD Radix Sort is not implemented yet.\n");
+        printf("Invalid choice.\n");
+        return;
     }
 
     printf("Sorted Array: ");
@@ -490,6 +579,7 @@ void radixSort() {
         printf("%d ", arr[i]);
     printf("\nIterations: %d\n", iterations);
 }
+
 
 
 // Quick Sort
@@ -547,12 +637,19 @@ void quickSortHelper(int arr[], int low, int high, int* iterations, int partitio
 
 void quickSort() {
     int n, type, iterations = 0;
-    printf("Enter the number of elements: ");
-    scanf("%d", &n);
+    getInput(&n);
     int arr[n];
     printf("Enter the elements: ");
-    for (int i = 0; i < n; i++)
-        scanf("%d", &arr[i]);
+    for (int i = 0; i < n; i++) {
+        while (1) {
+            if (scanf("%d", &arr[i]) != 1) {
+                printf("Invalid input. Please enter an integer: ");
+                clearInputBuffer();
+            } else {
+                break;
+            }
+        }
+    }
 
     printf("Choose Partition Type (1 for Lomuto, 2 for Hoare): ");
     scanf("%d", &type);
@@ -622,12 +719,19 @@ void mergeSortHelper(int arr[], int l, int r, int* iterations, const char *sortT
 
 void mergeSort() {
     int n, iterations = 0;
-    printf("Enter the number of elements: ");
-    scanf("%d", &n);
+    getInput(&n);
     int arr[n];
     printf("Enter the elements: ");
-    for (int i = 0; i < n; i++)
-        scanf("%d", &arr[i]);
+    for (int i = 0; i < n; i++) {
+        while (1) {
+            if (scanf("%d", &arr[i]) != 1) {
+                printf("Invalid input. Please enter an integer: ");
+                clearInputBuffer();
+            } else {
+                break;
+            }
+        }
+    }
 
     const char *sortType = "Merge Sort";
     mergeSortHelper(arr, 0, n - 1, &iterations, sortType);
@@ -642,12 +746,19 @@ void mergeSort() {
 // Random Sort
 void randSort() {
     int n;
-    printf("Enter the size of the array: ");
-    scanf("%d", &n);
-
+     getInput(&n);
     int arr[n];
-    printf("Enter %d elements: ", n);
-    for (int i = 0; i < n; i++) scanf("%d", &arr[i]);
+    printf("Enter the elements: ");
+    for (int i = 0; i < n; i++) {
+        while (1) {
+            if (scanf("%d", &arr[i]) != 1) {
+                printf("Invalid input. Please enter an integer: ");
+                clearInputBuffer();
+            } else {
+                break;
+            }
+        }
+    }
 
     srand(time(0));
     int sorted = 0;
@@ -679,12 +790,19 @@ void randSort() {
 // Insertion Sort
 void insertSort() {
     int n, iterations = 0;  
-    printf("Enter the size of the array: ");
-    scanf("%d", &n);
-
+    getInput(&n);
     int arr[n];
-    printf("Enter %d elements: ", n);
-    for (int i = 0; i < n; i++) scanf("%d", &arr[i]);
+    printf("Enter the elements: ");
+    for (int i = 0; i < n; i++) {
+        while (1) {
+            if (scanf("%d", &arr[i]) != 1) {
+                printf("Invalid input. Please enter an integer: ");
+                clearInputBuffer();
+            } else {
+                break;
+            }
+        }
+    }
 
     const char *sortType = "Insertion Sort";  
 
@@ -709,13 +827,20 @@ void insertSort() {
 
 
 void countSort() {
-    int n, iterations = 0;  // Add iterations counter
-    printf("Enter the size of the array: ");
-    scanf("%d", &n);
-
+    int n, iterations = 0; 
+    getInput(&n);
     int arr[n];
-    printf("Enter %d elements: ", n);
-    for (int i = 0; i < n; i++) scanf("%d", &arr[i]);
+    printf("Enter the elements: ");
+    for (int i = 0; i < n; i++) {
+        while (1) {
+            if (scanf("%d", &arr[i]) != 1) {
+                printf("Invalid input. Please enter an integer: ");
+                clearInputBuffer();
+            } else {
+                break;
+            }
+        }
+    }
 
     // Find max value
     int max = arr[0];
@@ -756,13 +881,18 @@ void countSort() {
 // selection sort
 void selecSort() {
     int n, iterations = 0;
-    printf("Enter the number of elements: ");
-    scanf("%d", &n);
-    
+    getInput(&n);
     int arr[n];
-    printf("Enter the elements:\n");
+    printf("Enter the elements: ");
     for (int i = 0; i < n; i++) {
-        scanf("%d", &arr[i]);
+        while (1) {
+            if (scanf("%d", &arr[i]) != 1) {
+                printf("Invalid input. Please enter an integer: ");
+                clearInputBuffer();
+            } else {
+                break;
+            }
+        }
     }
     
     // Initial array print
@@ -793,13 +923,18 @@ void selecSort() {
 // bubble sort
 void bubbleSort() {
     int n, iterations = 0;
-    printf("Enter the number of elements: ");
-    scanf("%d", &n);
-    
+    getInput(&n);
     int arr[n];
-    printf("Enter the elements:\n");
+    printf("Enter the elements: ");
     for (int i = 0; i < n; i++) {
-        scanf("%d", &arr[i]);
+        while (1) {
+            if (scanf("%d", &arr[i]) != 1) {
+                printf("Invalid input. Please enter an integer: ");
+                clearInputBuffer();
+            } else {
+                break;
+            }
+        }
     }
     
     // Initial Array print
