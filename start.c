@@ -1,3 +1,4 @@
+// Johann Reuel D. Buere || BSCS 2A
 /*
 GENERAL NOTE: This is only a test code with some of the algo's at the top of my head. Take note of the following implementations to update, organize, add or double check on:
 -  Queues
@@ -10,6 +11,15 @@ GENERAL NOTE: This is only a test code with some of the algo's at the top of my 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+void mainMenu();
+void linearDSMenu();
+void nonlinDSMenu();
+void treeMenu();
+
+/*
+Function prototypes for my pre-made codes for the program. Will be using after finishing the program flow and main loops:
+
 // Queue
 void enqueue(int queue[], int* front, int* rear, int maxSize, int value);
 int dequeue(int queue[], int* front, int* rear);
@@ -50,238 +60,283 @@ void selectionSort(int arr[], int n);
 
 // Bubble Sort
 void bubbleSort(int arr[], int n);
+*/
+
+
 
 int main() {
     int choice, size, value, key, maxSize, top = -1, front = -1, rear = -1;
     int *arr, *queue, *stack;
-    Node *head = NULL;
-    int running = 1;
-
+    //Node *head = NULL;
     printf("Welcome to the Data Structures and Algorithms Menu!\n");
-
-    while (running) {
-        printf("\nChoose an option:\n");
-        printf("1. Queue Operations\n");
-        printf("2. Stack Operations\n");
-        printf("3. Linked List Operations\n");
-        printf("4. Array Display\n");
-        printf("5. Linear Search\n");
-        printf("6. Binary Search\n");
-        printf("7. Heap Sort\n");
-        printf("8. Radix Sort\n");
-        printf("9. Quick Sort\n");
-        printf("10. Insertion Sort\n");
-        printf("11. Selection Sort\n");
-        printf("12. Bubble Sort\n");
-        printf("0. Exit\n");
+    do {
+        //Main Menu
+        mainMenu();
         printf("Enter your choice: ");
         scanf("%d", &choice);
-
+        
         switch (choice) {
-            case 1: // Queue Operations
-                printf("Enter maximum queue size: ");
-                scanf("%d", &maxSize);
-                queue = (int *)malloc(maxSize * sizeof(int));
-                int queueRunning = 1;
-                while (queueRunning) {
-                    printf("\nQueue Operations:\n");
-                    printf("1. Enqueue\n2. Dequeue\n3. Exit Queue Menu\nEnter choice: ");
-                    scanf("%d", &choice);
-                    if (choice == 1) {
-                        printf("Enter value to enqueue: ");
-                        scanf("%d", &value);
-                        enqueue(queue, &front, &rear, maxSize, value);
-                    } else if (choice == 2) {
-                        int dequeued = dequeue(queue, &front, &rear);
-                        if (dequeued != -1)
-                            printf("Dequeued: %d\n", dequeued);
-                    } else if (choice == 3) {
-                        queueRunning = 0;
-                    }
-                }
-                free(queue);
+            case 1:
+                linearDSMenu();
                 break;
-
-            case 2: // Stack Operations
-                printf("Enter maximum stack size: ");
-                scanf("%d", &maxSize);
-                stack = (int *)malloc(maxSize * sizeof(int));
-                int stackRunning = 1;
-                while (stackRunning) {
-                    printf("\nStack Operations:\n");
-                    printf("1. Push\n2. Pop\n3. Exit Stack Menu\nEnter choice: ");
-                    scanf("%d", &choice);
-                    if (choice == 1) {
-                        printf("Enter value to push: ");
-                        scanf("%d", &value);
-                        push(stack, &top, maxSize, value);
-                    } else if (choice == 2) {
-                        int popped = pop(stack, &top);
-                        if (popped != -1)
-                            printf("Popped: %d\n", popped);
-                    } else if (choice == 3) {
-                        stackRunning = 0;
-                    }
-                }
-                free(stack);
+            case 2:
+                nonlinDSMenu();
                 break;
-
-            case 3: // Linked List Operations
-                printf("\nLinked List Operations:\n");
-                printf("1. Insert Node\n2. Display List\nEnter choice: ");
-                scanf("%d", &choice);
-                if (choice == 1) {
-                    printf("Enter value to insert: ");
-                    scanf("%d", &value);
-                    head = insertLinkedList(head, value);
-                } else if (choice == 2) {
-                    displayLinkedList(head);
-                }
+            case 3:
+                stringsMenu(); // To be made
                 break;
-
-            case 4: // Array Display
-                printf("Enter size of array: ");
-                scanf("%d", &size);
-                arr = (int *)malloc(size * sizeof(int));
-                printf("Enter %d elements: ", size);
-                for (int i = 0; i < size; i++) {
-                    scanf("%d", &arr[i]);
-                }
-                displayArray(arr, size);
-                free(arr);
+            case 4:
+                sortingMenu(); // To be made
                 break;
-
-            case 5: // Linear Search
-                printf("Enter size of array: ");
-                scanf("%d", &size);
-                arr = (int *)malloc(size * sizeof(int));
-                printf("Enter %d elements: ", size);
-                for (int i = 0; i < size; i++) {
-                    scanf("%d", &arr[i]);
-                }
-                printf("Enter key to search: ");
-                scanf("%d", &key);
-                int linearIndex = linearSearch(arr, size, key);
-                if (linearIndex != -1)
-                    printf("Key found at index: %d\n", linearIndex);
-                else
-                    printf("Key not found.\n");
-                free(arr);
+            case 5:
+                searchingMenu(); // To be made
                 break;
-
-            case 6: // Binary Search
-                printf("Enter size of sorted array: ");
-                scanf("%d", &size);
-                arr = (int *)malloc(size * sizeof(int));
-                printf("Enter %d sorted elements: ", size);
-                for (int i = 0; i < size; i++) {
-                    scanf("%d", &arr[i]);
-                }
-                printf("Enter key to search: ");
-                scanf("%d", &key);
-                int binaryIndex = binarySearch(arr, 0, size - 1, key);
-                if (binaryIndex != -1)
-                    printf("Key found at index: %d\n", binaryIndex);
-                else
-                    printf("Key not found.\n");
-                free(arr);
-                break;
-
-            case 7: // Heap Sort
-                printf("Enter size of array: ");
-                scanf("%d", &size);
-                arr = (int *)malloc(size * sizeof(int));
-                printf("Enter %d elements: ", size);
-                for (int i = 0; i < size; i++) {
-                    scanf("%d", &arr[i]);
-                }
-                heapSort(arr, size);
-                printf("Sorted Array: ");
-                displayArray(arr, size);
-                free(arr);
-                break;
-
-            case 8: // Radix Sort
-                printf("Enter size of array: ");
-                scanf("%d", &size);
-                arr = (int *)malloc(size * sizeof(int));
-                printf("Enter %d elements: ", size);
-                for (int i = 0; i < size; i++) {
-                    scanf("%d", &arr[i]);
-                }
-                radixSort(arr, size);
-                printf("Sorted Array: ");
-                displayArray(arr, size);
-                free(arr);
-                break;
-
-            case 9: // Quick Sort
-                printf("Enter size of array: ");
-                scanf("%d", &size);
-                arr = (int *)malloc(size * sizeof(int));
-                printf("Enter %d elements: ", size);
-                for (int i = 0; i < size; i++) {
-                    scanf("%d", &arr[i]);
-                }
-                quickSort(arr, 0, size - 1);
-                printf("Sorted Array: ");
-                displayArray(arr, size);
-                free(arr);
-                break;
-
-            case 10: // Insertion Sort
-                printf("Enter size of array: ");
-                scanf("%d", &size);
-                arr = (int *)malloc(size * sizeof(int));
-                printf("Enter %d elements: ", size);
-                for (int i = 0; i < size; i++) {
-                    scanf("%d", &arr[i]);
-                }
-                insertionSort(arr, size);
-                printf("Sorted Array: ");
-                displayArray(arr, size);
-                free(arr);
-                break;
-
-            case 11: // Selection Sort
-                printf("Enter size of array: ");
-                scanf("%d", &size);
-                arr = (int *)malloc(size * sizeof(int));
-                printf("Enter %d elements: ", size);
-                for (int i = 0; i < size; i++) {
-                    scanf("%d", &arr[i]);
-                }
-                selectionSort(arr, size);
-                printf("Sorted Array: ");
-                displayArray(arr, size);
-                free(arr);
-                break;
-
-            case 12: // Bubble Sort
-                printf("Enter size of array: ");
-                scanf("%d", &size);
-                arr = (int *)malloc(size * sizeof(int));
-                printf("Enter %d elements: ", size);
-                for (int i = 0; i < size; i++) {
-                    scanf("%d", &arr[i]);
-                }
-                bubbleSort(arr, size);
-                printf("Sorted Array: ");
-                displayArray(arr, size);
-                free(arr);
-                break;
-
-            case 0:
-                running = 0;
+            case 6:
                 printf("Exiting program. Goodbye!\n");
                 break;
-
             default:
                 printf("Invalid choice. Try again.\n");
         }
-    }
+    } while (choice!=6);
     return 0;
 }
+
+//Menu's
+
+// Main Menu
+void mainMenu() {
+    printf("\n=== Main Menu ===\n");
+    printf("1) Linear DS\n");
+    printf("2) Non-Linear DS\n");
+    printf("3) Strings\n");
+    printf("4) Sorting\n");
+    printf("5) Searching\n");
+    printf("6) Quit\n");
+}
+
+void linearDSMenu() {
+    int choice;
+    do {
+        printf("\n=== Linear DS Menu ===\n");
+        printf("1) Arrays\n");
+        printf("2) Linked List\n");
+        printf("3) Stacks\n");
+        printf("4) Queues\n");
+        printf("5) Exit to Main Menu\n");
+        printf("Choose Option: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                arrayMenu(); // To be made
+                break;
+            case 2:
+                linkedListMenu(); // To be made
+                break;
+            case 3:
+                stackMenu(); // To be made
+                break;
+            case 4:
+                queueMenu(); // To be made
+                break;
+            case 5:
+                printf("Returning to Main Menu...\n");
+                break;
+            default:
+                printf("Invalid choice. Please try again.\n");
+        }
+    } while (choice != 5);
+}
+
+void nonlinDSMenu() {
+    int choice;
+    do {
+        printf("\n=== Non-Linear DS Menu ===\n");
+        printf("1) Trees\n");
+        printf("2) Exit to Main Menu\n");
+        printf("Choose Option: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+        case 1:
+            treeMenu(); // To be made
+            break;
+        case 2:
+            printf("Returning to Main Menu...\n");
+            break;        
+        }
+    } while (choice != 2);
+}
+
+void stringsMenu(){
+    int choice;
+    do {
+        printf("\n=== String Menu ===\n");
+        printf("1) Get Character (getchar)\n");
+        printf("2) Put Character (putchar)\n");
+        printf("3) Length \n");
+        printf("4) Position of Character\n");
+        printf("5) Concatenate (concat)\n");
+        printf("6) Substring\n");
+        printf("7) Insert\n");
+        printf("8) Delete\n");
+        printf("9) Compare");
+        printf("10) Sort");
+        printf("11) Exit to Main Menu\n");
+        printf("Choose Option: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+        case 1:
+            strGetChar(); // To be made
+            break;
+        case 2:
+            strPutChar(); // To be made
+            break;
+        case 3:
+            length(); // To be made
+            break;
+        case 4:
+            pos(); // To be made
+            break; 
+        case 5:
+            concat(); // To be made
+            break;
+        case 6:
+            substring(); // To be made
+            break;
+        case 7:
+            strInsert(); // To be made
+            break;
+        case 8:
+            strDel(); // To be made
+            break;
+        case 9:
+            strComp(); // To be made
+            break;
+        case 10:
+            strSort(); // To be made
+            break;
+        case 11:
+            printf("Returning to Main Menu...\n");
+            break;  
+        }
+    } while (choice != 11);
+}
+
+void sortingMenu(){
+    int choice;
+    do {
+        printf("\n=== Sorting Menu ===\n");
+        printf("1) Heap Sort\n");
+        printf("2) Radix Sort\n");
+        printf("3) Quick Sort \n");
+        printf("4) Merge Sort\n");
+        printf("5) Random Sort\n");
+        printf("6) Insertion Sort\n");
+        printf("7) Counting Sort\n");
+        printf("8) Selection Sort\n");
+        printf("9) Bubble Sort\n");
+        printf("10) Exit to Main Menu\n");
+        printf("Choose Option: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+        case 1:
+            heapSort(); // To be made
+            break;
+        case 2:
+            radixSort(); // To be made
+            break;
+        case 3:
+            quickSort(); // To be made
+            break;
+        case 4:
+            mergeSort(); // To be made
+            break; 
+        case 5:
+            randSort(); // To be made
+            break;
+        case 6:
+            insertSort(); // To be made
+            break;
+        case 7:
+            countSort(); // To be made
+            break;
+        case 8:
+            selecSort(); // To be made
+            break;
+        case 9:
+            bubbleSort(); // To be made
+            break;
+        case 10:
+            printf("Returning to Main Menu...\n");
+            break;
+        }
+    } while (choice != 10); 
+}
+
+void searchingMenu(){
+    int choice;
+    do {
+        printf("\n=== Searching Menu ===\n");
+        printf("1) Linear Search\n");
+        printf("2) Binary Search\n");
+        printf("3) Exit to Main Menu\n");
+        printf("Choose Option: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+        case 1:
+            linSearch(); // To be made
+            break;
+        case 2:
+            binSearch(); // To be made
+            break;
+        case 3:
+            printf("Returning to Main Menu...\n");
+            break;
+        }
+    } while (choice != 3); 
+}
+
+// Minor Menu's
+void treeMenu(){
+    int choice;
+       do {
+        printf("\n=== Tree Menu ===\n");
+        printf("1) Tree Representation\n");
+        printf("2) Rooted Trees\n");
+        printf("3) Ordered Trees\n");
+        printf("4) Binary Trees\n");
+        printf("5) Exit to Non-Linear DS Menu\n");
+        printf("Choose Option: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+        case 1:
+            showTree(); // To be made
+            break;
+        case 2:
+            rootTree(); // To be made
+            break;
+        case 3:
+            orderTree(); // To be made
+            break;
+        case 4:
+            binaryTree(); // To be made
+            break; 
+        case 5:
+            printf("Returning to Non-Linear DS Menu...\n");
+            break;
+        }
+    } while (choice != 5); 
+}
+
+
+
+/*
+The following code are my pre-made code for the inmplemenetions. Will change, edit, add, or delete a few parts after fixing the program flow:
 
 // 1. Queue
 void enqueue(int queue[], int* front, int* rear, int maxSize, int value) {
@@ -480,3 +535,4 @@ void bubbleSort(int arr[], int n) {
         }
     }
 }
+*/
