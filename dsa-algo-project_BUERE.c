@@ -40,7 +40,8 @@ Lab 2 is wrapping up, and I’ve made some serious progress on the program durin
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
+
+unsigned int seed = 1; // Initialize a seed for randomness
 
 // Menu's
 void mainMenu();
@@ -877,13 +878,13 @@ void mergeSort() {
 // Random Sort
 void randSort() {
     int n;
-     getInput(&n);
+    getInput(&n);
     int arr[n];
     printf("Enter the elements: ");
     for (int i = 0; i < n; i++) {
         while (1) {
             if (scanf("%d", &arr[i]) != 1) {
-                printf("Invalid input. \nPlease enter an integer: ");
+                printf("Invalid input.\nPlease enter an integer: ");
                 clearInputBuffer();
             } else {
                 break;
@@ -891,17 +892,28 @@ void randSort() {
         }
     }
 
-    srand(time(0));
+    // Shuffle and check for sorting
     int sorted = 0;
+    int iterations = 0; // Count the number of shuffles
+    const char *sortType = "Random Sort";
 
     while (!sorted) {
+        // Custom random number generator (LCG)
+        seed = (seed * 1103515245 + 12345) % 2147483648;
+
         // Shuffle array
         for (int i = 0; i < n; i++) {
-            int randomIndex = rand() % n;
+            int randomIndex = seed % n;
             int temp = arr[i];
             arr[i] = arr[randomIndex];
             arr[randomIndex] = temp;
         }
+
+        // Increment iteration counter
+        iterations++;
+
+        // Use printArray to display the current shuffle
+        printArray(arr, n, sortType, iterations);
 
         // Check if sorted
         sorted = 1;
@@ -913,6 +925,7 @@ void randSort() {
         }
     }
 
+    // Display final sorted array
     printf("Sorted Array: ");
     for (int i = 0; i < n; i++) printf("%d ", arr[i]);
     printf("\n");
