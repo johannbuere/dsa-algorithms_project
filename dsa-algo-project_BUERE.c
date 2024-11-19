@@ -41,6 +41,13 @@ Lab 2 is wrapping up, and I’ve made some serious progress on the program durin
 #include <stdlib.h>
 #include <string.h>
 
+#define WIDTH 80
+
+//terminal commands
+void setTerminalSize();
+void clearScreen();
+
+
 unsigned int seed = 1; // Initialize a seed for randomness
 
 // Menu's
@@ -52,12 +59,14 @@ void sortingMenu();
 void searchingMenu();
 void treeMenu();
 
-
 //print array func prototype
 void printArray(int arr[], int n, const char *sortType, int iterations);
 
 // Function to clear the input buffer
 void clearInputBuffer();
+
+// Helper function to print centered text
+void printCentered(const char *text, int width);
 
 // input
 void getInput(int *n);
@@ -112,8 +121,12 @@ int main() {
     int choice, size, value, key, maxSize, top = -1, front = -1, rear = -1;
     int *arr, *queue, *stack;
     //Node *head = NULL;
-    printf("Welcome to the Data Structures and Algorithms Menu!\n");
     do {
+        system("cls");
+        setTerminalSize();
+        printf("\n");
+        printf("\n");
+        printCentered("Welcome to the Data Structures and Algorithms Menu!", WIDTH);
         //Main Menu
         mainMenu();
         printf("Enter your choice: ");
@@ -121,52 +134,87 @@ int main() {
         
         switch (choice) {
             case 1:
+                clearScreen();
                 linearDSMenu();
                 break;
             case 2:
+                clearScreen();
                 nonlinDSMenu();
                 break;
             case 3:
+                clearScreen();
                 stringsMenu(); 
                 break;
             case 4:
+                clearScreen();
                 sortingMenu(); 
                 break;
             case 5:
+                clearScreen();
                 searchingMenu(); 
                 break;
             case 6:
-                printf("Exiting program. Goodbye!\n");
+                clearScreen();
+                printCentered("Exiting program. Goodbye!\n", WIDTH);
                 break;
             default:
-                printf("Invalid choice. Try again.\n");
+                printCentered("Invalid choice. Try again.\n", WIDTH);
         }
     } while (choice!=6);
     return 0;
 }
 
+
+
+//Terminal commands
+void setTerminalSize() { 
+    const int rows = 24;
+    const int cols = WIDTH; // Ensure WIDTH is defined and valid
+    char command[50];
+
+    sprintf(command, "mode con: cols=%d lines=%d", cols, rows);
+    printf("[DEBUG] Executing command: %s\n", command); // Debugging
+
+    fflush(stdout); // Flush output before changing terminal size
+    int result = system(command);
+
+    if (result != 0) {
+        printf("[ERROR] Failed to set terminal size.\n");
+    }
+}
+
+void clearScreen() {
+    system("cls");
+}
+
+
+
 //Menu's
 
 // Main Menu
 void mainMenu() {
-    printf("\n=== Main Menu ===\n");
-    printf("1) Linear DS[1/5 Done]\n");
-    printf("2) Non-Linear DS [Not Yet]\n");
-    printf("3) Strings[Not Yet]\n");
-    printf("4) Sorting\n");
-    printf("5) Searching\n");
-    printf("6) Quit\n");
+    printf("\n");
+    printCentered("=== Main Menu ===", WIDTH);
+    printCentered("1) Linear DS [1/5 Done]", WIDTH);
+    printCentered("2) Non-Linear DS [Not Yet]", WIDTH);
+    printCentered("3) Strings [Not Yet]", WIDTH);
+    printCentered("4) Sorting", WIDTH);
+    printCentered("5) Searching", WIDTH);
+    printCentered("6) Quit", WIDTH);
+    printf("\n");
 }
 
 void linearDSMenu() {
     int choice;
     do {
-        printf("\n=== Linear DS Menu ===\n");
-        printf("1) Arrays\n");
-        printf("2) Linked List\n");
-        printf("3) Stacks\n");
-        printf("4) Queues\n");
-        printf("5) Exit to Main Menu\n");
+        printf("\n");
+        printCentered("=== Linear DS Menu ===", WIDTH);
+        printCentered("1) Arrays", WIDTH);
+        printCentered("2) Linked List", WIDTH);
+        printCentered("3) Stacks", WIDTH);
+        printCentered("4) Queues", WIDTH);
+        printCentered("5) Exit to Main Menu", WIDTH);
+        printf("\n");
         printf("Choose Option: ");
         scanf("%d", &choice);
 
@@ -184,10 +232,10 @@ void linearDSMenu() {
                 queueMenu(); // To be made
                 break;*/
             case 5:
-                printf("Returning to Main Menu...\n");
+                printCentered("Returning to Main Menu...", WIDTH);
                 break;
             default:
-                printf("Invalid choice. Please try again.\n");
+                printCentered("Invalid choice. Please try again.", WIDTH);
         }
     } while (choice != 5);
 }
@@ -195,19 +243,23 @@ void linearDSMenu() {
 void nonlinDSMenu() {
     int choice;
     do {
-        printf("\n=== Non-Linear DS Menu ===\n");
-        printf("1) Trees\n");
-        printf("2) Exit to Main Menu\n");
+        printf("\n");
+        printCentered("=== Non-Linear DS Menu ===", WIDTH);
+        printCentered("1) Trees", WIDTH);
+        printCentered("2) Exit to Main Menu", WIDTH);
+        printf("\n");
         printf("Choose Option: ");
         scanf("%d", &choice);
 
         switch (choice) {
-        case 1:
-            treeMenu(); 
-            break;
-        case 2:
-            printf("Returning to Main Menu...\n");
-            break;        
+            case 1:
+                treeMenu();
+                break;
+            case 2:
+                printCentered("Returning to Main Menu...", WIDTH);
+                break;
+            default:
+                printCentered("Invalid choice. Please try again.", WIDTH);
         }
     } while (choice != 2);
 }
@@ -215,18 +267,20 @@ void nonlinDSMenu() {
 void stringsMenu(){
     int choice;
     do {
-        printf("\n=== String Menu ===\n");
-        printf("1) Get Character (getchar)\n");
-        printf("2) Put Character (putchar)\n");
-        printf("3) Length \n");
-        printf("4) Position of Character\n");
-        printf("5) Concatenate (concat)\n");
-        printf("6) Substring\n");
-        printf("7) Insert\n");
-        printf("8) Delete\n");
-        printf("9) Compare");
-        printf("10) Sort");
-        printf("11) Exit to Main Menu\n");
+        printf("\n");
+        printCentered("=== String Menu ===", WIDTH);
+        printCentered("1) Get Character (getchar)", WIDTH);
+        printCentered("2) Put Character (putchar)", WIDTH);
+        printCentered("3) Length", WIDTH);
+        printCentered("4) Position of Character", WIDTH);
+        printCentered("5) Concatenate (concat)", WIDTH);
+        printCentered("6) Substring", WIDTH);
+        printCentered("7) Insert", WIDTH);
+        printCentered("8) Delete", WIDTH);
+        printCentered("9) Compare", WIDTH);
+        printCentered("10) Sort", WIDTH);
+        printCentered("11) Exit to Main Menu", WIDTH);
+        printf("\n");
         printf("Choose Option: ");
         scanf("%d", &choice);
 
@@ -262,8 +316,10 @@ void stringsMenu(){
             strSort(); // To be made
             break;*/
         case 11:
-            printf("Returning to Main Menu...\n");
-            break;  
+            printCentered("Returning to Main Menu...", WIDTH);
+            break;
+        default:
+            printCentered("Invalid choice. Please try again.", WIDTH);
         }
     } while (choice != 11);
 }
@@ -271,17 +327,19 @@ void stringsMenu(){
 void sortingMenu(){
     int choice;
     do {
-        printf("\n=== Sorting Menu ===\n");
-        printf("1) Heap Sort\n");
-        printf("2) Radix Sort\n");
-        printf("3) Quick Sort \n");
-        printf("4) Merge Sort\n");
-        printf("5) Random Sort\n");
-        printf("6) Insertion Sort\n");
-        printf("7) Counting Sort\n");
-        printf("8) Selection Sort\n");
-        printf("9) Bubble Sort\n");
-        printf("10) Exit to Main Menu\n");
+        printf("\n");
+        printCentered("=== Sorting Menu ===", WIDTH);
+        printCentered("1) Heap Sort", WIDTH);
+        printCentered("2) Radix Sort", WIDTH);
+        printCentered("3) Quick Sort", WIDTH);
+        printCentered("4) Merge Sort", WIDTH);
+        printCentered("5) Random Sort", WIDTH);
+        printCentered("6) Insertion Sort", WIDTH);
+        printCentered("7) Counting Sort", WIDTH);
+        printCentered("8) Selection Sort", WIDTH);
+        printCentered("9) Bubble Sort", WIDTH);
+        printCentered("10) Exit to Main Menu", WIDTH);
+        printf("\n");
         printf("Choose Option: ");
         scanf("%d", &choice);
 
@@ -314,8 +372,10 @@ void sortingMenu(){
             bubbleSort();
             break;
         case 10:
-            printf("Returning to Main Menu...\n");
+            printCentered("Returning to Main Menu...", WIDTH);
             break;
+        default:
+            printCentered("Invalid choice. Please try again.", WIDTH);
         }
     } while (choice != 10); 
 }
@@ -323,10 +383,12 @@ void sortingMenu(){
 void searchingMenu(){
     int choice, n, target;
     do {
-        printf("\n=== Searching Menu ===\n");
-        printf("1) Linear Search\n");
-        printf("2) Binary Search\n");
-        printf("3) Exit to Main Menu\n");
+        printf("\n");
+        printCentered("=== Searching Menu ===", WIDTH);
+        printCentered("1) Linear Search", WIDTH);
+        printCentered("2) Binary Search", WIDTH);
+        printCentered("3) Exit to Main Menu", WIDTH);
+        printf("\n");
         printf("Choose Option: ");
         scanf("%d", &choice);
         int arr[n];
@@ -367,8 +429,10 @@ void searchingMenu(){
             binSearch(arr, n, target);
             break;
         case 3:
-            printf("Returning to Main Menu...\n");
+            printCentered("Returning to Main Menu...", WIDTH);
             break;
+        default:
+            printCentered("Invalid choice. Please try again.", WIDTH);
         }
     } while (choice != 3); 
 }
@@ -377,12 +441,14 @@ void searchingMenu(){
 void treeMenu(){
     int choice;
        do {
-        printf("\n=== Tree Menu ===\n");
-        printf("1) Tree Representation\n");
-        printf("2) Rooted Trees\n");
-        printf("3) Ordered Trees\n");
-        printf("4) Binary Trees\n");
-        printf("5) Exit to Non-Linear DS Menu\n");
+        printf("\n");
+        printCentered("=== Tree Menu ===", WIDTH);
+        printCentered("1) Tree Representation", WIDTH);
+        printCentered("2) Rooted Trees", WIDTH);
+        printCentered("3) Ordered Trees", WIDTH);
+        printCentered("4) Binary Trees", WIDTH);
+        printCentered("5) Exit to Non-Linear DS Menu", WIDTH);
+        printf("\n");
         printf("Choose Option: ");
         scanf("%d", &choice);
 
@@ -400,8 +466,10 @@ void treeMenu(){
             binaryTree(); // To be made
             break;*/
         case 5:
-            printf("Returning to Non-Linear DS Menu...\n");
+            printCentered("Returning to Non-Linear DS Menu...", WIDTH);
             break;
+        default:
+            printCentered("Invalid choice. Please try again.", WIDTH);
         }
     } while (choice != 5); 
 }
@@ -414,6 +482,16 @@ void printArray(int arr[], int n, const char *sortType, int iterations) {
         printf("%d ", arr[i]);
     }
     printf("\n");
+}
+
+// Helper function to print centered text
+void printCentered(const char *text, int width) {
+    int padding = (width - strlen(text)) / 2; // Calculate leading spaces
+    if (padding > 0) {
+        printf("%*s%s\n", padding, "", text); // Print spaces, then the text
+    } else {
+        printf("%s\n", text); // If text is wider than the width, just print it
+    }
 }
 
 // Function to clear the input buffer
