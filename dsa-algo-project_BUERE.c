@@ -42,6 +42,7 @@ Lab 2 is wrapping up, and I’ve made some serious progress on the program durin
 #include <string.h>
 
 #define WIDTH 80
+#define HEIGHT 24
 
 //terminal commands
 void setTerminalSize();
@@ -51,7 +52,7 @@ void clearScreen();
 unsigned int seed = 1; // Initialize a seed for randomness
 
 // Menu's
-void mainMenu();
+void mainMenu(int *choice);
 void linearDSMenu();
 void nonlinDSMenu();
 void stringsMenu();
@@ -61,6 +62,15 @@ void treeMenu();
 
 //print array func prototype
 void printArray(int arr[], int n, const char *sortType, int iterations);
+
+//print sorted Array
+void printSortedArray(int arr[], int n, int iterations);
+
+// Function to display title page and ask if the user wants to continue
+int welcomeScreen();
+
+// Function to display program introduction
+void introductionScreen();
 
 // Function to clear the input buffer
 void clearInputBuffer();
@@ -121,6 +131,16 @@ int main() {
     int choice, size, value, key, maxSize, top = -1, front = -1, rear = -1;
     int *arr, *queue, *stack;
     //Node *head = NULL;
+    setTerminalSize(); // Set terminal size once
+    clearScreen();
+
+    if (!welcomeScreen()) { // If the user chooses not to continue
+        printCentered("Exiting program. Goodbye!", WIDTH);
+        return 0; // Exit the program
+    }
+    
+    introductionScreen(); // Display the introduction
+
     do {
         system("cls");
         setTerminalSize();
@@ -128,13 +148,11 @@ int main() {
         printf("\n");
         printCentered("Welcome to the Data Structures and Algorithms Menu!", WIDTH);
         //Main Menu
-        mainMenu();
-        printf("Enter your choice: ");
-        scanf("%d", &choice);
-        
+        mainMenu(&choice);
+        clearScreen();
+
         switch (choice) {
             case 1:
-                clearScreen();
                 linearDSMenu();
                 break;
             case 2:
@@ -192,7 +210,7 @@ void clearScreen() {
 //Menu's
 
 // Main Menu
-void mainMenu() {
+void mainMenu(int *choice) {
     printf("\n");
     printCentered("=== Main Menu ===", WIDTH);
     printCentered("1) Linear DS [1/5 Done]", WIDTH);
@@ -202,6 +220,9 @@ void mainMenu() {
     printCentered("5) Searching", WIDTH);
     printCentered("6) Quit", WIDTH);
     printf("\n");
+    printf("Enter your choice: ");
+    scanf("%d", choice); // Update choice directly
+    clearInputBuffer();  // Clear any extra input from buffer
 }
 
 void linearDSMenu() {
@@ -236,6 +257,7 @@ void linearDSMenu() {
                 break;
             default:
                 printCentered("Invalid choice. Please try again.", WIDTH);
+                clearInputBuffer();
         }
     } while (choice != 5);
 }
@@ -260,6 +282,7 @@ void nonlinDSMenu() {
                 break;
             default:
                 printCentered("Invalid choice. Please try again.", WIDTH);
+                clearInputBuffer();
         }
     } while (choice != 2);
 }
@@ -320,6 +343,7 @@ void stringsMenu(){
             break;
         default:
             printCentered("Invalid choice. Please try again.", WIDTH);
+            clearInputBuffer();
         }
     } while (choice != 11);
 }
@@ -376,6 +400,7 @@ void sortingMenu(){
             break;
         default:
             printCentered("Invalid choice. Please try again.", WIDTH);
+            clearInputBuffer();
         }
     } while (choice != 10); 
 }
@@ -433,6 +458,7 @@ void searchingMenu(){
             break;
         default:
             printCentered("Invalid choice. Please try again.", WIDTH);
+            clearInputBuffer();
         }
     } while (choice != 3); 
 }
@@ -470,6 +496,7 @@ void treeMenu(){
             break;
         default:
             printCentered("Invalid choice. Please try again.", WIDTH);
+            clearInputBuffer();
         }
     } while (choice != 5); 
 }
@@ -477,10 +504,49 @@ void treeMenu(){
 
 // printing array func
 void printArray(int arr[], int n, const char *sortType, int iterations) {
-    printf("%s - Iteration %d: ", sortType, iterations);
-    for (int i = 0; i < n; i++) {
-        printf("%d ", arr[i]);
+    char buffer[WIDTH]; // Temporary buffer for array content
+    int length = 0;
+
+    printf("\n");
+    // Add the sort type and iteration info to the buffer
+    length += snprintf(buffer + length, sizeof(buffer) - length, "%s - Iteration %d: ", sortType, iterations);
+
+    // Add array elements to the buffer
+    for (int i = 0; i < n && length < sizeof(buffer) - 1; i++) {
+        length += snprintf(buffer + length, sizeof(buffer) - length, "%d ", arr[i]);
     }
+
+    // Calculate padding for centering
+    int padding = (WIDTH - strlen(buffer)) / 2;
+
+    // Ensure padding is non-negative
+    if (padding < 0) padding = 0;
+
+    // Print spaces for centering and then the buffer content
+    printf("%*s%s\n", padding, "", buffer);
+}
+
+void printSortedArray(int arr[], int n, int iterations) {
+    char buffer[WIDTH]; // Buffer for the array content
+    int length = 0;
+
+    printf("\n");
+    // Construct the array output
+    length += snprintf(buffer + length, sizeof(buffer) - length, "Sorted Array: ");
+    for (int i = 0; i < n && length < sizeof(buffer) - 1; i++) {
+        length += snprintf(buffer + length, sizeof(buffer) - length, "%d ", arr[i]);
+    }
+
+    // Center the sorted array
+    int padding = (WIDTH - strlen(buffer)) / 2;
+    if (padding < 0) padding = 0;
+    printf("%*s%s\n", padding, "", buffer);
+
+    // Construct and center the iterations count
+    snprintf(buffer, sizeof(buffer), "Iterations: %d", iterations);
+    padding = (WIDTH - strlen(buffer)) / 2;
+    if (padding < 0) padding = 0;
+    printf("%*s%s\n", padding, "", buffer);
     printf("\n");
 }
 
@@ -494,6 +560,67 @@ void printCentered(const char *text, int width) {
     }
 }
 
+// Function to display the title page and ask the user to continue
+int welcomeScreen() {
+    char choice;
+    clearScreen();
+
+    // Center the content vertically
+    for (int i = 0; i < HEIGHT / 3; i++) {
+        printf("\n");
+    }
+
+    // Display the title screen
+    printCentered("CS 104 - Data Structures and Algorithms", WIDTH);
+    printCentered("Instructor: Laarni D. Pancho", WIDTH);
+    printCentered("Student: Johann Reuel D. Buere", WIDTH);
+    printf("\n\n");
+    printCentered("Would you like to continue? (y/n): ", WIDTH);
+
+    // Get the user's choice
+    while (1) {
+        scanf(" %c", &choice);
+        clearInputBuffer(); // Clear any additional input
+        if (choice == 'y' || choice == 'Y') {
+            return 1; // Continue
+        } else if (choice == 'n' || choice == 'N') {
+            return 0; // Exit
+        } else {
+            printCentered("Invalid input. Please enter 'y' or 'n'.", WIDTH);
+            printCentered("Would you like to continue? (y/n): ", WIDTH);
+        }
+    }
+}
+
+void introductionScreen() {
+    clearScreen();
+
+    // Center the content vertically
+    for (int i = 0; i < HEIGHT / 4; i++) {
+        printf("\n");
+    }
+
+    // Display the program's introduction
+    printCentered("Welcome to the Data Structures and Algorithms Program!", WIDTH);
+    printf("\n");
+    printCentered("This program is designed to help you learn and interact with", WIDTH);
+    printCentered("various data structures and algorithms, such as:", WIDTH);
+    printCentered("- Linear Data Structures (Arrays, Stacks, Queues, etc.)", WIDTH);
+    printCentered("- Non-Linear Data Structures (Trees, Graphs)", WIDTH);
+    printCentered("- Sorting Algorithms (Quick Sort, Merge Sort, etc.)", WIDTH);
+    printCentered("- Searching Algorithms (Linear Search, Binary Search)", WIDTH);
+    printf("\n");
+    printCentered("Its purpose is to provide an interactive way to understand", WIDTH);
+    printCentered("and visualize how these concepts work.", WIDTH);
+    printf("\n");
+    printCentered("You will also be guided with menus to select and explore", WIDTH);
+    printCentered("each topic step by step. Have fun learning!", WIDTH);
+    printf("\n\n");
+    printCentered("Press Enter to continue...", WIDTH);
+
+    getchar(); // Wait for the user to press Enter
+}
+
 // Function to clear the input buffer
 void clearInputBuffer() {
     int c;
@@ -505,24 +632,27 @@ void clearInputBuffer() {
 // checks input for uncertainties
 void getInput(int *n) {
     int validInput = 0;
-    // Validate the number of elements
+
     while (!validInput) {
+        // Centered prompt for number of elements
         printf("Enter the number of elements: ");
         if (scanf("%d", n) != 1 || *n <= 0) {
-            printf("Invalid input. \nPlease enter a positive integer.\n");
-            clearInputBuffer();
+            printCentered("\nInvalid input.", WIDTH);
+            printCentered("Please enter a positive integer.\n", WIDTH);
+            clearInputBuffer(); // Clear invalid input from the buffer
         } else if (*n >= 30) {
             char confirm;
-            printf("That's quite a large number of elements. Are you sure you want to continue? (y/n): ");
+            printCentered("That's quite a large number of elements.", WIDTH);
+            printf("Are you sure you want to continue? (y/n): ");
             scanf(" %c", &confirm);
-            clearInputBuffer();
+            clearInputBuffer(); // Clear any additional input
             if (confirm == 'y' || confirm == 'Y') {
-                validInput = 1;
+                validInput = 1; // Input confirmed as valid
             } else {
-                printf("\nPlease enter a smaller number of elements.\n");
+                printCentered("Please enter a smaller number of elements.", WIDTH);
             }
         } else {
-            validInput = 1;
+            validInput = 1; // Valid input
         }
     }
 }
@@ -686,10 +816,7 @@ void heapSort() {
         }
     }
 
-    printf("Sorted Array: ");
-    for (int i = 0; i < n; i++)
-        printf("%d ", arr[i]);
-    printf("\nIterations: %d\n", iterations);
+    printSortedArray(arr, n, iterations);
 }
 
 
@@ -755,7 +882,7 @@ void msdRadixSort(int arr[], int n, int* iterations, const char *sortType) {
 
 void radixSort() {
     int n, type, iterations = 0;
-     getInput(&n);
+    getInput(&n);
     int arr[n];
     printf("Enter the elements: ");
     for (int i = 0; i < n; i++) {
@@ -784,10 +911,7 @@ void radixSort() {
         return;
     }
 
-    printf("Sorted Array: ");
-    for (int i = 0; i < n; i++)
-        printf("%d ", arr[i]);
-    printf("\nIterations: %d\n", iterations);
+    printSortedArray(arr, n, iterations);
 }
 
 
@@ -868,10 +992,7 @@ void quickSort() {
 
     quickSortHelper(arr, 0, n - 1, &iterations, type, sortType);
 
-    printf("Sorted Array: ");
-    for (int i = 0; i < n; i++)
-        printf("%d ", arr[i]);
-    printf("\nIterations: %d\n", iterations);
+    printSortedArray(arr, n, iterations);
 }
 
 
@@ -946,10 +1067,7 @@ void mergeSort() {
     const char *sortType = "Merge Sort";
     mergeSortHelper(arr, 0, n - 1, &iterations, sortType);
 
-    printf("Sorted Array: ");
-    for (int i = 0; i < n; i++)
-        printf("%d ", arr[i]);
-    printf("\nIterations: %d\n", iterations);
+    printSortedArray(arr, n, iterations);
 }
 
 
@@ -1004,9 +1122,7 @@ void randSort() {
     }
 
     // Display final sorted array
-    printf("Sorted Array: ");
-    for (int i = 0; i < n; i++) printf("%d ", arr[i]);
-    printf("\n");
+    printSortedArray(arr, n, iterations);
 }
 
 // Insertion Sort
@@ -1042,9 +1158,7 @@ void insertSort() {
         printArray(arr, n, sortType, iterations);  
     }
 
-    printf("Sorted Array: ");
-    for (int i = 0; i < n; i++) printf("%d ", arr[i]);
-    printf("\n");
+    printSortedArray(arr, n, iterations);   
 }
 
 
@@ -1094,9 +1208,7 @@ void countSort() {
     iterations++;  // Increment iteration after placing elements in output array
     printArray(output, n, "Counting Sort - Output Array", iterations);  // Print output array
 
-    printf("Sorted Array: ");
-    for (int i = 0; i < n; i++) printf("%d ", output[i]);
-    printf("\n");
+    printSortedArray(arr, n, iterations);
 }
 
 
@@ -1138,8 +1250,7 @@ void selecSort() {
     }
 
     // Final sorted array print
-    printf("Sorted Array: ");
-    printArray(arr, n, "Selection Sort - Sorted Array", ++iterations);
+    printSortedArray(arr, n, iterations);
 }
 
 // bubble sort
@@ -1177,6 +1288,5 @@ void bubbleSort() {
     }
 
     // Final sorted array print
-    printf("Sorted Array: ");
-    printArray(arr, n, "Bubble Sort - Sorted Array", ++iterations);
+    printSortedArray(arr, n, iterations);
 }
