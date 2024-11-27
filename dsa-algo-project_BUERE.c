@@ -429,7 +429,6 @@ void sortingMenu(){
     } while (choice != 10); 
 }
 
-//Searching Menu
 void searchingMenu() {
     int choice, n, type;
     do {
@@ -475,7 +474,7 @@ void searchingMenu() {
             }
 
             // Input elements
-            printf("Enter the elements: ");
+            printf("Enter the elements ");
             if (isInt) {
                 int *intArr = (int *)arr;
                 for (int i = 0; i < n; i++) {
@@ -495,6 +494,7 @@ void searchingMenu() {
                 }
                 clearInputBuffer();
             } else if (isString) {
+                printf("(Press Enter for Each String): ");
                 char **strArr = (char **)arr;
                 for (int i = 0; i < n; i++) {
                     strArr[i] = malloc(100 * sizeof(char));
@@ -560,7 +560,7 @@ void searchingMenu() {
             }
 
             // Input elements
-            printf("Enter the elements: ");
+            printf("Enter the elements ");
             if (isInt) {
                 int *intArr = (int *)arr;
                 for (int i = 0; i < n; i++) {
@@ -580,6 +580,7 @@ void searchingMenu() {
                 }
                 clearInputBuffer();
             } else if (isString) {
+                printf("(Press Enter for Each String): ");
                 char **strArr = (char **)arr;
                 for (int i = 0; i < n; i++) {
                     strArr[i] = malloc(100 * sizeof(char));
@@ -623,7 +624,6 @@ void searchingMenu() {
         }
     } while (choice != 3);
 }
-
 
 
 // Minor Menu's
@@ -1224,7 +1224,7 @@ void radixSort() {
         return;
     }
 
-    printf("Enter the elements");
+    printf("Enter the elements ");
     clearInputBuffer();
     if (isInt) {
         int *intArr = (int *)arr;
@@ -1243,7 +1243,7 @@ void radixSort() {
             }
         }
     } else if (isString) {
-        printf(" (Press Enter for Each String): ");
+        printf("(Press Enter for Each String): ");
         char **strArr = (char **)arr;
         for (int i = 0; i < n; i++) {
             strArr[i] = malloc(100 * sizeof(char)); // Allocate space for strings
@@ -1446,7 +1446,7 @@ void quickSort() {
         return;
     }
 
-    printf("Enter the elements");
+    printf("Enter the elements ");
     clearInputBuffer();
     if (isInt) {
         int *intArr = (int *)arr;
@@ -1465,7 +1465,7 @@ void quickSort() {
             }
         }
     } else if (isString) {
-        printf(" (Press Enter for Each String): ");
+        printf("(Press Enter for Each String): ");
         char **strArr = (char **)arr;
         for (int i = 0; i < n; i++) {
             strArr[i] = malloc(100 * sizeof(char)); // Allocate space for strings
@@ -1653,7 +1653,7 @@ void mergeSort() {
         return;
     }
 
-    printf("Enter the elements");
+    printf("Enter the elements ");
     clearInputBuffer();
     if (isInt) {
         int *intArr = (int *)arr;
@@ -1672,7 +1672,7 @@ void mergeSort() {
             }
         }
     } else if (isString) {
-        printf(" (Press Enter for Each String): ");
+        printf("(Press Enter for Each String): ");
         char **strArr = (char **)arr;
         for (int i = 0; i < n; i++) {
             strArr[i] = malloc(100 * sizeof(char)); // Allocate space for strings
@@ -1727,7 +1727,7 @@ void randSort() {
         return;
     }
 
-    printf("Enter the elements");
+    printf("Enter the elements ");
     clearInputBuffer();
     if (isInt) {
         int *intArr = (int *)arr;
@@ -1746,7 +1746,7 @@ void randSort() {
             }
         }
     } else if (isString) {
-        printf(" (Press Enter for Each String): ");
+        printf("(Press Enter for Each String): ");
         char **strArr = (char **)arr;
         for (int i = 0; i < n; i++) {
             strArr[i] = malloc(100 * sizeof(char)); // Allocate space for strings
@@ -1862,7 +1862,7 @@ void insertSort() {
         return;
     }
 
-    printf("Enter the elements");
+    printf("Enter the elements ");
     clearInputBuffer();
     if (isInt) {
         int *intArr = (int *)arr;
@@ -1881,7 +1881,7 @@ void insertSort() {
             }
         }
     } else if (isString) {
-        printf(" (Press Enter for Each String): ");
+        printf("(Press Enter for Each String): ");
         char **strArr = (char **)arr;
         for (int i = 0; i < n; i++) {
             strArr[i] = malloc(100 * sizeof(char)); // Allocate space for strings
@@ -1969,7 +1969,7 @@ void countSort() {
         return;
     }
 
-    printf("Enter the elements");
+    printf("Enter the elements ");
     clearInputBuffer();
     if (isInt) {
         int *intArr = (int *)arr;
@@ -1988,7 +1988,7 @@ void countSort() {
             }
         }
     } else if (isString) {
-        printf(" (Press Enter for Each String): ");
+        printf("(Press Enter for Each String): ");
         char **strArr = (char **)arr;
         for (int i = 0; i < n; i++) {
             strArr[i] = malloc(100 * sizeof(char)); // Allocate space for strings
@@ -2118,7 +2118,7 @@ void selecSort() {
         return;
     }
 
-    printf("Enter the elements");
+    printf("Enter the elements ");
     clearInputBuffer();
     if (isInt) {
         int *intArr = (int *)arr;
@@ -2137,7 +2137,7 @@ void selecSort() {
             }
         }
     } else if (isString) {
-        printf(" (Press Enter for Each String): ");
+        printf("(Press Enter for Each String): ");
         char **strArr = (char **)arr;
         for (int i = 0; i < n; i++) {
             strArr[i] = malloc(100 * sizeof(char)); // Allocate space for strings
@@ -2234,7 +2234,7 @@ void bubbleSort() {
         return;
     }
 
-    printf("Enter the elements");
+    printf("Enter the elements ");
     clearInputBuffer();
     if (isInt) {
         int *intArr = (int *)arr;
@@ -2253,7 +2253,7 @@ void bubbleSort() {
             }
         }
     } else if (isString) {
-        printf(" (Press Enter for Each String): ");
+        printf("(Press Enter for Each String): ");
         char **strArr = (char **)arr;
         for (int i = 0; i < n; i++) {
             strArr[i] = malloc(100 * sizeof(char)); // Allocate space for strings
