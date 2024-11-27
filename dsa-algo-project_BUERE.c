@@ -672,74 +672,6 @@ void getInput(int *n) {
     }
 }
 
-// Searching Algorithm
-void linSearch(int arr[], int size, int target) {
-    int found = 0;
-    for (int i = 0; i < size; i++) {
-        if (arr[i] == target) {
-            printf("Element %d found at index %d.\n", target, i);
-            found = 1;
-            break;
-        }
-    }
-    if (!found) {
-        printf("Element %d not found in the array.\n", target);
-    }
-}
-
-// Binary search function
-void binSearch(int arr[], int size, int target) {
-    // Perform binary insertion sort before binary search
-    binaryInsertionSort(arr, size);
-
-    int low = 0, high = size - 1;
-    int found = 0;
-
-    while (low <= high) {
-        int mid = (low + high) / 2;
-
-        if (arr[mid] == target) {
-            printf("Element %d found at index %d.\n", target, mid);
-            found = 1;
-            break;
-        } else if (arr[mid] < target) {
-            low = mid + 1;
-        } else {
-            high = mid - 1;
-        }
-    }
-
-    if (!found) {
-        printf("Element %d not found in the array.\n", target);
-    }
-}
-
-// Binary Insertion Sort function
-void binaryInsertionSort(int arr[], int size) {
-    for (int i = 1; i < size; i++) {
-        int key = arr[i];
-        int low = 0, high = i - 1;
-        
-        // Binary search to find the correct position
-        while (low <= high) {
-            int mid = (low + high) / 2;
-            if (arr[mid] < key) {
-                low = mid + 1;
-            } else {
-                high = mid - 1;
-            }
-        }
-
-        // Move all elements after the found position to one place ahead
-        for (int j = i - 1; j >= low; j--) {
-            arr[j + 1] = arr[j];
-        }
-
-        // Insert the key at its correct position
-        arr[low] = key;
-    }
-}
-
 // Heapify function for integers
 void maxHeapifyInt(int arr[], int n, int i, int *iterations) {
     int largest = i, left = 2 * i + 1, right = 2 * i + 2;
@@ -2242,4 +2174,71 @@ void bubbleSort() {
         }
     }
     free(arr);  // Free the dynamically allocated memory
+}
+
+// Searching Algorithm
+void linSearch(int arr[], int size, int target) {
+    int found = 0;
+    for (int i = 0; i < size; i++) {
+        if (arr[i] == target) {
+            printf("Element %d found at index %d.\n", target, i);
+            found = 1;
+            break;
+        }
+    }
+    if (!found) {
+        printf("Element %d not found in the array.\n", target);
+    }
+}
+
+// Binary search function
+void binSearch(int arr[], int size, int target) {
+    // Perform binary insertion sort before binary search
+    binaryInsertionSort(arr, size);
+
+    int low = 0, high = size - 1;
+    int found = 0;
+
+    while (low <= high) {
+        int mid = (low + high) / 2;
+
+        if (arr[mid] == target) {
+            printf("Element %d found at index %d.\n", target, mid);
+            found = 1;
+            break;
+        } else if (arr[mid] < target) {
+            low = mid + 1;
+        } else {
+            high = mid - 1;
+        }
+    }
+
+    if (!found) {
+        printf("Element %d not found in the array.\n", target);
+    }
+}
+
+// Binary Insertion Sort function
+void binaryInsertionSort(int arr[], int size) {
+    for (int i = 1; i < size; i++) {
+        int key = arr[i];
+        int low = 0, high = i - 1;
+        
+        // Binary search to find the correct position
+        while (low <= high) {
+            int mid = (low + high) / 2;
+            if (arr[mid] < key) {
+                low = mid + 1;
+            } else {
+                high = mid - 1;
+            }
+        }
+
+        for (int j = i - 1; j >= low; j--) {
+            arr[j + 1] = arr[j];
+        }
+
+        
+        arr[low] = key;
+    }
 }
