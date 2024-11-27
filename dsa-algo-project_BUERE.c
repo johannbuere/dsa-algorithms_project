@@ -445,7 +445,10 @@ void searchingMenu() {
 
         switch (choice) {
         case 1: { // Linear Search
-            getInput(&n);
+            printf("Enter the number of elements: ");
+            scanf("%d", &n);
+            clearInputBuffer();
+
             printf("Choose Data Type: 1) Integer 2) Character 3) String: ");
             scanf("%d", &type);
             clearInputBuffer();
@@ -496,7 +499,7 @@ void searchingMenu() {
                 for (int i = 0; i < n; i++) {
                     strArr[i] = malloc(100 * sizeof(char));
                     fgets(strArr[i], 100, stdin);
-                    strArr[i][strcspn(strArr[i], "\n")] = '\0';  // Remove newline
+                    strArr[i][strcspn(strArr[i], "\n")] = '\0';  // Remove trailing newline
                 }
             }
 
@@ -509,7 +512,7 @@ void searchingMenu() {
             } else if (isString) {
                 clearInputBuffer();
                 fgets((char *)target, 100, stdin);
-                ((char *)target)[strcspn((char *)target, "\n")] = '\0';  // Remove newline
+                ((char *)target)[strcspn((char *)target, "\n")] = '\0';  // Remove trailing newline
             }
 
             // Perform linear search
@@ -527,7 +530,10 @@ void searchingMenu() {
             break;
         }
         case 2: { // Binary Search
-            getInput(&n);
+            printf("Enter the number of elements: ");
+            scanf("%d", &n);
+            clearInputBuffer();
+
             printf("Choose Data Type: 1) Integer 2) Character 3) String: ");
             scanf("%d", &type);
             clearInputBuffer();
@@ -578,7 +584,7 @@ void searchingMenu() {
                 for (int i = 0; i < n; i++) {
                     strArr[i] = malloc(100 * sizeof(char));
                     fgets(strArr[i], 100, stdin);
-                    strArr[i][strcspn(strArr[i], "\n")] = '\0';  // Remove newline
+                    strArr[i][strcspn(strArr[i], "\n")] = '\0';  // Remove trailing newline
                 }
             }
 
@@ -591,7 +597,7 @@ void searchingMenu() {
             } else if (isString) {
                 clearInputBuffer();
                 fgets((char *)target, 100, stdin);
-                ((char *)target)[strcspn((char *)target, "\n")] = '\0';  // Remove newline
+                ((char *)target)[strcspn((char *)target, "\n")] = '\0';  // Remove trailing newline
             }
 
             // Perform binary search
@@ -617,6 +623,7 @@ void searchingMenu() {
         }
     } while (choice != 3);
 }
+
 
 
 // Minor Menu's
