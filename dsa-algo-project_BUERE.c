@@ -67,6 +67,11 @@ void sortingMenu();
 void searchingMenu();
 void treeMenu();
 
+// Helper functions for input handling
+void fgetsInput(int *value, const char *errorMsg); // Handles integer input
+void fgetsInputChar(char *value, const char *errorMsg); // Handles character input
+void fgetsInputString(char *value, int size, const char *errorMsg); // Handles string input
+
 //print array func prototype
 void printArrayMulti(void *arr, int n, const char *sortType, int iterations, int type);
 
@@ -439,18 +444,15 @@ void searchingMenu() {
         printCentered("3) Exit to Main Menu", WIDTH);
         printf("\n");
         printf("Choose Option: ");
-        scanf("%d", &choice);
-        clearInputBuffer();
+        fgetsInput(&choice, "Invalid input. Please enter a valid choice.");
 
         switch (choice) {
         case 1: { // Linear Search
             printf("Enter the number of elements: ");
-            scanf("%d", &n);
-            clearInputBuffer();
+            fgetsInput(&n, "Invalid input. Please enter a valid number.");
 
             printf("Choose Data Type: 1) Integer 2) Character 3) String: ");
-            scanf("%d", &type);
-            clearInputBuffer();
+            fgetsInput(&type, "Invalid input. Please enter a valid choice.");
 
             void *arr;
             void *target;
@@ -474,45 +476,33 @@ void searchingMenu() {
             }
 
             // Input elements
-            printf("Enter the elements ");
+            printf("Enter the elements (Press Enter for Each):\n");
             if (isInt) {
                 int *intArr = (int *)arr;
                 for (int i = 0; i < n; i++) {
-                    while (scanf("%d", &intArr[i]) != 1) {
-                        printf("Invalid input. Please enter an integer: ");
-                        clearInputBuffer();
-                    }
+                    fgetsInput(&intArr[i], "Invalid input. Please enter an integer.");
                 }
-                clearInputBuffer();
             } else if (isChar) {
                 char *charArr = (char *)arr;
                 for (int i = 0; i < n; i++) {
-                    while (scanf(" %c", &charArr[i]) != 1) {
-                        printf("Invalid input. Please enter a character: ");
-                        clearInputBuffer();
-                    }
+                    fgetsInputChar(&charArr[i], "Invalid input. Please enter a character.");
                 }
-                clearInputBuffer();
             } else if (isString) {
-                printf("(Press Enter for Each String): ");
                 char **strArr = (char **)arr;
                 for (int i = 0; i < n; i++) {
                     strArr[i] = malloc(100 * sizeof(char));
-                    fgets(strArr[i], 100, stdin);
-                    strArr[i][strcspn(strArr[i], "\n")] = '\0';  // Remove trailing newline
+                    fgetsInputString(strArr[i], 100, "Invalid input. Please enter a string.");
                 }
             }
 
             // Input target
             printf("Enter the element to search for: ");
             if (isInt) {
-                scanf("%d", (int *)target);
+                fgetsInput((int *)target, "Invalid input. Please enter an integer.");
             } else if (isChar) {
-                scanf(" %c", (char *)target);
+                fgetsInputChar((char *)target, "Invalid input. Please enter a character.");
             } else if (isString) {
-                clearInputBuffer();  // Clear input buffer to avoid leftover newline
-                fgets((char *)target, 100, stdin);  // Read the target string
-                ((char *)target)[strcspn((char *)target, "\n")] = '\0';  // Remove trailing newline
+                fgetsInputString((char *)target, 100, "Invalid input. Please enter a string.");
             }
 
             // Perform linear search
@@ -531,12 +521,10 @@ void searchingMenu() {
         }
         case 2: { // Binary Search
             printf("Enter the number of elements: ");
-            scanf("%d", &n);
-            clearInputBuffer();
+            fgetsInput(&n, "Invalid input. Please enter a valid number.");
 
             printf("Choose Data Type: 1) Integer 2) Character 3) String: ");
-            scanf("%d", &type);
-            clearInputBuffer();
+            fgetsInput(&type, "Invalid input. Please enter a valid choice.");
 
             void *arr;
             void *target;
@@ -560,45 +548,33 @@ void searchingMenu() {
             }
 
             // Input elements
-            printf("Enter the elements ");
+            printf("Enter the elements (Press Enter for Each):\n");
             if (isInt) {
                 int *intArr = (int *)arr;
                 for (int i = 0; i < n; i++) {
-                    while (scanf("%d", &intArr[i]) != 1) {
-                        printf("Invalid input. Please enter an integer: ");
-                        clearInputBuffer();
-                    }
+                    fgetsInput(&intArr[i], "Invalid input. Please enter an integer.");
                 }
-                clearInputBuffer();
             } else if (isChar) {
                 char *charArr = (char *)arr;
                 for (int i = 0; i < n; i++) {
-                    while (scanf(" %c", &charArr[i]) != 1) {
-                        printf("Invalid input. Please enter a character: ");
-                        clearInputBuffer();
-                    }
+                    fgetsInputChar(&charArr[i], "Invalid input. Please enter a character.");
                 }
-                clearInputBuffer();
             } else if (isString) {
-                printf("(Press Enter for Each String): ");
                 char **strArr = (char **)arr;
                 for (int i = 0; i < n; i++) {
                     strArr[i] = malloc(100 * sizeof(char));
-                    fgets(strArr[i], 100, stdin);
-                    strArr[i][strcspn(strArr[i], "\n")] = '\0';  // Remove trailing newline
+                    fgetsInputString(strArr[i], 100, "Invalid input. Please enter a string.");
                 }
             }
 
             // Input target
             printf("Enter the element to search for: ");
             if (isInt) {
-                scanf("%d", (int *)target);
+                fgetsInput((int *)target, "Invalid input. Please enter an integer.");
             } else if (isChar) {
-                scanf(" %c", (char *)target);
+                fgetsInputChar((char *)target, "Invalid input. Please enter a character.");
             } else if (isString) {
-                clearInputBuffer();  // Clear input buffer to avoid leftover newline
-                fgets((char *)target, 100, stdin);  // Read the target string
-                ((char *)target)[strcspn((char *)target, "\n")] = '\0';  // Remove trailing newline
+                fgetsInputString((char *)target, 100, "Invalid input. Please enter a string.");
             }
 
             // Perform binary search
@@ -620,9 +596,31 @@ void searchingMenu() {
             break;
         default:
             printCentered("Invalid choice. Please try again.", WIDTH);
-            clearInputBuffer();
         }
     } while (choice != 3);
+}
+void fgetsInput(int *value, const char *errorMsg) {
+    char buffer[100];
+    while (fgets(buffer, sizeof(buffer), stdin)) {
+        if (sscanf(buffer, "%d", value) == 1) return;
+        printf("%s\n", errorMsg);
+    }
+}
+
+void fgetsInputChar(char *value, const char *errorMsg) {
+    char buffer[100];
+    while (fgets(buffer, sizeof(buffer), stdin)) {
+        if (sscanf(buffer, " %c", value) == 1) return;
+        printf("%s\n", errorMsg);
+    }
+}
+
+void fgetsInputString(char *value, int size, const char *errorMsg) {
+    while (fgets(value, size, stdin)) {
+        value[strcspn(value, "\n")] = '\0';  // Remove trailing newline
+        if (strlen(value) > 0) return;
+        printf("%s\n", errorMsg);
+    }
 }
 
 
