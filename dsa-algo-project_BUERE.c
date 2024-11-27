@@ -1,45 +1,55 @@
 /* 
-✨ Johann Reuel D. Buere || BSCS 2A ✨ 
-📚 Lab 2: Progress Report 🛠️ 
+✨ Johann Reuel D. Buere || BSCS 2A ✨
+📚 Version 0.1: Initial Release 🛠️
 
-Lab 2 is wrapping up, and I’ve made some serious progress on the program during this time. Let’s break down what’s been achieved so far and what’s left to do!
+This version marks the beginning of the program, setting the foundation for future updates. Here's a breakdown of what has been achieved so far:
 
-🎉 Updates in Lab 2:
-- Sorting: Fully implemented and refined! 🎯 The sorting algorithms now feature polished user input handling and better usability. No more messy inputs; it’s all smooth sailing now!
+🎉 Updates in Version 0.1:
 
-- Searching: 🎉 New feature alert! Searching algorithms have been added to the program and are fully functional—finding data is a breeze. 🚀
+Sorting Algorithms: All sorting algorithms have been updated to handle multiple data types (int, char, and string). Each sorting algorithm is now capable of sorting arrays with integers, characters, and strings seamlessly. The algorithms include:
 
-- Linear DS: 1 out of 5 tasks complete! A small step forward, but still plenty of work to finish here. 🛤️
-- Others: Still under construction, but I’ll be taking the reins solo after Lab 2 to complete them. 🚧
+Heap Sort 🏰
+Radix Sort 🔢
+Quick Sort ⚡
+Merge Sort 🔀
+Random Sort (BogoSort) 🎲
+Insertion Sort 📝
+Counting Sort 🔍
+Selection Sort 🥇
+Bubble Sort 🔵
+These sorting algorithms now feature:
 
-📊 Main Menu Progress:
-    === Main Menu ===
+Proper handling of user inputs.
+The ability to print progress after each iteration during the sorting process.
+Sorting of integer, character, and string arrays.
+Searching Algorithms: 🎉 New feature alert! Searching algorithms have been added to the program and are fully functional. These algorithms make finding data intuitive and simple.
 
-    Linear DS [1/5 Done] 🟩⬜⬜⬜⬜
-    Non-Linear DS [Not Yet] 🚧
-    Strings [Not Yet] 🚧
-    Sorting [Done! ✅]
-    Searching [Done! ✅]
-    Quit
+📊 Main Menu Progress: === Main Menu ===
+Linear DS [Not Yet] 🚧
+Non-Linear DS [Not Yet] 🚧
+Strings [Not Yet] 🚧
+Sorting [Done! ✅]
+Searching [Done! ✅]
+Quit
 
-    
-📈 Comparison Since Lab 1:
-- Sorting was basic and clunky in Lab 1. Now it’s optimized with precise user controls and a clean interface! 💡
-- Searching didn’t even exist back then. Now, it’s fully functional and makes finding data intuitive and simple! ✨
-- The Main Menu now reflects real-time progress with percentages and markers to show what’s done and what’s still being worked on.
+📈 Comparison Since Initial Setup:
 
+Sorting algorithms were initially limited in functionality, but now they can sort arrays of int, char, and string seamlessly.
+Searching algorithms were added, and data can now be found easily and quickly.
+The Main Menu now reflects real-time progress with percentage markers to show what’s done and what’s still being worked on.
 ✨ Overall Progress:
-    [█████-----] 40% Complete!  
-    Still more to finish, but we’re making solid strides! 💪  
+[█████-----] 40% Complete!
+More work remains, but solid progress has been made! 💪
 
-🌟 Next Steps:  
-    After Lab 2, I’ll be working on the remaining features (Linear DS, Non-Linear DS, and Strings) on my own time. 
+🌟 Next Steps:
+After this release, I’ll be working on adding Linear DS, Non-Linear DS, and String manipulation features in future patches.
 */
 
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #define WIDTH 80
 #define HEIGHT 24
@@ -47,9 +57,6 @@ Lab 2 is wrapping up, and I’ve made some serious progress on the program durin
 //terminal commands
 void setTerminalSize();
 void clearScreen();
-
-
-unsigned int seed = 1; // Initialize a seed for randomness
 
 // Menu's
 void mainMenu(int *choice);
@@ -61,10 +68,10 @@ void searchingMenu();
 void treeMenu();
 
 //print array func prototype
-void printArray(int arr[], int n, const char *sortType, int iterations);
+void printArrayMulti(void *arr, int n, const char *sortType, int iterations, int type);
 
 //print sorted Array
-void printSortedArray(int arr[], int n, int iterations);
+void printSortedArrayMulti(void *arr, int n, int iterations, int type);  // Print sorted array for multiple data types
 
 // Function to display title page and ask if the user wants to continue
 int welcomeScreen();
@@ -88,26 +95,43 @@ void binaryInsertionSort(int arr[], int size);
 
 // Sorting Algo's
 
-// Heap Sort
-void maxHeapify(int arr[], int n, int i, int *iterations, const char *sortType);
-void minHeapify(int arr[], int n, int i, int *iterations, const char *sortType);
-void heapSort();
+/*
+    Heap Sort - Prototype Functions
+    Heapify functions for multiple data types (Max and Min)
+
+*/ 
+
+// heapify for integers
+void maxHeapifyInt(int arr[], int n, int i, int *iterations);  
+void minHeapifyInt(int arr[], int n, int i, int *iterations); 
+
+// heapify for characters
+void maxHeapifyChar(char arr[], int n, int i, int *iterations);  
+void minHeapifyChar(char arr[], int n, int i, int *iterations);  
+
+//heapify for strings
+void maxHeapifyString(char *arr[], int n, int i, int *iterations);  
+void minHeapifyString(char *arr[], int n, int i, int *iterations);  
+
+// Heap Sort function that uses different heap types
+void heapSortMulti();  // Main heap sort function handling Min and Max heap for int, char, string
+
 
 // radix Sort
-void countSortRadix(int arr[], int n, int exp, int* iterations, const char *sortType, int isMSD);
-void msdRadixSort(int arr[], int n, int* iterations, const char *sortType);
-void lsdRadixSort(int arr[], int n, int* iterations, const char *sortType);
+void countSortRadix(void *arr, int n, int exp, int* iterations, const char *sortType, int isMSD, int type);
+void msdRadixSort(void *arr, int n, int* iterations, const char *sortType, int type);
+void lsdRadixSort(void *arr, int n, int* iterations, const char *sortType, int type);
 void radixSort();
 
 // quick Sort
-int lomutoPartition(int arr[], int low, int high, int* iterations, const char *sortType);
-int hoarePartition(int arr[], int low, int high, int* iterations, const char *sortType);
-void quickSortHelper(int arr[], int low, int high, int* iterations, int partitionType, const char *sortType);
+int lomutoPartition(void *arr, int low, int high, int* iterations, const char *sortType, int type);
+int hoarePartition(void *arr, int low, int high, int* iterations, const char *sortType, int type);
+void quickSortHelper(void *arr, int low, int high, int* iterations, int partitionType, const char *sortType, int type);
 void quickSort();
 
 // Merge Sort
-void mergeSortHelper(int arr[], int l, int r, int* iterations, const char *sortType);
-void merge(int arr[], int l, int m, int r, int* iterations, const char *sortType);
+void mergeSortHelper(void *arr, int l, int r, int* iterations, const char *sortType, int type);
+void merge(void *arr, int l, int m, int r, int* iterations, const char *sortType, int type);
 void mergeSort();
 
 // random sort
@@ -369,7 +393,7 @@ void sortingMenu(){
 
         switch (choice) {
         case 1:
-            heapSort(); 
+            heapSortMulti(); 
             break;
         case 2:
             radixSort(); 
@@ -422,6 +446,7 @@ void searchingMenu(){
         case 1:
         getInput(&n);
         printf("Enter the elements: ");
+        clearInputBuffer();
         for (int i = 0; i < n; i++) {
             while (1) {
                 if (scanf("%d", &arr[i]) != 1) {
@@ -439,6 +464,7 @@ void searchingMenu(){
         case 2:
         getInput(&n);
         printf("Enter the elements: ");
+        clearInputBuffer();
         for (int i = 0; i < n; i++) {
             while (1) {
                 if (scanf("%d", &arr[i]) != 1) {
@@ -502,54 +528,40 @@ void treeMenu(){
 }
 
 
-// printing array func
-void printArray(int arr[], int n, const char *sortType, int iterations) {
-    char buffer[WIDTH]; // Temporary buffer for array content
+// Helper: Print array for multiple data types
+void printArrayMulti(void *arr, int n, const char *sortType, int iterations, int type) {
+    char buffer[WIDTH];
     int length = 0;
 
     printf("\n");
-    // Add the sort type and iteration info to the buffer
     length += snprintf(buffer + length, sizeof(buffer) - length, "%s - Iteration %d: ", sortType, iterations);
 
-    // Add array elements to the buffer
-    for (int i = 0; i < n && length < sizeof(buffer) - 1; i++) {
-        length += snprintf(buffer + length, sizeof(buffer) - length, "%d ", arr[i]);
+    if (type == 1) { // Integer array
+        int *intArr = (int *)arr;
+        for (int i = 0; i < n && length < sizeof(buffer) - 1; i++) {
+            length += snprintf(buffer + length, sizeof(buffer) - length, "%d ", intArr[i]);
+        }
+    } else if (type == 2) { // Character array
+        char *charArr = (char *)arr;
+        for (int i = 0; i < n && length < sizeof(buffer) - 1; i++) {
+            length += snprintf(buffer + length, sizeof(buffer) - length, "%c ", charArr[i]);
+        }
+    } else if (type == 3) { // String array
+        char **strArr = (char **)arr;
+        for (int i = 0; i < n && length < sizeof(buffer) - 1; i++) {
+            length += snprintf(buffer + length, sizeof(buffer) - length, "%s ", strArr[i]);
+        }
     }
 
-    // Calculate padding for centering
-    int padding = (WIDTH - strlen(buffer)) / 2;
-
-    // Ensure padding is non-negative
-    if (padding < 0) padding = 0;
-
-    // Print spaces for centering and then the buffer content
-    printf("%*s%s\n", padding, "", buffer);
-}
-
-void printSortedArray(int arr[], int n, int iterations) {
-    char buffer[WIDTH]; // Buffer for the array content
-    int length = 0;
-
-    printf("\n");
-    // Construct the array output
-    length += snprintf(buffer + length, sizeof(buffer) - length, "Sorted Array: ");
-    for (int i = 0; i < n && length < sizeof(buffer) - 1; i++) {
-        length += snprintf(buffer + length, sizeof(buffer) - length, "%d ", arr[i]);
-    }
-
-    // Center the sorted array
     int padding = (WIDTH - strlen(buffer)) / 2;
     if (padding < 0) padding = 0;
     printf("%*s%s\n", padding, "", buffer);
-
-    // Construct and center the iterations count
-    snprintf(buffer, sizeof(buffer), "Iterations: %d", iterations);
-    padding = (WIDTH - strlen(buffer)) / 2;
-    if (padding < 0) padding = 0;
-    printf("%*s%s\n", padding, "", buffer);
-    printf("\n");
 }
 
+void printSortedArrayMulti(void *arr, int n, int iterations, int type) {
+    printf("\nSorted Array:\n");
+    printArrayMulti(arr, n, "Final Result", iterations, type);
+}
 // Helper function to print centered text
 void printCentered(const char *text, int width) {
     int padding = (width - strlen(text)) / 2; // Calculate leading spaces
@@ -574,6 +586,8 @@ int welcomeScreen() {
     printCentered("CS 104 - Data Structures and Algorithms", WIDTH);
     printCentered("Instructor: Laarni D. Pancho", WIDTH);
     printCentered("Student: Johann Reuel D. Buere", WIDTH);
+    printf("\n");
+    printCentered("Version 0.1: Initial Release!", WIDTH);
     printf("\n\n");
     printCentered("Would you like to continue? (y/n): ", WIDTH);
 
@@ -636,6 +650,7 @@ void getInput(int *n) {
     while (!validInput) {
         // Centered prompt for number of elements
         printf("Enter the number of elements: ");
+        clearInputBuffer();
         if (scanf("%d", n) != 1 || *n <= 0) {
             printCentered("\nInvalid input.", WIDTH);
             printCentered("Please enter a positive integer.\n", WIDTH);
@@ -725,126 +740,316 @@ void binaryInsertionSort(int arr[], int size) {
     }
 }
 
+// Heapify function for integers
+void maxHeapifyInt(int arr[], int n, int i, int *iterations) {
+    int largest = i, left = 2 * i + 1, right = 2 * i + 2;
 
-
-
-// Heap Sort 
-void maxHeapify(int arr[], int n, int i, int *iterations, const char *sortType) {
-    int largest = i;
-    int left = 2 * i + 1;
-    int right = 2 * i + 2;
-
-    if (left < n && arr[left] > arr[largest])
-        largest = left;
-    if (right < n && arr[right] > arr[largest])
-        largest = right;
+    if (left < n && arr[left] > arr[largest]) largest = left;
+    if (right < n && arr[right] > arr[largest]) largest = right;
 
     if (largest != i) {
         int temp = arr[i];
         arr[i] = arr[largest];
         arr[largest] = temp;
         (*iterations)++;
-        printArray(arr, n, sortType, *iterations);  
-        maxHeapify(arr, n, largest, iterations, sortType);
+        printArrayMulti(arr, n, "Heapify (Integer)", *iterations, 1);
+        maxHeapifyInt(arr, n, largest, iterations);
     }
 }
 
-void minHeapify(int arr[], int n, int i, int *iterations, const char *sortType) {
-    int smallest = i;
-    int left = 2 * i + 1;
-    int right = 2 * i + 2;
+// Heapify function for characters
+void maxHeapifyChar(char arr[], int n, int i, int *iterations) {
+    int largest = i, left = 2 * i + 1, right = 2 * i + 2;
 
-    if (left < n && arr[left] < arr[smallest])
-        smallest = left;
-    if (right < n && arr[right] < arr[smallest])
-        smallest = right;
+    if (left < n && arr[left] > arr[largest]) largest = left;
+    if (right < n && arr[right] > arr[largest]) largest = right;
+
+    if (largest != i) {
+        char temp = arr[i];
+        arr[i] = arr[largest];
+        arr[largest] = temp;
+        (*iterations)++;
+        printArrayMulti(arr, n, "Heapify (Character)", *iterations, 2);
+        maxHeapifyChar(arr, n, largest, iterations);
+    }
+}
+
+// Heapify function for strings
+void maxHeapifyString(char *arr[], int n, int i, int *iterations) {
+    int largest = i, left = 2 * i + 1, right = 2 * i + 2;
+
+    if (left < n && strcmp(arr[left], arr[largest]) > 0) largest = left;
+    if (right < n && strcmp(arr[right], arr[largest]) > 0) largest = right;
+
+    if (largest != i) {
+        char *temp = arr[i];
+        arr[i] = arr[largest];
+        arr[largest] = temp;
+        (*iterations)++;
+        printArrayMulti(arr, n, "Heapify (String)", *iterations, 3);
+        maxHeapifyString(arr, n, largest, iterations);
+    }
+}
+
+//min Heapify func for int
+void minHeapifyInt(int arr[], int n, int i, int *iterations) {
+    int smallest = i, left = 2 * i + 1, right = 2 * i + 2;
+
+    if (left < n && arr[left] < arr[smallest]) smallest = left;
+    if (right < n && arr[right] < arr[smallest]) smallest = right;
 
     if (smallest != i) {
         int temp = arr[i];
         arr[i] = arr[smallest];
         arr[smallest] = temp;
         (*iterations)++;
-        printArray(arr, n, sortType, *iterations);  
-        minHeapify(arr, n, smallest, iterations, sortType);
+        printArrayMulti(arr, n, "Heapify (Integer - Min)", *iterations, 1);
+        minHeapifyInt(arr, n, smallest, iterations);
     }
 }
 
-void heapSort() {
-    int n, type, iterations = 0;
-    getInput(&n);
-    int arr[n];
-    printf("Enter the elements: ");
-    for (int i = 0; i < n; i++) {
-        while (1) {
-            if (scanf("%d", &arr[i]) != 1) {
-                printf("Invalid input. \nPlease enter an integer: ");
-                clearInputBuffer();
-            } else {
-                break;
+// min Heapify func for char
+void minHeapifyChar(char arr[], int n, int i, int *iterations) {
+    int smallest = i, left = 2 * i + 1, right = 2 * i + 2;
+
+    if (left < n && arr[left] < arr[smallest]) smallest = left;
+    if (right < n && arr[right] < arr[smallest]) smallest = right;
+
+    if (smallest != i) {
+        char temp = arr[i];
+        arr[i] = arr[smallest];
+        arr[smallest] = temp;
+        (*iterations)++;
+        printArrayMulti(arr, n, "Heapify (Character - Min)", *iterations, 2);
+        minHeapifyChar(arr, n, smallest, iterations);
+    }
+}
+
+//min Heapify func for string
+void minHeapifyString(char *arr[], int n, int i, int *iterations) {
+    int smallest = i, left = 2 * i + 1, right = 2 * i + 2;
+
+    if (left < n && strcmp(arr[left], arr[smallest]) < 0) smallest = left;
+    if (right < n && strcmp(arr[right], arr[smallest]) < 0) smallest = right;
+
+    if (smallest != i) {
+        char *temp = arr[i];
+        arr[i] = arr[smallest];
+        arr[smallest] = temp;
+        (*iterations)++;
+        printArrayMulti(arr, n, "Heapify (String - Min)", *iterations, 3);
+        minHeapifyString(arr, n, smallest, iterations);
+    }
+}
+
+
+
+// Heap Sort function for multiple data types
+void heapSortMulti() {
+    int type, heapType, n, iterations = 0;
+    printf("Choose Data Type: 1) Integer 2) Character 3) String: ");
+    scanf("%d", &type);
+    clearInputBuffer(); 
+
+    // Choose heap type (Min Heap or Max Heap)
+    printf("Choose Heap Type: 1) Max Heap 2) Min Heap: ");
+    scanf("%d", &heapType);
+    clearInputBuffer();
+
+    if (type == 1) { // Integer
+        printf("Enter number of elements: ");
+        scanf("%d", &n);
+        int arr[n];
+        printf("Enter the integers: ");
+        for (int i = 0; i < n; i++) scanf("%d", &arr[i]);
+
+        if (heapType == 1) { // Max Heap
+            // Build the Max Heap
+            for (int i = n / 2 - 1; i >= 0; i--) maxHeapifyInt(arr, n, i, &iterations);
+            // Perform the sorting using Max Heap
+            for (int i = n - 1; i > 0; i--) {
+                int temp = arr[0];
+                arr[0] = arr[i];
+                arr[i] = temp;
+                iterations++;
+                printArrayMulti(arr, n, "Heap Sort (Integer - Max)", iterations, 1);
+                maxHeapifyInt(arr, i, 0, &iterations);
+            }
+        } else { // Min Heap
+            // Build the Min Heap
+            for (int i = n / 2 - 1; i >= 0; i--) minHeapifyInt(arr, n, i, &iterations);
+            // Perform the sorting using Min Heap
+            for (int i = n - 1; i > 0; i--) {
+                int temp = arr[0];
+                arr[0] = arr[i];
+                arr[i] = temp;
+                iterations++;
+                printArrayMulti(arr, n, "Heap Sort (Integer - Min)", iterations, 1);
+                minHeapifyInt(arr, i, 0, &iterations);
             }
         }
-    }
 
-    printf("Choose Heap Type (1 for Max Heap, 2 for Min Heap): ");
-    clearInputBuffer();
-    scanf("%d", &type);
-    const char *sortType = (type == 1) ? "Max Heap Sort" : "Min Heap Sort";
+        printSortedArrayMulti(arr, n, iterations, 1);
 
-    if (type == 1) {
-        for (int i = n / 2 - 1; i >= 0; i--) {
-            maxHeapify(arr, n, i, &iterations, sortType);  // Pass pointer
+    } else if (type == 2) { // Character
+        printf("Enter number of elements: ");
+        scanf("%d", &n);
+        char arr[n];
+        printf("Enter the characters: ");
+        for (int i = 0; i < n; i++) scanf(" %c", &arr[i]);
+
+        if (heapType == 1) { // Max Heap for characters
+            // Build the Max Heap
+            for (int i = n / 2 - 1; i >= 0; i--) maxHeapifyChar(arr, n, i, &iterations);
+            // Perform the sorting using Max Heap
+            for (int i = n - 1; i > 0; i--) {
+                char temp = arr[0];
+                arr[0] = arr[i];
+                arr[i] = temp;
+                iterations++;
+                printArrayMulti(arr, n, "Heap Sort (Character - Max)", iterations, 2);
+                maxHeapifyChar(arr, i, 0, &iterations);
+            }
+        } else { // Min Heap for characters
+            // Build the Min Heap
+            for (int i = n / 2 - 1; i >= 0; i--) minHeapifyChar(arr, n, i, &iterations);
+            // Perform the sorting using Min Heap
+            for (int i = n - 1; i > 0; i--) {
+                char temp = arr[0];
+                arr[0] = arr[i];
+                arr[i] = temp;
+                iterations++;
+                printArrayMulti(arr, n, "Heap Sort (Character - Min)", iterations, 2);
+                minHeapifyChar(arr, i, 0, &iterations);
+            }
         }
-        for (int i = n - 1; i > 0; i--) {
-            int temp = arr[0];
-            arr[0] = arr[i];
-            arr[i] = temp;
-            iterations++;  // Increment iterations directly
-            printArray(arr, n, sortType, iterations);  // Print after each swap
-            maxHeapify(arr, i, 0, &iterations, sortType);  // Pass pointer
+
+        printSortedArrayMulti(arr, n, iterations, 2);
+
+    } else if (type == 3) { // String
+        printf("Enter number of elements: ");
+        scanf("%d", &n);
+        clearInputBuffer();        
+        char *arr[n];
+        printf("Enter the strings (press enter for each string): ");
+        for (int i = 0; i < n; i++) {
+            arr[i] = malloc(100 * sizeof(char)); // Allocate memory for strings
+            fgets(arr[i], 100, stdin);
+            arr[i][strcspn(arr[i], "\n")] = '\0'; // Remove newline
         }
+
+        if (heapType == 1) { // Max Heap for strings
+            // Build the Max Heap
+            for (int i = n / 2 - 1; i >= 0; i--) maxHeapifyString(arr, n, i, &iterations);
+            // Perform the sorting using Max Heap
+            for (int i = n - 1; i > 0; i--) {
+                char *temp = arr[0];
+                arr[0] = arr[i];
+                arr[i] = temp;
+                iterations++;
+                printArrayMulti(arr, n, "Heap Sort (String - Max)", iterations, 3);
+                maxHeapifyString(arr, i, 0, &iterations);
+            }
+        } else { // Min Heap for strings
+            // Build the Min Heap
+            for (int i = n / 2 - 1; i >= 0; i--) minHeapifyString(arr, n, i, &iterations);
+            // Perform the sorting using Min Heap
+            for (int i = n - 1; i > 0; i--) {
+                char *temp = arr[0];
+                arr[0] = arr[i];
+                arr[i] = temp;
+                iterations++;
+                printArrayMulti(arr, n, "Heap Sort (String - Min)", iterations, 3);
+                minHeapifyString(arr, i, 0, &iterations);
+            }
+        }
+
+        printSortedArrayMulti(arr, n, iterations, 3);
+
+        for (int i = 0; i < n; i++) free(arr[i]); // Free allocated memory
+
     } else {
-        for (int i = n / 2 - 1; i >= 0; i--) {
-            minHeapify(arr, n, i, &iterations, sortType);  // Pass pointer
-        }
-        for (int i = n - 1; i > 0; i--) {
-            int temp = arr[0];
-            arr[0] = arr[i];
-            arr[i] = temp;
-            iterations++;  // Increment iterations directly
-            printArray(arr, n, sortType, iterations);  // Print after each swap
-            minHeapify(arr, i, 0, &iterations, sortType);  // Pass pointer
-        }
+        printf("Invalid type chosen.\n");
     }
-
-    printSortedArray(arr, n, iterations);
 }
 
 
-//Radix sort
-void countSortRadix(int arr[], int n, int exp, int* iterations, const char *sortType, int isMSD) {
-    int output[n];
+// Radix Sort - Count Sort (works for int, char, and string)
+void countSortRadix(void *arr, int n, int exp, int* iterations, const char *sortType, int isMSD, int type) {
+    void *output = malloc(n * sizeof(arr));  // Allocate memory for the output array
     int count[10] = {0};
-    (*iterations)++;
 
-    // Count occurrences of each digit
-    for (int i = 0; i < n; i++)
-        count[(arr[i] / exp) % 10]++;
-    
-    // Convert counts to positions
-    for (int i = 1; i < 10; i++)
-        count[i] += count[i - 1];
-    
-    // Build the output array (stable sort)
-    for (int i = n - 1; i >= 0; i--) {
-        output[count[(arr[i] / exp) % 10] - 1] = arr[i];
-        count[(arr[i] / exp) % 10]--;
+    // Count occurrences of digits or characters
+    if (type == 1) { // Integer array
+        int *intArr = (int *)arr;
+        for (int i = 0; i < n; i++) {
+            count[(intArr[i] / exp) % 10]++;
+        }
+    } else if (type == 2) { // Character array
+        char *charArr = (char *)arr;
+        for (int i = 0; i < n; i++) {
+            count[(charArr[i] / exp) % 10]++;
+        }
+    } else if (type == 3) { // String array
+        char **strArr = (char **)arr;
+        for (int i = 0; i < n; i++) {
+            count[(strArr[i][0] / exp) % 10]++;  // Compare first character in string
+        }
     }
 
-    // Copy sorted elements back to the original array
-    for (int i = 0; i < n; i++)
-        arr[i] = output[i];
+    // Convert count[] to position
+    for (int i = 1; i < 10; i++) {
+        count[i] += count[i - 1];
+    }
 
-    printArray(arr, n, sortType, *iterations);  // Print after each iteration
+    // Build the output array
+    if (type == 1) { // Integer array
+        int *intArr = (int *)arr;
+        for (int i = n - 1; i >= 0; i--) {
+            int value = intArr[i];
+            int index = count[(value / exp) % 10] - 1;
+            ((int *)output)[index] = value;
+            count[(value / exp) % 10]--;
+        }
+    } else if (type == 2) { // Character array
+        char *charArr = (char *)arr;
+        for (int i = n - 1; i >= 0; i--) {
+            char value = charArr[i];
+            int index = count[(value / exp) % 10] - 1;
+            ((char *)output)[index] = value;
+            count[(value / exp) % 10]--;
+        }
+    } else if (type == 3) { // String array
+        char **strArr = (char **)arr;
+        for (int i = n - 1; i >= 0; i--) {
+            char *value = strArr[i];
+            int index = count[(value[0] / exp) % 10] - 1;
+            ((char **)output)[index] = value;
+            count[(value[0] / exp) % 10]--;
+        }
+    }
+
+    // Copy the sorted output back to the original array
+    if (type == 1) { // Integer array
+        int *intArr = (int *)arr;
+        for (int i = 0; i < n; i++) {
+            intArr[i] = ((int *)output)[i];
+        }
+    } else if (type == 2) { // Character array
+        char *charArr = (char *)arr;
+        for (int i = 0; i < n; i++) {
+            charArr[i] = ((char *)output)[i];
+        }
+    } else if (type == 3) { // String array
+        char **strArr = (char **)arr;
+        for (int i = 0; i < n; i++) {
+            strArr[i] = ((char **)output)[i];
+        }
+    }
+
+    printArrayMulti(arr, n, sortType, *iterations, type);  // Print after each iteration
+
+    free(output);  // Free allocated memory
 
     // For MSD: Recursively sort buckets if needed
     if (isMSD) {
@@ -852,47 +1057,129 @@ void countSortRadix(int arr[], int n, int exp, int* iterations, const char *sort
             int start = (i == 0) ? 0 : count[i - 1];
             int end = count[i];
             if (start < end) {  // Non-empty bucket
-                countSortRadix(arr + start, end - start, exp / 10, iterations, sortType, isMSD);
+                countSortRadix(arr + start, end - start, exp / 10, iterations, sortType, isMSD, type);
             }
         }
     }
 }
 
-void lsdRadixSort(int arr[], int n, int* iterations, const char *sortType) {
-    int max = arr[0];
-    for (int i = 1; i < n; i++)
-        if (arr[i] > max)
-            max = arr[i];
+// LSD Radix Sort (works for int, char, and string)
+void lsdRadixSort(void *arr, int n, int* iterations, const char *sortType, int type) {
+    int max = 0;
+
+    if (type == 1) { // Integer array
+        int *intArr = (int *)arr;
+        max = intArr[0];
+        for (int i = 1; i < n; i++) {
+            if (intArr[i] > max)
+                max = intArr[i];
+        }
+    } else if (type == 2) { // Character array
+        char *charArr = (char *)arr;
+        max = charArr[0];
+        for (int i = 1; i < n; i++) {
+            if (charArr[i] > max)
+                max = charArr[i];
+        }
+    } else if (type == 3) { // String array
+        char **strArr = (char **)arr;
+        max = strArr[0][0]; // Compare the first character of each string
+        for (int i = 1; i < n; i++) {
+            if (strArr[i][0] > max)
+                max = strArr[i][0];
+        }
+    }
+    
+    // Perform LSD sorting for each digit (from least significant to most)
     for (int exp = 1; max / exp > 0; exp *= 10)
-        countSortRadix(arr, n, exp, iterations, sortType, 0);  // LSD does not use recursion
+        countSortRadix(arr, n, exp, iterations, sortType, 0, type);  // LSD does not use recursion
 }
 
-void msdRadixSort(int arr[], int n, int* iterations, const char *sortType) {
-    int max = arr[0];
-    for (int i = 1; i < n; i++)  // Find the maximum number
-        if (arr[i] > max)
-            max = arr[i];
+// MSD Radix Sort (works for int, char, and string)
+void msdRadixSort(void *arr, int n, int* iterations, const char *sortType, int type) {
+    int max = 0;
 
+    if (type == 1) { // Integer array
+        int *intArr = (int *)arr;
+        max = intArr[0];
+        for (int i = 1; i < n; i++) {
+            if (intArr[i] > max)
+                max = intArr[i];
+        }
+    } else if (type == 2) { // Character array
+        char *charArr = (char *)arr;
+        max = charArr[0];
+        for (int i = 1; i < n; i++) {
+            if (charArr[i] > max)
+                max = charArr[i];
+        }
+    } else if (type == 3) { // String array
+        char **strArr = (char **)arr;
+        max = strArr[0][0]; // Compare the first character of each string
+        for (int i = 1; i < n; i++) {
+            if (strArr[i][0] > max)
+                max = strArr[i][0];
+        }
+    }
+
+    // Perform MSD sorting by checking each digit starting from the most significant
     int exp = 1;
     while (max / exp > 9)
         exp *= 10;  // Find the most significant digit's place value
 
-    countSortRadix(arr, n, exp, iterations, sortType, 1);  // MSD uses recursion
+    countSortRadix(arr, n, exp, iterations, sortType, 1, type);  // MSD uses recursion
 }
 
+// Main Radix Sort function that works for int, char, and string
 void radixSort() {
     int n, type, iterations = 0;
     getInput(&n);
-    int arr[n];
-    printf("Enter the elements: ");
-    for (int i = 0; i < n; i++) {
-        while (1) {
-            if (scanf("%d", &arr[i]) != 1) {
-                printf("Invalid input. \nPlease enter an integer: ");
+    void *arr;
+    int isInt = 0, isChar = 0, isString = 0;
+
+    // Choosing the type of array
+    printf("Choose Data Type: 1) Integer 2) Character 3) String: ");
+    scanf("%d", &type);
+
+    if (type == 1) { // Integer array
+        arr = malloc(n * sizeof(int));
+        isInt = 1;
+    } else if (type == 2) { // Character array
+        arr = malloc(n * sizeof(char));
+        isChar = 1;
+    } else if (type == 3) { // String array
+        arr = malloc(n * sizeof(char *));
+        isString = 1;
+    } else {
+        printf("Invalid input.\n");
+        return;
+    }
+
+    printf("Enter the elements");
+    clearInputBuffer();
+    if (isInt) {
+        int *intArr = (int *)arr;
+        for (int i = 0; i < n; i++) {
+            while (scanf("%d", &intArr[i]) != 1) {
+                printf("Invalid input. Please enter an integer: ");
                 clearInputBuffer();
-            } else {
-                break;
             }
+        }
+    } else if (isChar) {
+        char *charArr = (char *)arr;
+        for (int i = 0; i < n; i++) {
+            while (scanf(" %c", &charArr[i]) != 1) {
+                printf("Invalid input. Please enter a character: ");
+                clearInputBuffer();
+            }
+        }
+    } else if (isString) {
+        printf(" (Press Enter for Each String): ");
+        char **strArr = (char **)arr;
+        for (int i = 0; i < n; i++) {
+            strArr[i] = malloc(100 * sizeof(char)); // Allocate space for strings
+            fgets(strArr[i], 100, stdin);
+            strArr[i][strcspn(strArr[i], "\n")] = '\0';  // Remove newline character
         }
     }
 
@@ -903,390 +1190,1056 @@ void radixSort() {
     const char *sortType = "Radix Sort";
 
     if (type == 1) {
-        lsdRadixSort(arr, n, &iterations, sortType);
+        lsdRadixSort(arr, n, &iterations, sortType, type);
     } else if (type == 2) {
-        msdRadixSort(arr, n, &iterations, sortType);
+        msdRadixSort(arr, n, &iterations, sortType, type);
     } else {
         printf("Invalid choice.\n");
         return;
     }
 
-    printSortedArray(arr, n, iterations);
+    printSortedArrayMulti(arr, n, iterations, type);
+
+    // Free memory if strings were used
+    if (isString) {
+        char **strArr = (char **)arr;
+        for (int i = 0; i < n; i++) {
+            free(strArr[i]);
+        }
+    }
+    free(arr);  // Free the dynamically allocated memory
 }
 
 
 
 // Quick Sort
-int lomutoPartition(int arr[], int low, int high, int* iterations, const char *sortType) {
-    int pivot = arr[high];
+// Lomuto Partition for multiple data types (int, char, string)
+int lomutoPartition(void *arr, int low, int high, int* iterations, const char *sortType, int type) {
+    int pivotIndex = high;
     int i = low - 1;
-    for (int j = low; j < high; j++) {
-        (*iterations)++;
-        if (arr[j] < pivot) {
-            i++;
-            int temp = arr[i];
-            arr[i] = arr[j];
-            arr[j] = temp;
-            printArray(arr, high + 1, sortType, *iterations);  // Print after each iteration
+
+    if (type == 1) { // Integer array
+        int *intArr = (int *)arr;
+        int pivot = intArr[pivotIndex];
+        for (int j = low; j < high; j++) {
+            (*iterations)++;
+            if (intArr[j] < pivot) {
+                i++;
+                int temp = intArr[i];
+                intArr[i] = intArr[j];
+                intArr[j] = temp;
+                printArrayMulti(arr, high + 1, sortType, *iterations, 1);
+            }
+        }
+        int temp = intArr[i + 1];
+        intArr[i + 1] = intArr[pivotIndex];
+        intArr[pivotIndex] = temp;
+        return i + 1;
+    } else if (type == 2) { // Character array
+        char *charArr = (char *)arr;
+        char pivot = charArr[pivotIndex];
+        for (int j = low; j < high; j++) {
+            (*iterations)++;
+            if (charArr[j] < pivot) {
+                i++;
+                char temp = charArr[i];
+                charArr[i] = charArr[j];
+                charArr[j] = temp;
+                printArrayMulti(arr, high + 1, sortType, *iterations, 2);
+            }
+        }
+        char temp = charArr[i + 1];
+        charArr[i + 1] = charArr[pivotIndex];
+        charArr[pivotIndex] = temp;
+        return i + 1;
+    } else if (type == 3) { // String array
+        char **strArr = (char **)arr;
+        char *pivot = strArr[pivotIndex];
+        for (int j = low; j < high; j++) {
+            (*iterations)++;
+            if (strcmp(strArr[j], pivot) < 0) {
+                i++;
+                char *temp = strArr[i];
+                strArr[i] = strArr[j];
+                strArr[j] = temp;
+                printArrayMulti(arr, high + 1, sortType, *iterations, 3);
+            }
+        }
+        char *temp = strArr[i + 1];
+        strArr[i + 1] = strArr[pivotIndex];
+        strArr[pivotIndex] = temp;
+        return i + 1;
+    }
+    return 0; // Invalid type
+}
+
+// Hoare Partition for multiple data types (int, char, string)
+int hoarePartition(void *arr, int low, int high, int* iterations, const char *sortType, int type) {
+    int pivotIndex = low;
+    int i = low - 1, j = high + 1;
+
+    if (type == 1) { // Integer array
+        int *intArr = (int *)arr;
+        int pivot = intArr[pivotIndex];
+        while (1) {
+            do {
+                i++;
+                (*iterations)++;
+            } while (intArr[i] < pivot);
+            do {
+                j--;
+                (*iterations)++;
+            } while (intArr[j] > pivot);
+            if (i >= j)
+                return j;
+            int temp = intArr[i];
+            intArr[i] = intArr[j];
+            intArr[j] = temp;
+            printArrayMulti(arr, high + 1, sortType, *iterations, 1);
+        }
+    } else if (type == 2) { // Character array
+        char *charArr = (char *)arr;
+        char pivot = charArr[pivotIndex];
+        while (1) {
+            do {
+                i++;
+                (*iterations)++;
+            } while (charArr[i] < pivot);
+            do {
+                j--;
+                (*iterations)++;
+            } while (charArr[j] > pivot);
+            if (i >= j)
+                return j;
+            char temp = charArr[i];
+            charArr[i] = charArr[j];
+            charArr[j] = temp;
+            printArrayMulti(arr, high + 1, sortType, *iterations, 2);
+        }
+    } else if (type == 3) { // String array
+        char **strArr = (char **)arr;
+        char *pivot = strArr[pivotIndex];
+        while (1) {
+            do {
+                i++;
+                (*iterations)++;
+            } while (strcmp(strArr[i], pivot) < 0);
+            do {
+                j--;
+                (*iterations)++;
+            } while (strcmp(strArr[j], pivot) > 0);
+            if (i >= j)
+                return j;
+            char *temp = strArr[i];
+            strArr[i] = strArr[j];
+            strArr[j] = temp;
+            printArrayMulti(arr, high + 1, sortType, *iterations, 3);
         }
     }
-    int temp = arr[i + 1];
-    arr[i + 1] = arr[high];
-    arr[high] = temp;
-    return i + 1;
+    return 0; // Invalid type
 }
 
-int hoarePartition(int arr[], int low, int high, int* iterations, const char *sortType) {
-    int pivot = arr[low];
-    int i = low - 1, j = high + 1;
-    while (1) {
-        do {
-            i++;
-            (*iterations)++;
-        } while (arr[i] < pivot);
-        do {
-            j--;
-            (*iterations)++;
-        } while (arr[j] > pivot);
-        if (i >= j)
-            return j;
-        int temp = arr[i];
-        arr[i] = arr[j];
-        arr[j] = temp;
-        printArray(arr, high + 1, sortType, *iterations);  // Print after each iteration
-    }
-}
-
-void quickSortHelper(int arr[], int low, int high, int* iterations, int partitionType, const char *sortType) {
+// QuickSort Helper for multiple data types (int, char, string)
+void quickSortHelper(void *arr, int low, int high, int* iterations, int partitionType, const char *sortType, int type) {
     if (low < high) {
         int pi;
-        if (partitionType == 1)
-            pi = lomutoPartition(arr, low, high, iterations, sortType);
-        else
-            pi = hoarePartition(arr, low, high, iterations, sortType);
-        quickSortHelper(arr, low, pi - 1, iterations, partitionType, sortType);
-        quickSortHelper(arr, pi + 1, high, iterations, partitionType, sortType);
+        if (partitionType == 1)  // Lomuto Partition
+            pi = lomutoPartition(arr, low, high, iterations, sortType, type);
+        else  // Hoare Partition
+            pi = hoarePartition(arr, low, high, iterations, sortType, type);
+        quickSortHelper(arr, low, pi - 1, iterations, partitionType, sortType, type);
+        quickSortHelper(arr, pi + 1, high, iterations, partitionType, sortType, type);
     }
 }
 
+// QuickSort for multiple data types (int, char, string)
 void quickSort() {
     int n, type, iterations = 0;
     getInput(&n);
-    int arr[n];
-    printf("Enter the elements: ");
-    for (int i = 0; i < n; i++) {
-        while (1) {
-            if (scanf("%d", &arr[i]) != 1) {
-                printf("Invalid input. \nPlease enter an integer: ");
+    void *arr;
+    int isInt = 0, isChar = 0, isString = 0;
+
+    // Choosing the type of array
+    printf("Choose Data Type: 1) Integer 2) Character 3) String: ");
+    scanf("%d", &type);
+
+    if (type == 1) { // Integer array
+        arr = malloc(n * sizeof(int));
+        isInt = 1;
+    } else if (type == 2) { // Character array
+        arr = malloc(n * sizeof(char));
+        isChar = 1;
+    } else if (type == 3) { // String array
+        arr = malloc(n * sizeof(char *));
+        isString = 1;
+    } else {
+        printf("Invalid input.\n");
+        return;
+    }
+
+    printf("Enter the elements");
+    clearInputBuffer();
+    if (isInt) {
+        int *intArr = (int *)arr;
+        for (int i = 0; i < n; i++) {
+            while (scanf("%d", &intArr[i]) != 1) {
+                printf("Invalid input. Please enter an integer: ");
                 clearInputBuffer();
-            } else {
-                break;
             }
+        }
+    } else if (isChar) {
+        char *charArr = (char *)arr;
+        for (int i = 0; i < n; i++) {
+            while (scanf(" %c", &charArr[i]) != 1) {
+                printf("Invalid input. Please enter a character: ");
+                clearInputBuffer();
+            }
+        }
+    } else if (isString) {
+        printf(" (Press Enter for Each String): ");
+        char **strArr = (char **)arr;
+        for (int i = 0; i < n; i++) {
+            strArr[i] = malloc(100 * sizeof(char)); // Allocate space for strings
+            fgets(strArr[i], 100, stdin);
+            strArr[i][strcspn(strArr[i], "\n")] = '\0';  // Remove newline character
         }
     }
 
     printf("Choose Partition Type (1 for Lomuto, 2 for Hoare): ");
     scanf("%d", &type);
+    clearInputBuffer();
 
     const char *sortType = "Quick Sort";
 
-    quickSortHelper(arr, 0, n - 1, &iterations, type, sortType);
+    quickSortHelper(arr, 0, n - 1, &iterations, type, sortType, type);
 
-    printSortedArray(arr, n, iterations);
+    printSortedArrayMulti(arr, n, iterations, type);
+
+    // Free memory if strings were used
+    if (isString) {
+        char **strArr = (char **)arr;
+        for (int i = 0; i < n; i++) {
+            free(strArr[i]);
+        }
+    }
+    free(arr);  // Free the dynamically allocated memory
 }
-
 
 
 // Merge 
-void merge(int arr[], int l, int m, int r, int* iterations, const char *sortType) {
+// Merge function for multiple data types (int, char, string)
+void merge(void *arr, int l, int m, int r, int* iterations, const char *sortType, int type) {
     int n1 = m - l + 1;
     int n2 = r - m;
-    int L[n1], R[n2];
+    void *L = malloc(n1 * sizeof(arr));  // Left half
+    void *R = malloc(n2 * sizeof(arr));  // Right half
 
-    for (int i = 0; i < n1; i++)
-        L[i] = arr[l + i];
-    for (int i = 0; i < n2; i++)
-        R[i] = arr[m + 1 + i];
+    // Copy data into temporary arrays L[] and R[]
+    if (type == 1) { // Integer array
+        int *intArr = (int *)arr;
+        int *L_int = (int *)L;
+        int *R_int = (int *)R;
+        for (int i = 0; i < n1; i++) L_int[i] = intArr[l + i];
+        for (int i = 0; i < n2; i++) R_int[i] = intArr[m + 1 + i];
 
-    int i = 0, j = 0, k = l;
-    while (i < n1 && j < n2) {
-        (*iterations)++;
-        if (L[i] <= R[j]) {
-            arr[k] = L[i];
-            i++;
-        } else {
-            arr[k] = R[j];
-            j++;
+        int i = 0, j = 0, k = l;
+        while (i < n1 && j < n2) {
+            (*iterations)++;
+            if (L_int[i] <= R_int[j]) {
+                intArr[k] = L_int[i];
+                i++;
+            } else {
+                intArr[k] = R_int[j];
+                j++;
+            }
+            k++;
+            printArrayMulti(arr, r + 1, sortType, *iterations, 1);  // Print after each merge step
         }
-        k++;
-        printArray(arr, r + 1, sortType, *iterations);  // Print after each merge step
+
+        while (i < n1) {
+            intArr[k] = L_int[i];
+            i++;
+            k++;
+            (*iterations)++;
+            printArrayMulti(arr, r + 1, sortType, *iterations, 1);  // Print after adding remaining elements
+        }
+
+        while (j < n2) {
+            intArr[k] = R_int[j];
+            j++;
+            k++;
+            (*iterations)++;
+            printArrayMulti(arr, r + 1, sortType, *iterations, 1);  // Print after adding remaining elements
+        }
+    } else if (type == 2) { // Character array
+        char *charArr = (char *)arr;
+        char *L_char = (char *)L;
+        char *R_char = (char *)R;
+        for (int i = 0; i < n1; i++) L_char[i] = charArr[l + i];
+        for (int i = 0; i < n2; i++) R_char[i] = charArr[m + 1 + i];
+
+        int i = 0, j = 0, k = l;
+        while (i < n1 && j < n2) {
+            (*iterations)++;
+            if (L_char[i] <= R_char[j]) {
+                charArr[k] = L_char[i];
+                i++;
+            } else {
+                charArr[k] = R_char[j];
+                j++;
+            }
+            k++;
+            printArrayMulti(arr, r + 1, sortType, *iterations, 2);  // Print after each merge step
+        }
+
+        while (i < n1) {
+            charArr[k] = L_char[i];
+            i++;
+            k++;
+            (*iterations)++;
+            printArrayMulti(arr, r + 1, sortType, *iterations, 2);  // Print after adding remaining elements
+        }
+
+        while (j < n2) {
+            charArr[k] = R_char[j];
+            j++;
+            k++;
+            (*iterations)++;
+            printArrayMulti(arr, r + 1, sortType, *iterations, 2);  // Print after adding remaining elements
+        }
+    } else if (type == 3) { // String array
+        char **strArr = (char **)arr;
+        char **L_str = (char **)L;
+        char **R_str = (char **)R;
+        for (int i = 0; i < n1; i++) L_str[i] = strArr[l + i];
+        for (int i = 0; i < n2; i++) R_str[i] = strArr[m + 1 + i];
+
+        int i = 0, j = 0, k = l;
+        while (i < n1 && j < n2) {
+            (*iterations)++;
+            if (strcmp(L_str[i], R_str[j]) <= 0) {
+                strArr[k] = L_str[i];
+                i++;
+            } else {
+                strArr[k] = R_str[j];
+                j++;
+            }
+            k++;
+            printArrayMulti(arr, r + 1, sortType, *iterations, 3);  // Print after each merge step
+        }
+
+        while (i < n1) {
+            strArr[k] = L_str[i];
+            i++;
+            k++;
+            (*iterations)++;
+            printArrayMulti(arr, r + 1, sortType, *iterations, 3);  // Print after adding remaining elements
+        }
+
+        while (j < n2) {
+            strArr[k] = R_str[j];
+            j++;
+            k++;
+            (*iterations)++;
+            printArrayMulti(arr, r + 1, sortType, *iterations, 3);  // Print after adding remaining elements
+        }
     }
 
-    while (i < n1) {
-        arr[k] = L[i];
-        i++;
-        k++;
-        (*iterations)++;
-        printArray(arr, r + 1, sortType, *iterations);  // Print after adding remaining elements
-    }
-
-    while (j < n2) {
-        arr[k] = R[j];
-        j++;
-        k++;
-        (*iterations)++;
-        printArray(arr, r + 1, sortType, *iterations);  // Print after adding remaining elements
-    }
+    free(L); // Free temporary arrays
+    free(R); // Free temporary arrays
 }
 
-void mergeSortHelper(int arr[], int l, int r, int* iterations, const char *sortType) {
+// MergeSort Helper for multiple data types (int, char, string)
+void mergeSortHelper(void *arr, int l, int r, int* iterations, const char *sortType, int type) {
     if (l < r) {
         int m = l + (r - l) / 2;
-        mergeSortHelper(arr, l, m, iterations, sortType);
-        mergeSortHelper(arr, m + 1, r, iterations, sortType);
-        merge(arr, l, m, r, iterations, sortType);
+        mergeSortHelper(arr, l, m, iterations, sortType, type);
+        mergeSortHelper(arr, m + 1, r, iterations, sortType, type);
+        merge(arr, l, m, r, iterations, sortType, type);
     }
 }
 
+// MergeSort for multiple data types (int, char, string)
 void mergeSort() {
-    int n, iterations = 0;
+    int n, type, iterations = 0;
     getInput(&n);
-    int arr[n];
-    printf("Enter the elements: ");
-    for (int i = 0; i < n; i++) {
-        while (1) {
-            if (scanf("%d", &arr[i]) != 1) {
-                printf("Invalid input. \nPlease enter an integer: ");
+    void *arr;
+    int isInt = 0, isChar = 0, isString = 0;
+
+    // Choosing the type of array
+    printf("Choose Data Type: 1) Integer 2) Character 3) String: ");
+    scanf("%d", &type);
+
+    if (type == 1) { // Integer array
+        arr = malloc(n * sizeof(int));
+        isInt = 1;
+    } else if (type == 2) { // Character array
+        arr = malloc(n * sizeof(char));
+        isChar = 1;
+    } else if (type == 3) { // String array
+        arr = malloc(n * sizeof(char *));
+        isString = 1;
+    } else {
+        printf("Invalid input.\n");
+        return;
+    }
+
+    printf("Enter the elements");
+    clearInputBuffer();
+    if (isInt) {
+        int *intArr = (int *)arr;
+        for (int i = 0; i < n; i++) {
+            while (scanf("%d", &intArr[i]) != 1) {
+                printf("Invalid input. Please enter an integer: ");
                 clearInputBuffer();
-            } else {
-                break;
             }
+        }
+    } else if (isChar) {
+        char *charArr = (char *)arr;
+        for (int i = 0; i < n; i++) {
+            while (scanf(" %c", &charArr[i]) != 1) {
+                printf("Invalid input. Please enter a character: ");
+                clearInputBuffer();
+            }
+        }
+    } else if (isString) {
+        printf(" (Press Enter for Each String): ");
+        char **strArr = (char **)arr;
+        for (int i = 0; i < n; i++) {
+            strArr[i] = malloc(100 * sizeof(char)); // Allocate space for strings
+            fgets(strArr[i], 100, stdin);
+            strArr[i][strcspn(strArr[i], "\n")] = '\0';  // Remove newline character
         }
     }
 
     const char *sortType = "Merge Sort";
-    mergeSortHelper(arr, 0, n - 1, &iterations, sortType);
+    mergeSortHelper(arr, 0, n - 1, &iterations, sortType, type);
 
-    printSortedArray(arr, n, iterations);
+    printSortedArrayMulti(arr, n, iterations, type);
+
+    // Free memory if strings were used
+    if (isString) {
+        char **strArr = (char **)arr;
+        for (int i = 0; i < n; i++) {
+            free(strArr[i]);
+        }
+    }
+    free(arr);  // Free the dynamically allocated memory
 }
 
 
+
 // Random Sort
+#include <stdlib.h>
+#include <time.h>
+
+// Random Sort (BogoSort) - Generic for int, char, and string
 void randSort() {
-    int n;
+    int n, type, iterations = 0;
     getInput(&n);
-    int arr[n];
-    printf("Enter the elements: ");
-    for (int i = 0; i < n; i++) {
-        while (1) {
-            if (scanf("%d", &arr[i]) != 1) {
-                printf("Invalid input.\nPlease enter an integer: ");
+    void *arr;
+    int isInt = 0, isChar = 0, isString = 0;
+
+    // Choosing the type of array
+    printf("Choose Data Type: 1) Integer 2) Character 3) String: ");
+    scanf("%d", &type);
+
+    if (type == 1) { // Integer array
+        arr = malloc(n * sizeof(int));
+        isInt = 1;
+    } else if (type == 2) { // Character array
+        arr = malloc(n * sizeof(char));
+        isChar = 1;
+    } else if (type == 3) { // String array
+        arr = malloc(n * sizeof(char *));
+        isString = 1;
+    } else {
+        printf("Invalid input.\n");
+        return;
+    }
+
+    printf("Enter the elements");
+    clearInputBuffer();
+    if (isInt) {
+        int *intArr = (int *)arr;
+        for (int i = 0; i < n; i++) {
+            while (scanf("%d", &intArr[i]) != 1) {
+                printf("Invalid input. Please enter an integer: ");
                 clearInputBuffer();
-            } else {
-                break;
             }
+        }
+    } else if (isChar) {
+        char *charArr = (char *)arr;
+        for (int i = 0; i < n; i++) {
+            while (scanf(" %c", &charArr[i]) != 1) {
+                printf("Invalid input. Please enter a character: ");
+                clearInputBuffer();
+            }
+        }
+    } else if (isString) {
+        printf(" (Press Enter for Each String): ");
+        char **strArr = (char **)arr;
+        for (int i = 0; i < n; i++) {
+            strArr[i] = malloc(100 * sizeof(char)); // Allocate space for strings
+            fgets(strArr[i], 100, stdin);
+            strArr[i][strcspn(strArr[i], "\n")] = '\0';  // Remove newline character
         }
     }
 
     // Shuffle and check for sorting
     int sorted = 0;
-    int iterations = 0; // Count the number of shuffles
+    unsigned int seed = (unsigned int)time(NULL); // Random seed based on current time
+    srand(seed); // Initialize the random number generator using srand()
     const char *sortType = "Random Sort";
 
     while (!sorted) {
-        // Custom random number generator (LCG)
-        seed = (seed * 1103515245 + 12345) % 2147483648;
-
-        // Shuffle array
-        for (int i = 0; i < n; i++) {
-            int randomIndex = seed % n;
-            int temp = arr[i];
-            arr[i] = arr[randomIndex];
-            arr[randomIndex] = temp;
+        // Shuffle array using rand()
+        if (isInt) { // Integer array
+            int *intArr = (int *)arr;
+            for (int i = 0; i < n; i++) {
+                int randomIndex = rand() % n;  // Use rand() for generating random index
+                int temp = intArr[i];
+                intArr[i] = intArr[randomIndex];
+                intArr[randomIndex] = temp;
+            }
+        } else if (isChar) { // Character array
+            char *charArr = (char *)arr;
+            for (int i = 0; i < n; i++) {
+                int randomIndex = rand() % n;  // Use rand() for generating random index
+                char temp = charArr[i];
+                charArr[i] = charArr[randomIndex];
+                charArr[randomIndex] = temp;
+            }
+        } else if (isString) { // String array
+            char **strArr = (char **)arr;
+            for (int i = 0; i < n; i++) {
+                int randomIndex = rand() % n;  // Use rand() for generating random index
+                char *temp = strArr[i];
+                strArr[i] = strArr[randomIndex];
+                strArr[randomIndex] = temp;
+            }
         }
 
         // Increment iteration counter
         iterations++;
 
-        // Use printArray to display the current shuffle
-        printArray(arr, n, sortType, iterations);
+        // Use printArrayMulti to display the current shuffle
+        printArrayMulti(arr, n, sortType, iterations, type);
 
         // Check if sorted
         sorted = 1;
-        for (int i = 1; i < n; i++) {
-            if (arr[i] < arr[i - 1]) {
-                sorted = 0;
-                break;
+        if (isInt) {
+            int *intArr = (int *)arr;
+            for (int i = 1; i < n; i++) {
+                if (intArr[i] < intArr[i - 1]) {
+                    sorted = 0;
+                    break;
+                }
+            }
+        } else if (isChar) {
+            char *charArr = (char *)arr;
+            for (int i = 1; i < n; i++) {
+                if (charArr[i] < charArr[i - 1]) {
+                    sorted = 0;
+                    break;
+                }
+            }
+        } else if (isString) {
+            char **strArr = (char **)arr;
+            for (int i = 1; i < n; i++) {
+                if (strcmp(strArr[i], strArr[i - 1]) < 0) {
+                    sorted = 0;
+                    break;
+                }
             }
         }
     }
 
     // Display final sorted array
-    printSortedArray(arr, n, iterations);
+    printSortedArrayMulti(arr, n, iterations, type);
+
+    // Free memory if strings were used
+    if (isString) {
+        char **strArr = (char **)arr;
+        for (int i = 0; i < n; i++) {
+            free(strArr[i]);
+        }
+    }
+    free(arr);  // Free the dynamically allocated memory
 }
 
-// Insertion Sort
+// Insertion Sort for multiple data types (int, char, string)
 void insertSort() {
-    int n, iterations = 0;  
+    int n, type, iterations = 0;
     getInput(&n);
-    int arr[n];
-    printf("Enter the elements: ");
-    for (int i = 0; i < n; i++) {
-        while (1) {
-            if (scanf("%d", &arr[i]) != 1) {
-                printf("Invalid input. \nPlease enter an integer: ");
+    void *arr;
+    int isInt = 0, isChar = 0, isString = 0;
+
+    // Choosing the type of array
+    printf("Choose Data Type: 1) Integer 2) Character 3) String: ");
+    scanf("%d", &type);
+
+    if (type == 1) { // Integer array
+        arr = malloc(n * sizeof(int));
+        isInt = 1;
+    } else if (type == 2) { // Character array
+        arr = malloc(n * sizeof(char));
+        isChar = 1;
+    } else if (type == 3) { // String array
+        arr = malloc(n * sizeof(char *));
+        isString = 1;
+    } else {
+        printf("Invalid input.\n");
+        return;
+    }
+
+    printf("Enter the elements");
+    clearInputBuffer();
+    if (isInt) {
+        int *intArr = (int *)arr;
+        for (int i = 0; i < n; i++) {
+            while (scanf("%d", &intArr[i]) != 1) {
+                printf("Invalid input. Please enter an integer: ");
                 clearInputBuffer();
-            } else {
-                break;
             }
         }
-    }
-
-    const char *sortType = "Insertion Sort";  
-
-    for (int i = 1; i < n; i++) {
-        int key = arr[i];
-        int j = i - 1;
-
-        while (j >= 0 && arr[j] > key) {
-            arr[j + 1] = arr[j];
-            j--;
+    } else if (isChar) {
+        char *charArr = (char *)arr;
+        for (int i = 0; i < n; i++) {
+            while (scanf(" %c", &charArr[i]) != 1) {
+                printf("Invalid input. Please enter a character: ");
+                clearInputBuffer();
+            }
         }
-        arr[j + 1] = key;
-
-        iterations++;  
-        printArray(arr, n, sortType, iterations);  
+    } else if (isString) {
+        printf(" (Press Enter for Each String): ");
+        char **strArr = (char **)arr;
+        for (int i = 0; i < n; i++) {
+            strArr[i] = malloc(100 * sizeof(char)); // Allocate space for strings
+            fgets(strArr[i], 100, stdin);
+            strArr[i][strcspn(strArr[i], "\n")] = '\0';  // Remove newline character
+        }
     }
 
-    printSortedArray(arr, n, iterations);   
+    const char *sortType = "Insertion Sort";
+
+    // Insertion Sort logic for different data types
+    for (int i = 1; i < n; i++) {
+        if (isInt) { // Integer array
+            int *intArr = (int *)arr;
+            int key = intArr[i];
+            int j = i - 1;
+
+            while (j >= 0 && intArr[j] > key) {
+                intArr[j + 1] = intArr[j];
+                j--;
+            }
+            intArr[j + 1] = key;
+        } else if (isChar) { // Character array
+            char *charArr = (char *)arr;
+            char key = charArr[i];
+            int j = i - 1;
+
+            while (j >= 0 && charArr[j] > key) {
+                charArr[j + 1] = charArr[j];
+                j--;
+            }
+            charArr[j + 1] = key;
+        } else if (isString) { // String array
+            char **strArr = (char **)arr;
+            char *key = strArr[i];
+            int j = i - 1;
+
+            while (j >= 0 && strcmp(strArr[j], key) > 0) {
+                strArr[j + 1] = strArr[j];
+                j--;
+            }
+            strArr[j + 1] = key;
+        }
+
+        iterations++;  // Increment iteration after each insertion step
+        printArrayMulti(arr, n, sortType, iterations, type);  // Print array after each insertion step
+    }
+
+    printSortedArrayMulti(arr, n, iterations, type);  // Print final sorted array
+
+    // Free memory for string arrays
+    if (isString) {
+        char **strArr = (char **)arr;
+        for (int i = 0; i < n; i++) {
+            free(strArr[i]);
+        }
+    }
+    free(arr);  // Free the dynamically allocated memory
 }
 
 
+// Count Sort for multiple data types (int, char, string)
+// Count Sort for multiple data types (int, char, string)
 void countSort() {
-    int n, iterations = 0; 
+    int n, type, iterations = 0;
     getInput(&n);
-    int arr[n];
-    printf("Enter the elements: ");
-    for (int i = 0; i < n; i++) {
-        while (1) {
-            if (scanf("%d", &arr[i]) != 1) {
-                printf("Invalid input. \nPlease enter an integer: ");
+    void *arr;
+    int isInt = 0, isChar = 0, isString = 0;
+
+    // Choosing the type of array
+    printf("Choose Data Type: 1) Integer 2) Character 3) String: ");
+    scanf("%d", &type);
+
+    if (type == 1) { // Integer array
+        arr = malloc(n * sizeof(int));
+        isInt = 1;
+    } else if (type == 2) { // Character array
+        arr = malloc(n * sizeof(char));
+        isChar = 1;
+    } else if (type == 3) { // String array
+        arr = malloc(n * sizeof(char *));
+        isString = 1;
+    } else {
+        printf("Invalid input.\n");
+        return;
+    }
+
+    printf("Enter the elements");
+    clearInputBuffer();
+    if (isInt) {
+        int *intArr = (int *)arr;
+        for (int i = 0; i < n; i++) {
+            while (scanf("%d", &intArr[i]) != 1) {
+                printf("Invalid input. Please enter an integer: ");
                 clearInputBuffer();
-            } else {
-                break;
             }
+        }
+    } else if (isChar) {
+        char *charArr = (char *)arr;
+        for (int i = 0; i < n; i++) {
+            while (scanf(" %c", &charArr[i]) != 1) {
+                printf("Invalid input. Please enter a character: ");
+                clearInputBuffer();
+            }
+        }
+    } else if (isString) {
+        printf(" (Press Enter for Each String): ");
+        char **strArr = (char **)arr;
+        for (int i = 0; i < n; i++) {
+            strArr[i] = malloc(100 * sizeof(char)); // Allocate space for strings
+            fgets(strArr[i], 100, stdin);
+            strArr[i][strcspn(strArr[i], "\n")] = '\0';  // Remove newline character
         }
     }
 
-    // Find max value
-    int max = arr[0];
-    for (int i = 1; i < n; i++) if (arr[i] > max) max = arr[i];
+    int max;
 
+    // Find max value (for int or char arrays)
+    if (isInt) {
+        int *intArr = (int *)arr;
+        max = intArr[0];
+        for (int i = 1; i < n; i++) if (intArr[i] > max) max = intArr[i];
+    } else if (isChar) {
+        char *charArr = (char *)arr;
+        max = charArr[0];
+        for (int i = 1; i < n; i++) if (charArr[i] > max) max = charArr[i];
+    } else if (isString) {
+        // For strings, calculate max based on the first character (simplified)
+        char **strArr = (char **)arr;
+        max = strArr[0][0];
+        for (int i = 1; i < n; i++) if (strArr[i][0] > max) max = strArr[i][0];
+    }
+
+    // Create the count array for occurrences
     int count[max + 1];
     for (int i = 0; i <= max; i++) count[i] = 0;
 
-    // Count the occurrences of each element
-    for (int i = 0; i < n; i++) {
-        count[arr[i]]++;
+    // Count the occurrences of each element (for int, char, or string arrays)
+    if (isInt) {
+        int *intArr = (int *)arr;
+        for (int i = 0; i < n; i++) count[intArr[i]]++;
+    } else if (isChar) {
+        char *charArr = (char *)arr;
+        for (int i = 0; i < n; i++) count[charArr[i]]++;
+    } else if (isString) {
+        char **strArr = (char **)arr;
+        for (int i = 0; i < n; i++) count[strArr[i][0]]++;  // Count based on the first character
     }
 
     iterations++;  // Increment iteration after count array is filled
-    printArray(count, max + 1, "Counting Sort - Count Array", iterations);  // Print count array after counting
+    printArrayMulti(count, max + 1, "Counting Sort - Count Array", iterations, type);  // Print count array after counting
 
     // Update count array with cumulative counts
     for (int i = 1; i <= max; i++) count[i] += count[i - 1];
 
     iterations++;  // Increment iteration after cumulative count
-    printArray(count, max + 1, "Counting Sort - Cumulative Count", iterations);  // Print cumulative count array
+    printArrayMulti(count, max + 1, "Counting Sort - Cumulative Count", iterations, type);  // Print cumulative count array
 
+    // Create output array to store sorted values
     int output[n];
-    for (int i = n - 1; i >= 0; i--) {
-        output[count[arr[i]] - 1] = arr[i];
-        count[arr[i]]--;
+
+    if (isInt) {
+        int *intArr = (int *)arr;
+        for (int i = n - 1; i >= 0; i--) {
+            output[count[intArr[i]] - 1] = intArr[i];
+            count[intArr[i]]--;
+        }
+    } else if (isChar) {
+        char *charArr = (char *)arr;
+        for (int i = n - 1; i >= 0; i--) {
+            output[count[charArr[i]] - 1] = charArr[i];
+            count[charArr[i]]--;
+        }
+    } else if (isString) {
+        char **strArr = (char **)arr;
+        for (int i = n - 1; i >= 0; i--) {
+            output[count[strArr[i][0]] - 1] = (int)strArr[i];  // For simplicity, store as int (based on first character)
+            count[strArr[i][0]]--;
+        }
     }
 
     iterations++;  // Increment iteration after placing elements in output array
-    printArray(output, n, "Counting Sort - Output Array", iterations);  // Print output array
+    printArrayMulti(output, n, "Counting Sort - Output Array", iterations, type);  // Print output array
 
-    printSortedArray(arr, n, iterations);
+    // Copy the output array back to the original array
+    if (isInt) {
+        int *intArr = (int *)arr;
+        for (int i = 0; i < n; i++) intArr[i] = output[i];
+    } else if (isChar) {
+        char *charArr = (char *)arr;
+        for (int i = 0; i < n; i++) charArr[i] = output[i];
+    } else if (isString) {
+        char **strArr = (char **)arr;
+        for (int i = 0; i < n; i++) strArr[i] = (char *)output[i];  // Convert back to string type
+    }
+
+    printSortedArrayMulti(arr, n, iterations, type);
+
+    // Free memory if strings were used
+    if (isString) {
+        char **strArr = (char **)arr;
+        for (int i = 0; i < n; i++) {
+            free(strArr[i]);
+        }
+    }
+    free(arr);  // Free the dynamically allocated memory
 }
 
 
+
 // selection sort
+// Selection Sort for multiple data types (int, char, string)
 void selecSort() {
-    int n, iterations = 0;
+    int n, type, iterations = 0;
     getInput(&n);
-    int arr[n];
-    printf("Enter the elements: ");
-    for (int i = 0; i < n; i++) {
-        while (1) {
-            if (scanf("%d", &arr[i]) != 1) {
-                printf("Invalid input. \nPlease enter an integer: ");
+    void *arr;
+    int isInt = 0, isChar = 0, isString = 0;
+
+    // Choosing the type of array
+    printf("Choose Data Type: 1) Integer 2) Character 3) String: ");
+    scanf("%d", &type);
+
+    if (type == 1) { // Integer array
+        arr = malloc(n * sizeof(int));
+        isInt = 1;
+    } else if (type == 2) { // Character array
+        arr = malloc(n * sizeof(char));
+        isChar = 1;
+    } else if (type == 3) { // String array
+        arr = malloc(n * sizeof(char *));
+        isString = 1;
+    } else {
+        printf("Invalid input.\n");
+        return;
+    }
+
+    printf("Enter the elements");
+    clearInputBuffer();
+    if (isInt) {
+        int *intArr = (int *)arr;
+        for (int i = 0; i < n; i++) {
+            while (scanf("%d", &intArr[i]) != 1) {
+                printf("Invalid input. Please enter an integer: ");
                 clearInputBuffer();
-            } else {
-                break;
             }
         }
+    } else if (isChar) {
+        char *charArr = (char *)arr;
+        for (int i = 0; i < n; i++) {
+            while (scanf(" %c", &charArr[i]) != 1) {
+                printf("Invalid input. Please enter a character: ");
+                clearInputBuffer();
+            }
+        }
+    } else if (isString) {
+        printf(" (Press Enter for Each String): ");
+        char **strArr = (char **)arr;
+        for (int i = 0; i < n; i++) {
+            strArr[i] = malloc(100 * sizeof(char)); // Allocate space for strings
+            fgets(strArr[i], 100, stdin);
+            strArr[i][strcspn(strArr[i], "\n")] = '\0';  // Remove newline character
+        }
     }
-    
+
     // Initial array print
-    printArray(arr, n, "Selection Sort - Initial Array", ++iterations);
+    const char *sortType = "Selection Sort";
+    printArrayMulti(arr, n, "Selection Sort - Initial Array", ++iterations, type);
 
     // Selection Sort Algorithm with display after each iteration
     for (int i = 0; i < n - 1; i++) {
         int minIdx = i;
-        for (int j = i + 1; j < n; j++) {
-            if (arr[j] < arr[minIdx]) {
-                minIdx = j;
-            }
-        }
-        // Swap the found minimum element with the first element
-        int temp = arr[minIdx];
-        arr[minIdx] = arr[i];
-        arr[i] = temp;
 
-        // Display array after the iteration
-        printArray(arr, n, "Selection Sort - After Iteration", ++iterations);
+        // Find the minimum element in unsorted array
+        if (isInt) {
+            int *intArr = (int *)arr;
+            for (int j = i + 1; j < n; j++) {
+                if (intArr[j] < intArr[minIdx]) {
+                    minIdx = j;
+                }
+            }
+            // Swap the found minimum element with the first element
+            int temp = intArr[minIdx];
+            intArr[minIdx] = intArr[i];
+            intArr[i] = temp;
+        } else if (isChar) {
+            char *charArr = (char *)arr;
+            for (int j = i + 1; j < n; j++) {
+                if (charArr[j] < charArr[minIdx]) {
+                    minIdx = j;
+                }
+            }
+            // Swap the found minimum element with the first element
+            char temp = charArr[minIdx];
+            charArr[minIdx] = charArr[i];
+            charArr[i] = temp;
+        } else if (isString) {
+            char **strArr = (char **)arr;
+            for (int j = i + 1; j < n; j++) {
+                if (strcmp(strArr[j], strArr[minIdx]) < 0) {
+                    minIdx = j;
+                }
+            }
+            // Swap the found minimum element with the first element
+            char *temp = strArr[minIdx];
+            strArr[minIdx] = strArr[i];
+            strArr[i] = temp;
+        }
+
+        iterations++;  // Increment iteration after each selection step
+        printArrayMulti(arr, n, "Selection Sort - After Iteration", iterations, type);  // Print array after each selection step
     }
 
     // Final sorted array print
-    printSortedArray(arr, n, iterations);
-}
+    printSortedArrayMulti(arr, n, iterations, type);
 
-// bubble sort
-void bubbleSort() {
-    int n, iterations = 0;
-    getInput(&n);
-    int arr[n];
-    printf("Enter the elements: ");
-    for (int i = 0; i < n; i++) {
-        while (1) {
-            if (scanf("%d", &arr[i]) != 1) {
-                printf("Invalid input. \nPlease enter an integer: ");
-                clearInputBuffer();
-            } else {
-                break;
-            }
+    // Free memory for string arrays
+    if (isString) {
+        char **strArr = (char **)arr;
+        for (int i = 0; i < n; i++) {
+            free(strArr[i]);
         }
     }
-    
+    free(arr);  // Free the dynamically allocated memory
+}
+
+
+// Bubble Sort for multiple data types (int, char, string)
+void bubbleSort() {
+    int n, type, iterations = 0;
+    getInput(&n);
+    void *arr;
+    int isInt = 0, isChar = 0, isString = 0;
+
+    // Choosing the type of array
+    printf("Choose Data Type: 1) Integer 2) Character 3) String: ");
+    scanf("%d", &type);
+    clearInputBuffer();
+
+    if (type == 1) { // Integer array
+        arr = malloc(n * sizeof(int));
+        isInt = 1;
+    } else if (type == 2) { // Character array
+        arr = malloc(n * sizeof(char));
+        isChar = 1;
+    } else if (type == 3) { // String array
+        arr = malloc(n * sizeof(char *));
+        isString = 1;
+    } else {
+        printf("Invalid input.\n");
+        return;
+    }
+
+    printf("Enter the elements");
+    clearInputBuffer();
+    if (isInt) {
+        int *intArr = (int *)arr;
+        for (int i = 0; i < n; i++) {
+            while (scanf("%d", &intArr[i]) != 1) {
+                printf("Invalid input. Please enter an integer: ");
+                clearInputBuffer();
+            }
+        }
+    } else if (isChar) {
+        char *charArr = (char *)arr;
+        for (int i = 0; i < n; i++) {
+            while (scanf(" %c", &charArr[i]) != 1) {
+                printf("Invalid input. Please enter a character: ");
+                clearInputBuffer();
+            }
+        }
+    } else if (isString) {
+        printf(" (Press Enter for Each String): ");
+        char **strArr = (char **)arr;
+        for (int i = 0; i < n; i++) {
+            strArr[i] = malloc(100 * sizeof(char)); // Allocate space for strings
+            fgets(strArr[i], 100, stdin);
+            strArr[i][strcspn(strArr[i], "\n")] = '\0';  // Remove newline character
+        }
+    }
+
     // Initial Array print
-    printArray(arr, n, "Bubble Sort - Initial Array", ++iterations);
+    const char *sortType = "Bubble Sort";
+    printArrayMulti(arr, n, "Bubble Sort - Initial Array", ++iterations, type);
 
     // Bubble Sort Algorithm with display after each iteration
     for (int i = 0; i < n - 1; i++) {
         for (int j = 0; j < n - i - 1; j++) {
-            if (arr[j] > arr[j + 1]) {
-                // Swap adjacent elements if they are in the wrong order
-                int temp = arr[j];
-                arr[j] = arr[j + 1];
-                arr[j + 1] = temp;
+            if (isInt) {
+                int *intArr = (int *)arr;
+                if (intArr[j] > intArr[j + 1]) {
+                    // Swap adjacent elements if they are in the wrong order
+                    int temp = intArr[j];
+                    intArr[j] = intArr[j + 1];
+                    intArr[j + 1] = temp;
+                }
+            } else if (isChar) {
+                char *charArr = (char *)arr;
+                if (charArr[j] > charArr[j + 1]) {
+                    // Swap adjacent elements if they are in the wrong order
+                    char temp = charArr[j];
+                    charArr[j] = charArr[j + 1];
+                    charArr[j + 1] = temp;
+                }
+            } else if (isString) {
+                char **strArr = (char **)arr;
+                if (strcmp(strArr[j], strArr[j + 1]) > 0) {
+                    // Swap adjacent elements if they are in the wrong order
+                    char *temp = strArr[j];
+                    strArr[j] = strArr[j + 1];
+                    strArr[j + 1] = temp;
+                }
             }
         }
         // Display array after the iteration
-        printArray(arr, n, "Bubble Sort - After Iteration", ++iterations);
+        iterations++;
+        printArrayMulti(arr, n, "Bubble Sort - After Iteration", iterations, type);  // Print array after each iteration
     }
 
     // Final sorted array print
-    printSortedArray(arr, n, iterations);
+    printSortedArrayMulti(arr, n, iterations, type);
+
+    // Free memory for string arrays
+    if (isString) {
+        char **strArr = (char **)arr;
+        for (int i = 0; i < n; i++) {
+            free(strArr[i]);
+        }
+    }
+    free(arr);  // Free the dynamically allocated memory
 }
