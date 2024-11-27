@@ -89,9 +89,9 @@ void printCentered(const char *text, int width);
 void getInput(int *n);
 
 // Searching Algo's
-void linSearch(int arr[], int size, int target);
-void binSearch(int arr[], int size, int target);
-void binaryInsertionSort(int arr[], int size);
+void linSearch(void *arr, int size, void *target, int type);
+void binSearch(void *arr, int size, void *target, int type);
+void binaryInsertionSort(void *arr, int size, int type);
 
 // Sorting Algo's
 
@@ -429,8 +429,9 @@ void sortingMenu(){
     } while (choice != 10); 
 }
 
-void searchingMenu(){
-    int choice, n, target;
+//Searching Menu
+void searchingMenu() {
+    int choice, n, type;
     do {
         printf("\n");
         printCentered("=== Searching Menu ===", WIDTH);
@@ -440,45 +441,173 @@ void searchingMenu(){
         printf("\n");
         printf("Choose Option: ");
         scanf("%d", &choice);
-        int arr[n];
+        clearInputBuffer();
 
         switch (choice) {
-        case 1:
-        getInput(&n);
-        printf("Enter the elements: ");
-        clearInputBuffer();
-        for (int i = 0; i < n; i++) {
-            while (1) {
-                if (scanf("%d", &arr[i]) != 1) {
-                    printf("Invalid input. \nPlease enter an integer: ");
-                    clearInputBuffer();
-                } else {
-                    break;
+        case 1: { // Linear Search
+            getInput(&n);
+            printf("Choose Data Type: 1) Integer 2) Character 3) String: ");
+            scanf("%d", &type);
+            clearInputBuffer();
+
+            void *arr;
+            void *target;
+            int isInt = 0, isChar = 0, isString = 0;
+
+            if (type == 1) { // Integer array
+                arr = malloc(n * sizeof(int));
+                target = malloc(sizeof(int));
+                isInt = 1;
+            } else if (type == 2) { // Character array
+                arr = malloc(n * sizeof(char));
+                target = malloc(sizeof(char));
+                isChar = 1;
+            } else if (type == 3) { // String array
+                arr = malloc(n * sizeof(char *));
+                target = malloc(100 * sizeof(char));
+                isString = 1;
+            } else {
+                printf("Invalid input.\n");
+                break;
+            }
+
+            // Input elements
+            printf("Enter the elements: ");
+            if (isInt) {
+                int *intArr = (int *)arr;
+                for (int i = 0; i < n; i++) {
+                    while (scanf("%d", &intArr[i]) != 1) {
+                        printf("Invalid input. Please enter an integer: ");
+                        clearInputBuffer();
+                    }
+                }
+                clearInputBuffer();
+            } else if (isChar) {
+                char *charArr = (char *)arr;
+                for (int i = 0; i < n; i++) {
+                    while (scanf(" %c", &charArr[i]) != 1) {
+                        printf("Invalid input. Please enter a character: ");
+                        clearInputBuffer();
+                    }
+                }
+                clearInputBuffer();
+            } else if (isString) {
+                char **strArr = (char **)arr;
+                for (int i = 0; i < n; i++) {
+                    strArr[i] = malloc(100 * sizeof(char));
+                    fgets(strArr[i], 100, stdin);
+                    strArr[i][strcspn(strArr[i], "\n")] = '\0';  // Remove newline
                 }
             }
-        }
+
+            // Input target
             printf("Enter the element to search for: ");
-            scanf("%d", &target);
-            linSearch(arr, n, target);
-            break;
-        case 2:
-        getInput(&n);
-        printf("Enter the elements: ");
-        clearInputBuffer();
-        for (int i = 0; i < n; i++) {
-            while (1) {
-                if (scanf("%d", &arr[i]) != 1) {
-                    printf("Invalid input. \nPlease enter an integer: ");
-                    clearInputBuffer();
-                } else {
-                    break;
+            if (isInt) {
+                scanf("%d", (int *)target);
+            } else if (isChar) {
+                scanf(" %c", (char *)target);
+            } else if (isString) {
+                clearInputBuffer();
+                fgets((char *)target, 100, stdin);
+                ((char *)target)[strcspn((char *)target, "\n")] = '\0';  // Remove newline
+            }
+
+            // Perform linear search
+            linSearch(arr, n, target, type);
+
+            // Free allocated memory
+            if (isString) {
+                char **strArr = (char **)arr;
+                for (int i = 0; i < n; i++) {
+                    free(strArr[i]);
                 }
             }
-        }
-            printf("Enter the element to search for: ");
-            scanf("%d", &target);
-            binSearch(arr, n, target);
+            free(arr);
+            free(target);
             break;
+        }
+        case 2: { // Binary Search
+            getInput(&n);
+            printf("Choose Data Type: 1) Integer 2) Character 3) String: ");
+            scanf("%d", &type);
+            clearInputBuffer();
+
+            void *arr;
+            void *target;
+            int isInt = 0, isChar = 0, isString = 0;
+
+            if (type == 1) { // Integer array
+                arr = malloc(n * sizeof(int));
+                target = malloc(sizeof(int));
+                isInt = 1;
+            } else if (type == 2) { // Character array
+                arr = malloc(n * sizeof(char));
+                target = malloc(sizeof(char));
+                isChar = 1;
+            } else if (type == 3) { // String array
+                arr = malloc(n * sizeof(char *));
+                target = malloc(100 * sizeof(char));
+                isString = 1;
+            } else {
+                printf("Invalid input.\n");
+                break;
+            }
+
+            // Input elements
+            printf("Enter the elements: ");
+            if (isInt) {
+                int *intArr = (int *)arr;
+                for (int i = 0; i < n; i++) {
+                    while (scanf("%d", &intArr[i]) != 1) {
+                        printf("Invalid input. Please enter an integer: ");
+                        clearInputBuffer();
+                    }
+                }
+                clearInputBuffer();
+            } else if (isChar) {
+                char *charArr = (char *)arr;
+                for (int i = 0; i < n; i++) {
+                    while (scanf(" %c", &charArr[i]) != 1) {
+                        printf("Invalid input. Please enter a character: ");
+                        clearInputBuffer();
+                    }
+                }
+                clearInputBuffer();
+            } else if (isString) {
+                char **strArr = (char **)arr;
+                for (int i = 0; i < n; i++) {
+                    strArr[i] = malloc(100 * sizeof(char));
+                    fgets(strArr[i], 100, stdin);
+                    strArr[i][strcspn(strArr[i], "\n")] = '\0';  // Remove newline
+                }
+            }
+
+            // Input target
+            printf("Enter the element to search for: ");
+            if (isInt) {
+                scanf("%d", (int *)target);
+            } else if (isChar) {
+                scanf(" %c", (char *)target);
+            } else if (isString) {
+                clearInputBuffer();
+                fgets((char *)target, 100, stdin);
+                ((char *)target)[strcspn((char *)target, "\n")] = '\0';  // Remove newline
+            }
+
+            // Perform binary search
+            binSearch(arr, n, target, type);
+
+            // Free allocated memory
+            if (isString) {
+                char **strArr = (char **)arr;
+                for (int i = 0; i < n; i++) {
+                    free(strArr[i]);
+                }
+            }
+            free(arr);
+            free(target);
+            break;
+        }
         case 3:
             printCentered("Returning to Main Menu...", WIDTH);
             break;
@@ -486,8 +615,9 @@ void searchingMenu(){
             printCentered("Invalid choice. Please try again.", WIDTH);
             clearInputBuffer();
         }
-    } while (choice != 3); 
+    } while (choice != 3);
 }
+
 
 // Minor Menu's
 void treeMenu(){
@@ -2176,69 +2306,195 @@ void bubbleSort() {
     free(arr);  // Free the dynamically allocated memory
 }
 
-// Searching Algorithm
-void linSearch(int arr[], int size, int target) {
+// Linear Search for multiple data types (int, char, string)
+void linSearch(void *arr, int size, void *target, int type) {
     int found = 0;
-    for (int i = 0; i < size; i++) {
-        if (arr[i] == target) {
-            printf("Element %d found at index %d.\n", target, i);
-            found = 1;
-            break;
+    printf("Performing Linear Search...\n");
+
+    if (type == 1) { // Integer array
+        int *intArr = (int *)arr;
+        int intTarget = *(int *)target;
+        for (int i = 0; i < size; i++) {
+            if (intArr[i] == intTarget) {
+                printf("Element %d found at index %d.\n", intTarget, i);
+                found = 1;
+                break;
+            }
+        }
+    } else if (type == 2) { // Character array
+        char *charArr = (char *)arr;
+        char charTarget = *(char *)target;
+        for (int i = 0; i < size; i++) {
+            if (charArr[i] == charTarget) {
+                printf("Element '%c' found at index %d.\n", charTarget, i);
+                found = 1;
+                break;
+            }
+        }
+    } else if (type == 3) { // String array
+        char **strArr = (char **)arr;
+        char *strTarget = (char *)target;
+        for (int i = 0; i < size; i++) {
+            if (strcmp(strArr[i], strTarget) == 0) {
+                printf("Element \"%s\" found at index %d.\n", strTarget, i);
+                found = 1;
+                break;
+            }
         }
     }
+
     if (!found) {
-        printf("Element %d not found in the array.\n", target);
+        if (type == 1) printf("Element %d not found in the array.\n", *(int *)target);
+        else if (type == 2) printf("Element '%c' not found in the array.\n", *(char *)target);
+        else if (type == 3) printf("Element \"%s\" not found in the array.\n", (char *)target);
     }
 }
 
-// Binary search function
-void binSearch(int arr[], int size, int target) {
-    // Perform binary insertion sort before binary search
-    binaryInsertionSort(arr, size);
+// Binary Search for multiple data types (int, char, string)
+void binSearch(void *arr, int size, void *target, int type) {
+    printf("Performing Binary Search...\n");
 
-    int low = 0, high = size - 1;
-    int found = 0;
+    // Sort the array before searching
+    binaryInsertionSort(arr, size, type);
 
-    while (low <= high) {
-        int mid = (low + high) / 2;
+    int low = 0, high = size - 1, found = 0;
 
-        if (arr[mid] == target) {
-            printf("Element %d found at index %d.\n", target, mid);
-            found = 1;
-            break;
-        } else if (arr[mid] < target) {
-            low = mid + 1;
-        } else {
-            high = mid - 1;
-        }
-    }
-
-    if (!found) {
-        printf("Element %d not found in the array.\n", target);
-    }
-}
-
-// Binary Insertion Sort function
-void binaryInsertionSort(int arr[], int size) {
-    for (int i = 1; i < size; i++) {
-        int key = arr[i];
-        int low = 0, high = i - 1;
-        
-        // Binary search to find the correct position
+    if (type == 1) { // Integer array
+        int *intArr = (int *)arr;
+        int intTarget = *(int *)target;
         while (low <= high) {
             int mid = (low + high) / 2;
-            if (arr[mid] < key) {
+            if (intArr[mid] == intTarget) {
+                printf("Element %d found at index %d.\n", intTarget, mid);
+                found = 1;
+                break;
+            } else if (intArr[mid] < intTarget) {
                 low = mid + 1;
             } else {
                 high = mid - 1;
             }
         }
-
-        for (int j = i - 1; j >= low; j--) {
-            arr[j + 1] = arr[j];
+    } else if (type == 2) { // Character array
+        char *charArr = (char *)arr;
+        char charTarget = *(char *)target;
+        while (low <= high) {
+            int mid = (low + high) / 2;
+            if (charArr[mid] == charTarget) {
+                printf("Element '%c' found at index %d.\n", charTarget, mid);
+                found = 1;
+                break;
+            } else if (charArr[mid] < charTarget) {
+                low = mid + 1;
+            } else {
+                high = mid - 1;
+            }
         }
-
-        
-        arr[low] = key;
+    } else if (type == 3) { // String array
+        char **strArr = (char **)arr;
+        char *strTarget = (char *)target;
+        while (low <= high) {
+            int mid = (low + high) / 2;
+            int cmp = strcmp(strArr[mid], strTarget);
+            if (cmp == 0) {
+                printf("Element \"%s\" found at index %d.\n", strTarget, mid);
+                found = 1;
+                break;
+            } else if (cmp < 0) {
+                low = mid + 1;
+            } else {
+                high = mid - 1;
+            }
+        }
     }
+
+    if (!found) {
+        if (type == 1) printf("Element %d not found in the array.\n", *(int *)target);
+        else if (type == 2) printf("Element '%c' not found in the array.\n", *(char *)target);
+        else if (type == 3) printf("Element \"%s\" not found in the array.\n", (char *)target);
+    }
+}
+
+// Binary Insertion Sort for multiple data types (int, char, string)
+void binaryInsertionSort(void *arr, int size, int type) {
+    printf("Sorting array using Binary Insertion Sort...\n");
+
+    if (type == 1) { // Integer array
+        int *intArr = (int *)arr;
+        for (int i = 1; i < size; i++) {
+            int key = intArr[i];
+            int low = 0, high = i - 1;
+
+            // Binary search for the correct position
+            while (low <= high) {
+                int mid = (low + high) / 2;
+                if (intArr[mid] < key) {
+                    low = mid + 1;
+                } else {
+                    high = mid - 1;
+                }
+            }
+
+            // Shift elements to make space for the key
+            for (int j = i - 1; j >= low; j--) {
+                intArr[j + 1] = intArr[j];
+            }
+            intArr[low] = key;
+
+            // Print array after each insertion
+            printArrayMulti(intArr, size, "Binary Insertion Sort - Intermediate", i, 1);
+        }
+    } else if (type == 2) { // Character array
+        char *charArr = (char *)arr;
+        for (int i = 1; i < size; i++) {
+            char key = charArr[i];
+            int low = 0, high = i - 1;
+
+            // Binary search for the correct position
+            while (low <= high) {
+                int mid = (low + high) / 2;
+                if (charArr[mid] < key) {
+                    low = mid + 1;
+                } else {
+                    high = mid - 1;
+                }
+            }
+
+            // Shift elements to make space for the key
+            for (int j = i - 1; j >= low; j--) {
+                charArr[j + 1] = charArr[j];
+            }
+            charArr[low] = key;
+
+            // Print array after each insertion
+            printArrayMulti(charArr, size, "Binary Insertion Sort - Intermediate", i, 2);
+        }
+    } else if (type == 3) { // String array
+        char **strArr = (char **)arr;
+        for (int i = 1; i < size; i++) {
+            char *key = strArr[i];
+            int low = 0, high = i - 1;
+
+            // Binary search for the correct position
+            while (low <= high) {
+                int mid = (low + high) / 2;
+                if (strcmp(strArr[mid], key) < 0) {
+                    low = mid + 1;
+                } else {
+                    high = mid - 1;
+                }
+            }
+
+            // Shift elements to make space for the key
+            for (int j = i - 1; j >= low; j--) {
+                strArr[j + 1] = strArr[j];
+            }
+            strArr[low] = key;
+
+            // Print array after each insertion
+            printArrayMulti(strArr, size, "Binary Insertion Sort - Intermediate", i, 3);
+        }
+    }
+
+    // Print final sorted array
+    printSortedArrayMulti(arr, size, size, type);
 }
