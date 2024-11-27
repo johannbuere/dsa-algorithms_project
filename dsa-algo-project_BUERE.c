@@ -155,6 +155,23 @@ void selecSort();
 void bubbleSort();          
 
 
+
+// Function Prototypes For String
+void strGetChar();
+void strPutChar();
+void length();
+void pos();
+void concat();
+void substring();
+void strInsert();
+void strDel();
+void strComp();
+void strSort();
+void printCentered(const char *text, int width);
+void clearInputBuffer();
+
+
+
 // Main code block
 int main() {
     int choice, size, value, key, maxSize, top = -1, front = -1, rear = -1;
@@ -185,19 +202,15 @@ int main() {
                 linearDSMenu();
                 break;
             case 2:
-                clearScreen();
                 nonlinDSMenu();
                 break;
             case 3:
-                clearScreen();
                 stringsMenu(); 
                 break;
             case 4:
-                clearScreen();
                 sortingMenu(); 
                 break;
             case 5:
-                clearScreen();
                 searchingMenu(); 
                 break;
             case 6:
@@ -244,7 +257,7 @@ void mainMenu(int *choice) {
     printCentered("=== Main Menu ===", WIDTH);
     printCentered("1) Linear DS [1/5 Done]", WIDTH);
     printCentered("2) Non-Linear DS [Not Yet]", WIDTH);
-    printCentered("3) Strings [Not Yet]", WIDTH);
+    printCentered("3) Strings", WIDTH);
     printCentered("4) Sorting", WIDTH);
     printCentered("5) Searching", WIDTH);
     printCentered("6) Quit", WIDTH);
@@ -337,36 +350,36 @@ void stringsMenu(){
         scanf("%d", &choice);
 
         switch (choice) {
-        /*case 1:
-            strGetChar(); // To be made
+        case 1:
+            strGetChar();
             break;
         case 2:
-            strPutChar(); // To be made
+            strPutChar(); 
             break;
         case 3:
-            length(); // To be made
+            length(); 
             break;
         case 4:
-            pos(); // To be made
+            pos(); 
             break; 
         case 5:
-            concat(); // To be made
+            concat(); 
             break;
         case 6:
-            substring(); // To be made
+            substring(); 
             break;
         case 7:
-            strInsert(); // To be made
+            strInsert(); 
             break;
         case 8:
-            strDel(); // To be made
+            strDel(); 
             break;
         case 9:
-            strComp(); // To be made
+            strComp(); 
             break;
         case 10:
-            strSort(); // To be made
-            break;*/
+            strSort(); 
+            break;
         case 11:
             printCentered("Returning to Main Menu...", WIDTH);
             break;
@@ -2502,4 +2515,183 @@ void binaryInsertionSort(void *arr, int size, int type) {
 
     // Print final sorted array
     printSortedArrayMulti(arr, size, size, type);
+}
+
+
+// String Functions
+void strGetChar() {
+    char str[100];
+    int pos;
+    printf("Enter a string: ");
+    scanf(" %[^\n]", str);
+    printf("Enter position to get character (1-based): ");
+    scanf("%d", &pos);
+    if (pos > 0 && pos <= strlen(str)) {
+        printf("Character at position %d: %c\n", pos, str[pos - 1]);
+    } else {
+        printf("Invalid position.\n");
+    }
+}
+
+void strPutChar() {
+    char str[100];
+    int pos;
+    char ch;
+    printf("Enter a string: ");
+    scanf(" %[^\n]", str);
+    printf("Enter position to replace character (1-based): ");
+    scanf("%d", &pos);
+    printf("Enter new character: ");
+    scanf(" %c", &ch);
+    if (pos > 0 && pos <= strlen(str)) {
+        str[pos - 1] = ch;
+        printf("Modified string: %s\n", str);
+    } else {
+        printf("Invalid position.\n");
+    }
+}
+
+void length() {
+    char str[100];
+    int len = 0;
+    printf("Enter a string: ");
+    scanf(" %[^\n]", str);
+    while (str[len] != '\0') {
+        len++;
+    }
+    printf("Length of the string: %d\n", len);
+}
+
+void pos() {
+    char str[100], ch;
+    int i, found = 0;
+    printf("Enter a string: ");
+    scanf(" %[^\n]", str);
+    printf("Enter character to find: ");
+    scanf(" %c", &ch);
+    for (i = 0; str[i] != '\0'; i++) {
+        if (str[i] == ch) {
+            printf("Character '%c' found at position %d\n", ch, i + 1);
+            found = 1;
+            break;
+        }
+    }
+    if (!found) {
+        printf("Character '%c' not found in the string.\n", ch);
+    }
+}
+
+void concat() {
+    char str1[100], str2[100];
+    int i = 0, j = 0;
+    printf("Enter first string: ");
+    scanf(" %[^\n]", str1);
+    printf("Enter second string: ");
+    scanf(" %[^\n]", str2);
+
+    while (str1[i] != '\0') i++;
+    while (str2[j] != '\0') {
+        str1[i++] = str2[j++];
+    }
+    str1[i] = '\0';
+
+    printf("Concatenated string: %s\n", str1);
+}
+
+void substring() {
+    char str[100], sub[100];
+    int start, len, i;
+    printf("Enter a string: ");
+    scanf(" %[^\n]", str);
+    printf("Enter starting position (1-based): ");
+    scanf("%d", &start);
+    printf("Enter length of substring: ");
+    scanf("%d", &len);
+    if (start > 0 && start + len - 1 <= strlen(str)) {
+        for (i = 0; i < len; i++) {
+            sub[i] = str[start - 1 + i];
+        }
+        sub[i] = '\0';
+        printf("Substring: %s\n", sub);
+    } else {
+        printf("Invalid range.\n");
+    }
+}
+
+void strInsert() {
+    char str1[100], str2[100], result[200];
+    int pos, i = 0, j = 0, k = 0;
+    printf("Enter the main string: ");
+    scanf(" %[^\n]", str1);
+    printf("Enter the string to insert: ");
+    scanf(" %[^\n]", str2);
+    printf("Enter the position to insert (1-based): ");
+    scanf("%d", &pos);
+
+    if (pos > 0 && pos <= strlen(str1) + 1) {
+        while (i < pos - 1) result[k++] = str1[i++];
+        while (str2[j] != '\0') result[k++] = str2[j++];
+        while (str1[i] != '\0') result[k++] = str1[i++];
+        result[k] = '\0';
+        printf("Modified string: %s\n", result);
+    } else {
+        printf("Invalid position.\n");
+    }
+}
+
+void strDel() {
+    char str[100];
+    int start, len, i, j;
+    printf("Enter a string: ");
+    scanf(" %[^\n]", str);
+    printf("Enter starting position (1-based): ");
+    scanf("%d", &start);
+    printf("Enter length of portion to delete: ");
+    scanf("%d", &len);
+
+    if (start > 0 && start + len - 1 <= strlen(str)) {
+        for (i = start - 1, j = start + len - 1; str[j] != '\0'; i++, j++) {
+            str[i] = str[j];
+        }
+        str[i] = '\0';
+        printf("Modified string: %s\n", str);
+    } else {
+        printf("Invalid range.\n");
+    }
+}
+
+void strComp() {
+    char str1[100], str2[100];
+    int i = 0, cmp = 0;
+    printf("Enter first string: ");
+    scanf(" %[^\n]", str1);
+    printf("Enter second string: ");
+    scanf(" %[^\n]", str2);
+
+    while (str1[i] != '\0' && str2[i] != '\0') {
+        if (str1[i] != str2[i]) {
+            cmp = str1[i] - str2[i];
+            break;
+        }
+        i++;
+    }
+    if (cmp == 0 && str1[i] != str2[i]) cmp = str1[i] - str2[i];
+    printf("Comparison result: %d\n", cmp);
+}
+
+void strSort() {
+    char str[100], temp;
+    int i, j;
+    printf("Enter a string: ");
+    scanf(" %[^\n]", str);
+    for (i = 0; str[i] != '\0'; i++) {
+        for (j = i + 1; str[j] != '\0'; j++) {
+            if (str[i] > str[j]) {
+                temp = str[i];
+                str[i] = str[j];
+                str[j] = temp;
+            }
+        }
+    }
+    printf("Sorted string: %s\n", str);
 }
