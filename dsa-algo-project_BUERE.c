@@ -510,8 +510,8 @@ void searchingMenu() {
             } else if (isChar) {
                 scanf(" %c", (char *)target);
             } else if (isString) {
-                clearInputBuffer();
-                fgets((char *)target, 100, stdin);
+                clearInputBuffer();  // Clear input buffer to avoid leftover newline
+                fgets((char *)target, 100, stdin);  // Read the target string
                 ((char *)target)[strcspn((char *)target, "\n")] = '\0';  // Remove trailing newline
             }
 
@@ -595,8 +595,8 @@ void searchingMenu() {
             } else if (isChar) {
                 scanf(" %c", (char *)target);
             } else if (isString) {
-                clearInputBuffer();
-                fgets((char *)target, 100, stdin);
+                clearInputBuffer();  // Clear input buffer to avoid leftover newline
+                fgets((char *)target, 100, stdin);  // Read the target string
                 ((char *)target)[strcspn((char *)target, "\n")] = '\0';  // Remove trailing newline
             }
 
