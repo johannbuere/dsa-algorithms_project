@@ -233,14 +233,11 @@ void setTerminalSize() {
     char command[50];
 
     sprintf(command, "mode con: cols=%d lines=%d", cols, rows);
-    printf("[DEBUG] Executing command: %s\n", command); // Debugging
 
     fflush(stdout); // Flush output before changing terminal size
     int result = system(command);
 
-    if (result != 0) {
-        printf("[ERROR] Failed to set terminal size.\n");
-    }
+
 }
 
 void clearScreen() {
