@@ -303,7 +303,7 @@ void linearDSMenu() {
                 queueMenu(); // To be made
                 break;*/
             case 5:
-                printCentered("Returning...", WIDTH);
+                    clearScreen();
                 break;
             default:
                 printCentered("Invalid choice. Please try again.", WIDTH);
@@ -328,8 +328,7 @@ void nonlinDSMenu() {
                 treeMenu();
                 break;
             case 2:
-                printCentered("Returning to Main Menu...", WIDTH);
-                break;
+                    break;
             default:
                 printCentered("Invalid choice. Please try again.", WIDTH);
                 clearInputBuffer();
@@ -398,7 +397,6 @@ void stringsMenu(){
             strSort(); 
             break;
         case 11:
-            printCentered("Returning...", WIDTH);
             break;
         default:
             printCentered("Invalid choice. Please try again.", WIDTH);
@@ -462,7 +460,6 @@ void sortingMenu(){
             bubbleSort();
             break;
         case 10:
-            printCentered("Returning to Main Menu...", WIDTH);
             break;
         default:
             printCentered("Invalid choice. Please try again.", WIDTH);
@@ -667,7 +664,6 @@ void searchingMenu() {
             break;
         }
         case 3:
-            printCentered("Returning...", WIDTH);
             break;
         default:
             printCentered("Invalid choice. Please try again.", WIDTH);
@@ -731,7 +727,6 @@ void treeMenu(){
             binaryTree(); // To be made
             break;*/
         case 5:
-            printCentered("Returning...", WIDTH);
             break;
         default:
             printCentered("Invalid choice. Please try again.", WIDTH);
@@ -2824,6 +2819,7 @@ void strSort() {
 void arrayMenu() {
     int choice, type;
     do {
+        clearScreen();
         printf("\n");
         printCentered("=== Array Menu ===", WIDTH);
         printCentered("The Array Menu enables you to perform", WIDTH);
@@ -2866,7 +2862,6 @@ void arrayMenu() {
             break;
         case 7:
             clearScreen();
-            printCentered("Returning...", WIDTH);
             break;
         default:
             printCentered("Invalid choice. Please try again.", WIDTH);
