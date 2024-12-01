@@ -460,6 +460,7 @@ void sortingMenu(){
             bubbleSort();
             break;
         case 10:
+            clearScreen();
             break;
         default:
             printCentered("Invalid choice. Please try again.", WIDTH);
@@ -664,6 +665,7 @@ void searchingMenu() {
             break;
         }
         case 3:
+            clearScreen();
             break;
         default:
             printCentered("Invalid choice. Please try again.", WIDTH);
@@ -727,6 +729,7 @@ void treeMenu(){
             binaryTree(); // To be made
             break;*/
         case 5:
+            clearScreen();
             break;
         default:
             printCentered("Invalid choice. Please try again.", WIDTH);
@@ -2819,7 +2822,6 @@ void strSort() {
 void arrayMenu() {
     int choice, type;
     do {
-        clearScreen();
         printf("\n");
         printCentered("=== Array Menu ===", WIDTH);
         printCentered("The Array Menu enables you to perform", WIDTH);
@@ -2929,7 +2931,7 @@ void traverseArray() {
     }
 }
 
-// Insert function
+// Insert function with dynamic array size, supporting int, char, and string
 void insertArray() {
     printf("\n");
     printCentered("=== Insert Into Array ===", WIDTH);
@@ -2937,121 +2939,152 @@ void insertArray() {
     printCentered("Checks for array overflow before insertion.", WIDTH);
     printCentered("Supports integer, character, and string data types.", WIDTH);
     printf("\n");
-    int n, type, maxSize = 100; // maxSize represents the array capacity
-    printf("Enter the number of elements (max 100): ");
-    scanf("%d", &n);
-    clearInputBuffer();
 
-    if (n >= maxSize) {
-        printf("Array overflow. Maximum size reached.\n");
+    int n, type;
+    printf("Enter the number of elements: ");
+    fgetsInput(&n, "Invalid input. Please enter a valid number.");
+        
+    // If n is too large, ask for confirmation
+    if (n > 30) {
+        char confirm;
+        printCentered("That's quite a large number of elements.", WIDTH);
+        printf("Are you sure you want to continue? (y/n): ");
+        scanf(" %c", &confirm);
+        clearInputBuffer(); // Clear any extra input
+        if (confirm != 'y' && confirm != 'Y') {
+            printf("Please enter a smaller number of elements.\n");
+            return;
+        }
+    }
+
+    // Ask for the data type (int, char, or string)
+    printf("Choose Data Type: 1) Integer 2) Character 3) String: ");
+    fgetsInput(&type, "Invalid input. Please enter a valid choice.");
+
+    void *arr;
+    void *element;
+    int isInt = 0, isChar = 0, isString = 0;
+
+    if (type == 1) { // Integer array
+        arr = malloc(n * sizeof(int));
+        memset(arr, 0, n * sizeof(int)); // Initialize with zeros
+        element = malloc(sizeof(int));
+        isInt = 1;
+    } else if (type == 2) { // Character array
+        arr = malloc(n * sizeof(char));
+        memset(arr, 0, n * sizeof(char)); // Initialize with zeros
+        element = malloc(sizeof(char));
+        isChar = 1;
+    } else if (type == 3) { // String array
+        arr = malloc(n * sizeof(char *));
+        memset(arr, 0, n * sizeof(char *)); // Initialize with zeros
+        element = malloc(100 * sizeof(char)); // Assuming max string length of 100
+        isString = 1;
+    } else {
+        printf("Invalid data type.\n");
         return;
     }
 
-    printf("Choose Data Type: 1) Integer 2) Character 3) String: ");
-    scanf("%d", &type);
-    clearInputBuffer();
-
-    if (type == 1) { // Integer
-        int arr[maxSize];
-        printf("Enter the elements: ");
+    // Input elements
+    printf("Enter the elements (Press Enter for Each):\n");
+    if (isInt) {
+        int *intArr = (int *)arr;
         for (int i = 0; i < n; i++) {
-            scanf("%d", &arr[i]);
+            printf("Element %d: ", i + 1);
+            fgetsInput(&intArr[i], "Invalid input. Please enter a valid element.");
         }
-        int element, position;
-        printf("Enter the element to insert: ");
-        scanf("%d", &element);
-        printf("Enter the position (1 to %d): ", n + 1);
-        scanf("%d", &position);
-
-        if (position < 1 || position > n + 1) {
-            printf("Invalid position.\n");
-            return;
-        }
-
-        for (int i = n; i >= position; i--) {
-            arr[i] = arr[i - 1];
-        }
-        arr[position - 1] = element;
-        n++;
-
-        printf("Array after insertion: ");
+    } else if (isChar) {
+        char *charArr = (char *)arr;
         for (int i = 0; i < n; i++) {
-            printf("%d ", arr[i]);
+            printf("Element %d: ", i + 1);
+            fgetsInputChar(&charArr[i], "Invalid input. Please enter a valid element.");
         }
-        printf("\n");
-    } else if (type == 2) { // Character
-        char arr[maxSize];
-        printf("Enter the characters: ");
+    } else if (isString) {
+        char **strArr = (char **)arr;
         for (int i = 0; i < n; i++) {
-            scanf(" %c", &arr[i]);
+            strArr[i] = malloc(100 * sizeof(char));
+            fgetsInputString(strArr[i], 100, "Invalid input. Please enter a valid element.");
         }
-        char element;
-        int position;
-        printf("Enter the character to insert: ");
-        scanf(" %c", &element);
-        printf("Enter the position (1 to %d): ", n + 1);
-        scanf("%d", &position);
-
-        if (position < 1 || position > n + 1) {
-            printf("Invalid position.\n");
-            return;
-        }
-
-        for (int i = n; i >= position; i--) {
-            arr[i] = arr[i - 1];
-        }
-        arr[position - 1] = element;
-        n++;
-
-        printf("Array after insertion: ");
-        for (int i = 0; i < n; i++) {
-            printf("%c ", arr[i]);
-        }
-        printf("\n");
-    } else if (type == 3) { // String
-        char *arr[maxSize];
-        printf("Enter the strings: ");
-        for (int i = 0; i < n; i++) {
-            arr[i] = malloc(100 * sizeof(char));
-            fgets(arr[i], 100, stdin);
-            arr[i][strcspn(arr[i], "\n")] = '\0'; // Remove trailing newline
-        }
-        char element[100];
-        int position;
-        printf("Enter the string to insert: ");
-        fgets(element, 100, stdin);
-        element[strcspn(element, "\n")] = '\0'; // Remove trailing newline
-        printf("Enter the position (1 to %d): ", n + 1);
-        scanf("%d", &position);
-
-        if (position < 1 || position > n + 1) {
-            printf("Invalid position.\n");
-            for (int i = 0; i < n; i++) { // Free memory
-                free(arr[i]);
-            }
-            return;
-        }
-
-        for (int i = n; i >= position; i--) {
-            arr[i] = arr[i - 1];
-        }
-        arr[position - 1] = strdup(element); // Duplicate string
-        n++;
-
-        printf("Array after insertion: ");
-        for (int i = 0; i < n; i++) {
-            printf("%s ", arr[i]);
-        }
-        printf("\n");
-        for (int i = 0; i < n; i++) { // Free memory
-            free(arr[i]);
-        }
-    } else {
-        printf("Invalid data type.\n");
     }
+
+    // Show current state of the array with placeholders
+    printf("Current Array: ");
+    for (int i = 0; i < n; i++) {
+        if (isInt) {
+            printf("%d ", ((int *)arr)[i]);
+        } else if (isChar) {
+            printf("%c ", ((char *)arr)[i]);
+        } else if (isString) {
+            printf("%s ", ((char **)arr)[i]);
+        }
+    }
+    printf("\n");
+
+    // Proceed with insertion
+    int position;
+    printf("Enter the position to insert (1 to %d): ", n + 1);
+    fgetsInput(&position, "Invalid position. Please enter a valid position.");
+    if (position < 1 || position > n + 1) {
+        printf("Invalid position.\n");
+        free(arr);
+        free(element);
+        return;
+    }
+
+    // Insert the new element at the specified position
+    if (isInt) {
+        printf("Enter the integer element to insert: ");
+        fgetsInput((int *)element, "Invalid input. Please enter an integer.");
+        int *intArr = (int *)arr;
+        for (int i = n; i >= position; i--) {
+            intArr[i] = intArr[i - 1];
+        }
+        intArr[position - 1] = *(int *)element;
+    } else if (isChar) {
+        printf("Enter the character element to insert: ");
+        fgetsInputChar((char *)element, "Invalid input. Please enter a character.");
+        char *charArr = (char *)arr;
+        for (int i = n; i >= position; i--) {
+            charArr[i] = charArr[i - 1];
+        }
+        charArr[position - 1] = *(char *)element;
+    } else if (isString) {
+        printf("Enter the string element to insert: ");
+        fgetsInputString((char *)element, 100, "Invalid input. Please enter a string.");
+        char **strArr = (char **)arr;
+        for (int i = n; i >= position; i--) {
+            strArr[i] = strArr[i - 1];
+        }
+        strArr[position - 1] = strdup((char *)element);
+    }
+
+    n++; // Update the number of elements
+
+    // Display the array after insertion
+    printf("Array after insertion: ");
+    for (int i = 0; i < n; i++) {
+        if (isInt) {
+            printf("%d ", ((int *)arr)[i]);
+        } else if (isChar) {
+            printf("%c ", ((char *)arr)[i]);
+        } else if (isString) {
+            printf("%s ", ((char **)arr)[i]);
+        }
+    }
+    printf("\n");
+
+    // Free dynamically allocated memory
+    if (isString) {
+        char **strArr = (char **)arr;
+        for (int i = 0; i < n; i++) {
+            free(strArr[i]);
+        }
+    }
+    free(arr);
+    free(element);
 }
 
-// Delete function
+// Delete function with dynamic array size, supporting int, char, and string
 void deleteArray() {
     printf("\n");
     printCentered("=== Delete From Array ===", WIDTH);
@@ -3059,107 +3092,120 @@ void deleteArray() {
     printCentered("Checks for array underflow before deletion.", WIDTH);
     printCentered("Supports integer, character, and string data types.", WIDTH);
     printf("\n");
+
     int n, type;
     printf("Enter the number of elements: ");
-    scanf("%d", &n);
-    clearInputBuffer();
+    fgetsInput(&n, "Invalid input. Please enter a valid number.");
 
     if (n <= 0) {
         printf("Array underflow. No elements to delete.\n");
         return;
     }
 
+    // Ask for the data type (int, char, or string)
     printf("Choose Data Type: 1) Integer 2) Character 3) String: ");
-    scanf("%d", &type);
+    fgetsInput(&type, "Invalid input. Please enter a valid choice.");
     clearInputBuffer();
 
-    if (type == 1) { // Integer
-        int arr[n];
-        printf("Enter the elements: ");
-        for (int i = 0; i < n; i++) {
-            scanf("%d", &arr[i]);
-        }
-        int position;
-        printf("Enter the position to delete (1 to %d): ", n);
-        scanf("%d", &position);
+    void *arr;
+    int isInt = 0, isChar = 0, isString = 0;
 
-        if (position < 1 || position > n) {
-            printf("Invalid position.\n");
-            return;
-        }
-
-        for (int i = position - 1; i < n - 1; i++) {
-            arr[i] = arr[i + 1];
-        }
-        n--;
-
-        printf("Array after deletion: ");
-        for (int i = 0; i < n; i++) {
-            printf("%d ", arr[i]);
-        }
-        printf("\n");
-    } else if (type == 2) { // Character
-        char arr[n];
-        printf("Enter the characters: ");
-        for (int i = 0; i < n; i++) {
-            scanf(" %c", &arr[i]);
-        }
-        int position;
-        printf("Enter the position to delete (1 to %d): ", n);
-        scanf("%d", &position);
-
-        if (position < 1 || position > n) {
-            printf("Invalid position.\n");
-            return;
-        }
-
-        for (int i = position - 1; i < n - 1; i++) {
-            arr[i] = arr[i + 1];
-        }
-        n--;
-
-        printf("Array after deletion: ");
-        for (int i = 0; i < n; i++) {
-            printf("%c ", arr[i]);
-        }
-        printf("\n");
-    } else if (type == 3) { // String
-        char *arr[n];
-        printf("Enter the strings: ");
-        for (int i = 0; i < n; i++) {
-            arr[i] = malloc(100 * sizeof(char));
-            fgets(arr[i], 100, stdin);
-            arr[i][strcspn(arr[i], "\n")] = '\0'; // Remove trailing newline
-        }
-        int position;
-        printf("Enter the position to delete (1 to %d): ", n);
-        scanf("%d", &position);
-
-        if (position < 1 || position > n) {
-            printf("Invalid position.\n");
-            for (int i = 0; i < n; i++) { // Free memory
-                free(arr[i]);
-            }
-            return;
-        }
-
-        free(arr[position - 1]);
-        for (int i = position - 1; i < n - 1; i++) {
-            arr[i] = arr[i + 1];
-        }
-        n--;
-
-        printf("Array after deletion: ");
-        for (int i = 0; i < n; i++) {
-            printf("%s ", arr[i]);
-        }
-        printf("\n");
-        for (int i = 0; i < n; i++) { // Free memory
-            free(arr[i]);
-        }
+    if (type == 1) { // Integer array
+        arr = malloc(n * sizeof(int));
+        memset(arr, 0, n * sizeof(int)); // Initialize with zeros
+        isInt = 1;
+    } else if (type == 2) { // Character array
+        arr = malloc(n * sizeof(char));
+        memset(arr, 0, n * sizeof(char)); // Initialize with zeros
+        isChar = 1;
+    } else if (type == 3) { // String array
+        arr = malloc(n * sizeof(char *));
+        memset(arr, 0, n * sizeof(char *)); // Initialize with zeros
+        isString = 1;
     } else {
         printf("Invalid data type.\n");
+        return;
     }
+
+    // Input elements
+    printf("Enter the elements (Press Enter for Each):\n");
+    if (isInt) {
+        int *intArr = (int *)arr;
+        for (int i = 0; i < n; i++) {
+            printf("Element %d: ", i + 1);
+            fgetsInput(&intArr[i], "Invalid input. Please enter a valid element.");
+        }
+    } else if (isChar) {
+        char *charArr = (char *)arr;
+        for (int i = 0; i < n; i++) {
+            printf("Element %d: ", i + 1);
+            fgetsInputChar(&charArr[i], "Invalid input. Please enter a valid element.");
+        }
+    } else if (isString) {
+        char **strArr = (char **)arr;
+        for (int i = 0; i < n; i++) {
+            strArr[i] = malloc(100 * sizeof(char));
+            fgetsInputString(strArr[i], 100, "Invalid input. Please enter a valid element.");
+        }
+    }
+
+    // Show current state of the array with placeholders
+    printf("Current Array: ");
+    for (int i = 0; i < n; i++) {
+        if (isInt) {
+            printf("%d ", ((int *)arr)[i]);
+        } else if (isChar) {
+            printf("%c ", ((char *)arr)[i]);
+        } else if (isString) {
+            printf("%s ", ((char **)arr)[i]);
+        }
+    }
+    printf("\n");
+
+    // Deletion logic
+    int position;
+    printf("Enter the position to delete (1 to %d): ", n);
+    fgetsInput(&position, "Invalid position. Please enter a valid position.");
+
+    if (position < 1 || position > n) {
+        printf("Invalid position.\n");
+        free(arr);
+        return;
+    }
+
+    // Shift elements to delete the specified position
+    for (int i = position - 1; i < n - 1; i++) {
+        if (isInt) {
+            ((int *)arr)[i] = ((int *)arr)[i + 1];
+        } else if (isChar) {
+            ((char *)arr)[i] = ((char *)arr)[i + 1];
+        } else if (isString) {
+            ((char **)arr)[i] = ((char **)arr)[i + 1];
+        }
+    }
+    n--;
+
+    // Display the array after deletion
+    printf("Array after deletion: ");
+    for (int i = 0; i < n; i++) {
+        if (isInt) {
+            printf("%d ", ((int *)arr)[i]);
+        } else if (isChar) {
+            printf("%c ", ((char *)arr)[i]);
+        } else if (isString) {
+            printf("%s ", ((char **)arr)[i]);
+        }
+    }
+    printf("\n");
+
+    // Free dynamically allocated memory
+    if (isString) {
+        char **strArr = (char **)arr;
+        for (int i = 0; i < n; i++) {
+            free(strArr[i]);
+        }
+    }
+    free(arr);
 }
 
 //merge array
