@@ -119,7 +119,7 @@ void maxHeapifyString(char *arr[], int n, int i, int *iterations);
 void minHeapifyString(char *arr[], int n, int i, int *iterations);  
 
 // Heap Sort function that uses different heap types
-void heapSortMulti();  // Main heap sort function handling Min and Max heap for int, char, string
+void heapSort();  // Main heap sort function handling Min and Max heap for int, char, string
 
 
 // radix Sort
@@ -169,6 +169,16 @@ void strComp();
 void strSort();
 void printCentered(const char *text, int width);
 void clearInputBuffer();
+
+
+
+//func proto for arrays
+void arrayMenu(); // Main menu for array operations
+void traverseArray(); // Traverses an array and prints its elements
+void insertArray(); // Inserts an element into an array
+void deleteArray(); // Deletes an element from an array
+void mergeArray(); // Merges two arrays into one (to be implemented)
+
 
 
 
@@ -277,12 +287,13 @@ void linearDSMenu() {
         printf("\n");
         printf("Choose Option: ");
         scanf("%d", &choice);
+        clearScreen();
 
         switch (choice) {
-            /*case 1:
-                arrayMenu(); // To be made
+            case 1:
+                arrayMenu(); 
                 break;
-            case 2:
+            /*case 2:
                 linkedListMenu(); // To be made
                 break;
             case 3:
@@ -329,8 +340,17 @@ void nonlinDSMenu() {
 void stringsMenu(){
     int choice;
     do {
+        clearScreen();
         printf("\n");
         printCentered("=== String Menu ===", WIDTH);
+        printf("\n");
+        printCentered("The String Menu allows you to perform", WIDTH);
+        printCentered("various operations on strings such as", WIDTH);
+        printCentered("manipulation, searching, and merging.", WIDTH);
+        printCentered("Explore functionalities specific to", WIDTH);
+        printCentered("string-based data handling.", WIDTH);
+        printf("\n");
+
         printCentered("1) Get Character (getchar)", WIDTH);
         printCentered("2) Put Character (putchar)", WIDTH);
         printCentered("3) Length", WIDTH);
@@ -391,7 +411,14 @@ void sortingMenu(){
     int choice;
     do {
         printf("\n");
-        printCentered("=== Sorting Menu ===", WIDTH);
+        printCentered("=== Sorting Menu Description ===", WIDTH);
+        printCentered("The Sorting Menu allows you to choose", WIDTH);
+        printCentered("from various sorting algorithms to", WIDTH);
+        printCentered("organize data efficiently. It supports", WIDTH);
+        printCentered("int, char, and string types.", WIDTH);
+        printCentered("Includes popular algorithms like", WIDTH);
+        printCentered("Bubble, Quick, and Merge Sort.", WIDTH);
+        printf("\n");        
         printCentered("1) Heap Sort", WIDTH);
         printCentered("2) Radix Sort", WIDTH);
         printCentered("3) Quick Sort", WIDTH);
@@ -408,7 +435,7 @@ void sortingMenu(){
 
         switch (choice) {
         case 1:
-            heapSortMulti(); 
+            heapSort(); 
             break;
         case 2:
             radixSort(); 
@@ -444,11 +471,18 @@ void sortingMenu(){
     } while (choice != 10); 
 }
 
+//searching func
 void searchingMenu() {
     int choice, n, type;
     do {
         printf("\n");
         printCentered("=== Searching Menu ===", WIDTH);
+        printCentered("The Searching Menu offers functionalities", WIDTH);
+        printCentered("to find elements in arrays using", WIDTH);
+        printCentered("methods like Linear Search and Binary", WIDTH);
+        printCentered("Search. Supports int, char, and string", WIDTH);
+        printCentered("data types.", WIDTH);
+        printf("\n");
         printCentered("1) Linear Search", WIDTH);
         printCentered("2) Binary Search", WIDTH);
         printCentered("3) Exit to Main Menu", WIDTH);
@@ -458,6 +492,21 @@ void searchingMenu() {
 
         switch (choice) {
         case 1: { // Linear Search
+            clearScreen();
+            printCentered("=== Linear Search ===", WIDTH);
+            printf("\n");
+            printCentered("Linear Search is one of the simplest search algorithms.", WIDTH);
+            printCentered("It works by sequentially checking each element of the array", WIDTH);
+            printCentered("until the desired element is found or the end is reached.", WIDTH);
+            printf("\n");
+            printCentered("Best suited for small or unsorted datasets where efficiency", WIDTH);
+            printCentered("is not critical.", WIDTH);
+            printf("\n");
+            printCentered("In this program, you will:", WIDTH);
+            printCentered("- Input an array of integers, characters, or strings.", WIDTH);
+            printCentered("- Specify the element you wish to search for.", WIDTH);
+            printCentered("- Get feedback on whether and where the element exists.", WIDTH);
+            printf("\n");
             printf("Enter the number of elements: ");
             fgetsInput(&n, "Invalid input. Please enter a valid number.");
 
@@ -530,6 +579,22 @@ void searchingMenu() {
             break;
         }
         case 2: { // Binary Search
+            clearScreen();
+            printCentered("=== Binary Search ===", WIDTH);
+            printf("\n");
+            printCentered("Binary Search is a highly efficient search algorithm used", WIDTH);
+            printCentered("on sorted arrays. It works by repeatedly dividing the search", WIDTH);
+            printCentered("space in half, eliminating half of the remaining elements", WIDTH);
+            printCentered("with each step.", WIDTH);
+            printf("\n");
+            printCentered("Best suited for large datasets where efficiency is critical,", WIDTH);
+            printCentered("but the array must be sorted for this algorithm to work.", WIDTH);
+            printf("\n");
+            printCentered("In this program, you will:", WIDTH);
+            printCentered("- Input a sorted array of integers, characters, or strings.", WIDTH);
+            printCentered("- Specify the element you wish to search for.", WIDTH);
+            printCentered("- Get feedback on whether the element exists and its position.", WIDTH);
+            printf("\n");
             printf("Enter the number of elements: ");
             fgetsInput(&n, "Invalid input. Please enter a valid number.");
 
@@ -609,6 +674,8 @@ void searchingMenu() {
         }
     } while (choice != 3);
 }
+
+
 void fgetsInput(int *value, const char *errorMsg) {
     char buffer[100];
     while (fgets(buffer, sizeof(buffer), stdin)) {
@@ -632,6 +699,7 @@ void fgetsInputString(char *value, int size, const char *errorMsg) {
         printf("%s\n", errorMsg);
     }
 }
+
 
 
 // Minor Menu's
@@ -922,7 +990,7 @@ void minHeapifyString(char *arr[], int n, int i, int *iterations) {
 
 
 // Heap Sort function for multiple data types
-void heapSortMulti() {
+void heapSort() {
     int type, heapType, n, iterations = 0;
     printf("Choose Data Type: 1) Integer 2) Character 3) String: ");
     scanf("%d", &type);
@@ -2517,6 +2585,11 @@ void binaryInsertionSort(void *arr, int size, int type) {
 
 // String Functions
 void strGetChar() {
+    clearScreen();
+    printCentered("=== Position of Character ===", WIDTH);
+    printCentered("Find the first occurrence of a character in a string.", WIDTH);
+    printCentered("You will provide a character, and the program will display", WIDTH);
+    printCentered("its 1-based position, if found.", WIDTH);
     char str[100];
     int pos;
     printf("Enter a string: ");
@@ -2531,6 +2604,12 @@ void strGetChar() {
 }
 
 void strPutChar() {
+    clearScreen();
+    printCentered("=== Put Character ===", WIDTH);
+    printCentered("Modify a character in a string by specifying its position.", WIDTH);
+    printCentered("You will provide a new character to replace the old one,", WIDTH);
+    printCentered("and the program will update and display the modified string.", WIDTH);
+
     char str[100];
     int pos;
     char ch;
@@ -2549,6 +2628,12 @@ void strPutChar() {
 }
 
 void length() {
+    clearScreen();
+    printCentered("=== Length of String ===", WIDTH);
+    printCentered("Determine the number of characters in a string.", WIDTH);
+    printCentered("The program will calculate and display the total length,", WIDTH);
+    printCentered("excluding the null terminator.", WIDTH);
+
     char str[100];
     int len = 0;
     printf("Enter a string: ");
@@ -2560,6 +2645,12 @@ void length() {
 }
 
 void pos() {
+    clearScreen();
+    printCentered("=== Position of Character ===", WIDTH);
+    printCentered("Find the first occurrence of a character in a string.", WIDTH);
+    printCentered("You will provide a character, and the program will display", WIDTH);
+    printCentered("its 1-based position, if found.", WIDTH);
+
     char str[100], ch;
     int i, found = 0;
     printf("Enter a string: ");
@@ -2579,6 +2670,12 @@ void pos() {
 }
 
 void concat() {
+    clearScreen();
+    printCentered("=== Concatenate Strings ===", WIDTH);
+    printCentered("Combine two strings into a single string.", WIDTH);
+    printCentered("The program will take two inputs, merge them,", WIDTH);
+    printCentered("and display the concatenated result.", WIDTH);
+
     char str1[100], str2[100];
     int i = 0, j = 0;
     printf("Enter first string: ");
@@ -2596,6 +2693,12 @@ void concat() {
 }
 
 void substring() {
+    clearScreen();
+    printCentered("=== Substring Extraction ===", WIDTH);
+    printCentered("Extract a portion of a string by specifying a start position", WIDTH);
+    printCentered("and the desired length. The program will display the extracted", WIDTH);
+    printCentered("substring if the range is valid.", WIDTH);
+
     char str[100], sub[100];
     int start, len, i;
     printf("Enter a string: ");
@@ -2616,6 +2719,12 @@ void substring() {
 }
 
 void strInsert() {
+    clearScreen();
+    printCentered("=== Insert String ===", WIDTH);
+    printCentered("Insert one string into another at a specified position.", WIDTH);
+    printCentered("The program will merge the strings and display the updated", WIDTH);
+    printCentered("result, maintaining the original order.", WIDTH);
+
     char str1[100], str2[100], result[200];
     int pos, i = 0, j = 0, k = 0;
     printf("Enter the main string: ");
@@ -2637,6 +2746,12 @@ void strInsert() {
 }
 
 void strDel() {
+    clearScreen();
+    printCentered("=== Delete Substring ===", WIDTH);
+    printCentered("Remove a portion of a string by specifying a start position", WIDTH);
+    printCentered("and the length of the section to delete. The program will", WIDTH);
+    printCentered("display the modified string.", WIDTH);
+
     char str[100];
     int start, len, i, j;
     printf("Enter a string: ");
@@ -2658,6 +2773,12 @@ void strDel() {
 }
 
 void strComp() {
+    clearScreen();
+    printCentered("=== Compare Strings ===", WIDTH);
+    printCentered("Perform a lexicographical comparison of two strings.", WIDTH);
+    printCentered("The program will display the result indicating whether the", WIDTH);
+    printCentered("first string is less than, equal to, or greater than the second.", WIDTH);
+
     char str1[100], str2[100];
     int i = 0, cmp = 0;
     printf("Enter first string: ");
@@ -2676,7 +2797,13 @@ void strComp() {
     printf("Comparison result: %d\n", cmp);
 }
 
+//bubble sort*
 void strSort() {
+    clearScreen();
+    printCentered("=== Sort String ===", WIDTH);
+    printCentered("Arrange the characters of a string in alphabetical order.", WIDTH);
+    printCentered("The program will sort the string in ascending order", WIDTH);
+    printCentered("and display the sorted result.", WIDTH);
     char str[100], temp;
     int i, j;
     printf("Enter a string: ");
@@ -2691,4 +2818,459 @@ void strSort() {
         }
     }
     printf("Sorted string: %s\n", str);
+}
+
+///arrays
+void arrayMenu() {
+    int choice, type;
+    do {
+        printf("\n");
+        printCentered("=== Array Menu ===", WIDTH);
+        printCentered("The Array Menu enables you to perform", WIDTH);
+        printCentered("operations like traversal, insertion,", WIDTH);
+        printCentered("deletion, searching, sorting, and", WIDTH);
+        printCentered("merging on arrays of different data types.", WIDTH);
+        printCentered("Supported types: int, char, and string.", WIDTH);
+        printf("\n");        
+        printCentered("1) Traverse", WIDTH);
+        printCentered("2) Insert", WIDTH);
+        printCentered("3) Delete", WIDTH);
+        printCentered("4) Search", WIDTH);
+        printCentered("5) Sort", WIDTH);
+        printCentered("6) Merge", WIDTH);
+        printCentered("7) Exit to Linear DS Menu", WIDTH);
+        printf("\n");
+        printf("Choose Option: ");
+        scanf("%d", &choice);
+        clearInputBuffer();
+        clearScreen();
+
+        switch (choice) {
+        case 1:
+            traverseArray();
+            break;
+        case 2:
+            insertArray();
+            break;
+        case 3:
+            deleteArray();
+            break;
+        case 4:
+            searchingMenu();
+            break;
+        case 5:
+            sortingMenu();
+            break;
+        case 6:
+            mergeArray();
+            break;
+        case 7:
+            clearScreen();
+            printCentered("Returning to Linear DS Menu...", WIDTH);
+            break;
+        default:
+            printCentered("Invalid choice. Please try again.", WIDTH);
+        }
+    } while (choice != 7);
+}
+
+// Traverse function
+void traverseArray() {
+    printf("\n");
+    printCentered("=== Traverse Array ===", WIDTH);
+    printCentered("Displays all the elements of an array.", WIDTH);
+    printCentered("Supports integer, character, and string data types.", WIDTH);
+    printf("\n");
+
+    int n, type;
+    printf("Enter the number of elements: ");
+    scanf("%d", &n);
+    clearInputBuffer();
+
+    printf("Choose Data Type: 1) Integer 2) Character 3) String: ");
+    scanf("%d", &type);
+    clearInputBuffer();
+
+    if (type == 1) { // Integer
+        int arr[n];
+        printf("Enter the elements: ");
+        for (int i = 0; i < n; i++) {
+            scanf("%d", &arr[i]);
+        }
+        printf("Array elements: ");
+        for (int i = 0; i < n; i++) {
+            printf("%d ", arr[i]);
+        }
+        printf("\n");
+    } else if (type == 2) { // Character
+        char arr[n];
+        printf("Enter the characters: ");
+        for (int i = 0; i < n; i++) {
+            scanf(" %c", &arr[i]);
+        }
+        printf("Array elements: ");
+        for (int i = 0; i < n; i++) {
+            printf("%c ", arr[i]);
+        }
+        printf("\n");
+    } else if (type == 3) { // String
+        char *arr[n];
+        printf("Enter the strings: ");
+        for (int i = 0; i < n; i++) {
+            arr[i] = malloc(100 * sizeof(char));
+            fgets(arr[i], 100, stdin);
+            arr[i][strcspn(arr[i], "\n")] = '\0'; // Remove trailing newline
+        }
+        printf("Array elements: ");
+        for (int i = 0; i < n; i++) {
+            printf("%s ", arr[i]);
+        }
+        printf("\n");
+        for (int i = 0; i < n; i++) { // Free memory
+            free(arr[i]);
+        }
+    } else {
+        printf("Invalid data type.\n");
+    }
+}
+
+// Insert function
+void insertArray() {
+    printf("\n");
+    printCentered("=== Insert Into Array ===", WIDTH);
+    printCentered("Adds a new element at a specified position.", WIDTH);
+    printCentered("Checks for array overflow before insertion.", WIDTH);
+    printCentered("Supports integer, character, and string data types.", WIDTH);
+    printf("\n");
+    int n, type, maxSize = 100; // maxSize represents the array capacity
+    printf("Enter the number of elements (max 100): ");
+    scanf("%d", &n);
+    clearInputBuffer();
+
+    if (n >= maxSize) {
+        printf("Array overflow. Maximum size reached.\n");
+        return;
+    }
+
+    printf("Choose Data Type: 1) Integer 2) Character 3) String: ");
+    scanf("%d", &type);
+    clearInputBuffer();
+
+    if (type == 1) { // Integer
+        int arr[maxSize];
+        printf("Enter the elements: ");
+        for (int i = 0; i < n; i++) {
+            scanf("%d", &arr[i]);
+        }
+        int element, position;
+        printf("Enter the element to insert: ");
+        scanf("%d", &element);
+        printf("Enter the position (1 to %d): ", n + 1);
+        scanf("%d", &position);
+
+        if (position < 1 || position > n + 1) {
+            printf("Invalid position.\n");
+            return;
+        }
+
+        for (int i = n; i >= position; i--) {
+            arr[i] = arr[i - 1];
+        }
+        arr[position - 1] = element;
+        n++;
+
+        printf("Array after insertion: ");
+        for (int i = 0; i < n; i++) {
+            printf("%d ", arr[i]);
+        }
+        printf("\n");
+    } else if (type == 2) { // Character
+        char arr[maxSize];
+        printf("Enter the characters: ");
+        for (int i = 0; i < n; i++) {
+            scanf(" %c", &arr[i]);
+        }
+        char element;
+        int position;
+        printf("Enter the character to insert: ");
+        scanf(" %c", &element);
+        printf("Enter the position (1 to %d): ", n + 1);
+        scanf("%d", &position);
+
+        if (position < 1 || position > n + 1) {
+            printf("Invalid position.\n");
+            return;
+        }
+
+        for (int i = n; i >= position; i--) {
+            arr[i] = arr[i - 1];
+        }
+        arr[position - 1] = element;
+        n++;
+
+        printf("Array after insertion: ");
+        for (int i = 0; i < n; i++) {
+            printf("%c ", arr[i]);
+        }
+        printf("\n");
+    } else if (type == 3) { // String
+        char *arr[maxSize];
+        printf("Enter the strings: ");
+        for (int i = 0; i < n; i++) {
+            arr[i] = malloc(100 * sizeof(char));
+            fgets(arr[i], 100, stdin);
+            arr[i][strcspn(arr[i], "\n")] = '\0'; // Remove trailing newline
+        }
+        char element[100];
+        int position;
+        printf("Enter the string to insert: ");
+        fgets(element, 100, stdin);
+        element[strcspn(element, "\n")] = '\0'; // Remove trailing newline
+        printf("Enter the position (1 to %d): ", n + 1);
+        scanf("%d", &position);
+
+        if (position < 1 || position > n + 1) {
+            printf("Invalid position.\n");
+            for (int i = 0; i < n; i++) { // Free memory
+                free(arr[i]);
+            }
+            return;
+        }
+
+        for (int i = n; i >= position; i--) {
+            arr[i] = arr[i - 1];
+        }
+        arr[position - 1] = strdup(element); // Duplicate string
+        n++;
+
+        printf("Array after insertion: ");
+        for (int i = 0; i < n; i++) {
+            printf("%s ", arr[i]);
+        }
+        printf("\n");
+        for (int i = 0; i < n; i++) { // Free memory
+            free(arr[i]);
+        }
+    } else {
+        printf("Invalid data type.\n");
+    }
+}
+
+// Delete function
+void deleteArray() {
+    printf("\n");
+    printCentered("=== Delete From Array ===", WIDTH);
+    printCentered("Removes an element from a specified position.", WIDTH);
+    printCentered("Checks for array underflow before deletion.", WIDTH);
+    printCentered("Supports integer, character, and string data types.", WIDTH);
+    printf("\n");
+    int n, type;
+    printf("Enter the number of elements: ");
+    scanf("%d", &n);
+    clearInputBuffer();
+
+    if (n <= 0) {
+        printf("Array underflow. No elements to delete.\n");
+        return;
+    }
+
+    printf("Choose Data Type: 1) Integer 2) Character 3) String: ");
+    scanf("%d", &type);
+    clearInputBuffer();
+
+    if (type == 1) { // Integer
+        int arr[n];
+        printf("Enter the elements: ");
+        for (int i = 0; i < n; i++) {
+            scanf("%d", &arr[i]);
+        }
+        int position;
+        printf("Enter the position to delete (1 to %d): ", n);
+        scanf("%d", &position);
+
+        if (position < 1 || position > n) {
+            printf("Invalid position.\n");
+            return;
+        }
+
+        for (int i = position - 1; i < n - 1; i++) {
+            arr[i] = arr[i + 1];
+        }
+        n--;
+
+        printf("Array after deletion: ");
+        for (int i = 0; i < n; i++) {
+            printf("%d ", arr[i]);
+        }
+        printf("\n");
+    } else if (type == 2) { // Character
+        char arr[n];
+        printf("Enter the characters: ");
+        for (int i = 0; i < n; i++) {
+            scanf(" %c", &arr[i]);
+        }
+        int position;
+        printf("Enter the position to delete (1 to %d): ", n);
+        scanf("%d", &position);
+
+        if (position < 1 || position > n) {
+            printf("Invalid position.\n");
+            return;
+        }
+
+        for (int i = position - 1; i < n - 1; i++) {
+            arr[i] = arr[i + 1];
+        }
+        n--;
+
+        printf("Array after deletion: ");
+        for (int i = 0; i < n; i++) {
+            printf("%c ", arr[i]);
+        }
+        printf("\n");
+    } else if (type == 3) { // String
+        char *arr[n];
+        printf("Enter the strings: ");
+        for (int i = 0; i < n; i++) {
+            arr[i] = malloc(100 * sizeof(char));
+            fgets(arr[i], 100, stdin);
+            arr[i][strcspn(arr[i], "\n")] = '\0'; // Remove trailing newline
+        }
+        int position;
+        printf("Enter the position to delete (1 to %d): ", n);
+        scanf("%d", &position);
+
+        if (position < 1 || position > n) {
+            printf("Invalid position.\n");
+            for (int i = 0; i < n; i++) { // Free memory
+                free(arr[i]);
+            }
+            return;
+        }
+
+        free(arr[position - 1]);
+        for (int i = position - 1; i < n - 1; i++) {
+            arr[i] = arr[i + 1];
+        }
+        n--;
+
+        printf("Array after deletion: ");
+        for (int i = 0; i < n; i++) {
+            printf("%s ", arr[i]);
+        }
+        printf("\n");
+        for (int i = 0; i < n; i++) { // Free memory
+            free(arr[i]);
+        }
+    } else {
+        printf("Invalid data type.\n");
+    }
+}
+
+//merge array
+void mergeArray() {
+    printf("\n");
+    printCentered("=== Merge Arrays ===", WIDTH);
+    printCentered("Combines two arrays into a single array.", WIDTH);
+    printCentered("Supports integer, character, and string data types.", WIDTH);
+    printf("\n");
+    int n1, n2, type;
+    printf("Enter the number of elements in the first array: ");
+    scanf("%d", &n1);
+    clearInputBuffer();
+    printf("Enter the number of elements in the second array: ");
+    scanf("%d", &n2);
+    clearInputBuffer();
+
+    printf("Choose Data Type: 1) Integer 2) Character 3) String: ");
+    scanf("%d", &type);
+    clearInputBuffer();
+
+    if (type == 1) { // Integer
+        int arr1[n1], arr2[n2], merged[n1 + n2];
+        printf("Enter the elements of the first array: ");
+        for (int i = 0; i < n1; i++) {
+            scanf("%d", &arr1[i]);
+        }
+        printf("Enter the elements of the second array: ");
+        for (int i = 0; i < n2; i++) {
+            scanf("%d", &arr2[i]);
+        }
+
+        // Merge the arrays
+        for (int i = 0; i < n1; i++) {
+            merged[i] = arr1[i];
+        }
+        for (int i = 0; i < n2; i++) {
+            merged[n1 + i] = arr2[i];
+        }
+
+        printf("Merged array: ");
+        for (int i = 0; i < n1 + n2; i++) {
+            printf("%d ", merged[i]);
+        }
+        printf("\n");
+    } else if (type == 2) { // Character
+        char arr1[n1], arr2[n2], merged[n1 + n2];
+        printf("Enter the characters of the first array: ");
+        for (int i = 0; i < n1; i++) {
+            scanf(" %c", &arr1[i]);
+        }
+        printf("Enter the characters of the second array: ");
+        for (int i = 0; i < n2; i++) {
+            scanf(" %c", &arr2[i]);
+        }
+
+        // Merge the arrays
+        for (int i = 0; i < n1; i++) {
+            merged[i] = arr1[i];
+        }
+        for (int i = 0; i < n2; i++) {
+            merged[n1 + i] = arr2[i];
+        }
+
+        printf("Merged array: ");
+        for (int i = 0; i < n1 + n2; i++) {
+            printf("%c ", merged[i]);
+        }
+        printf("\n");
+    } else if (type == 3) { // String
+        char *arr1[n1], *arr2[n2], *merged[n1 + n2];
+        printf("Enter the strings of the first array: ");
+        for (int i = 0; i < n1; i++) {
+            arr1[i] = malloc(100 * sizeof(char));
+            fgets(arr1[i], 100, stdin);
+            arr1[i][strcspn(arr1[i], "\n")] = '\0'; // Remove trailing newline
+        }
+        printf("Enter the strings of the second array: ");
+        for (int i = 0; i < n2; i++) {
+            arr2[i] = malloc(100 * sizeof(char));
+            fgets(arr2[i], 100, stdin);
+            arr2[i][strcspn(arr2[i], "\n")] = '\0'; // Remove trailing newline
+        }
+
+        // Merge the arrays
+        for (int i = 0; i < n1; i++) {
+            merged[i] = arr1[i];
+        }
+        for (int i = 0; i < n2; i++) {
+            merged[n1 + i] = arr2[i];
+        }
+
+        printf("Merged array: ");
+        for (int i = 0; i < n1 + n2; i++) {
+            printf("%s ", merged[i]);
+        }
+        printf("\n");
+
+        // Free memory
+        for (int i = 0; i < n1; i++) {
+            free(arr1[i]);
+        }
+        for (int i = 0; i < n2; i++) {
+            free(arr2[i]);
+        }
+    } else {
+        printf("Invalid data type.\n");
+    }
 }
