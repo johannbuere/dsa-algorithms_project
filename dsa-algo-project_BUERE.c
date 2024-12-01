@@ -262,7 +262,7 @@ void clearScreen() {
 void mainMenu(int *choice) {
     printf("\n");
     printCentered("=== Main Menu ===", WIDTH);
-    printCentered("1) Linear DS [1/5 Done]", WIDTH);
+    printCentered("1) Linear DS [2/5 Done]", WIDTH);
     printCentered("2) Non-Linear DS [Not Yet]", WIDTH);
     printCentered("3) Strings", WIDTH);
     printCentered("4) Sorting", WIDTH);
