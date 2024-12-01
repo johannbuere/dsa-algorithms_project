@@ -3105,7 +3105,6 @@ void deleteArray() {
     // Ask for the data type (int, char, or string)
     printf("Choose Data Type: 1) Integer 2) Character 3) String: ");
     fgetsInput(&type, "Invalid input. Please enter a valid choice.");
-    clearInputBuffer();
 
     void *arr;
     int isInt = 0, isChar = 0, isString = 0;
