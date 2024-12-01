@@ -283,7 +283,7 @@ void linearDSMenu() {
         printCentered("2) Linked List", WIDTH);
         printCentered("3) Stacks", WIDTH);
         printCentered("4) Queues", WIDTH);
-        printCentered("5) Exit to Main Menu", WIDTH);
+        printCentered("5) Exit", WIDTH);
         printf("\n");
         printf("Choose Option: ");
         scanf("%d", &choice);
@@ -303,7 +303,7 @@ void linearDSMenu() {
                 queueMenu(); // To be made
                 break;*/
             case 5:
-                printCentered("Returning to Main Menu...", WIDTH);
+                printCentered("Returning...", WIDTH);
                 break;
             default:
                 printCentered("Invalid choice. Please try again.", WIDTH);
@@ -318,7 +318,7 @@ void nonlinDSMenu() {
         printf("\n");
         printCentered("=== Non-Linear DS Menu ===", WIDTH);
         printCentered("1) Trees", WIDTH);
-        printCentered("2) Exit to Main Menu", WIDTH);
+        printCentered("2) Exit", WIDTH);
         printf("\n");
         printf("Choose Option: ");
         scanf("%d", &choice);
@@ -361,7 +361,7 @@ void stringsMenu(){
         printCentered("8) Delete", WIDTH);
         printCentered("9) Compare", WIDTH);
         printCentered("10) Sort", WIDTH);
-        printCentered("11) Exit to Main Menu", WIDTH);
+        printCentered("11) Exit", WIDTH);
         printf("\n");
         printf("Choose Option: ");
         scanf("%d", &choice);
@@ -398,7 +398,7 @@ void stringsMenu(){
             strSort(); 
             break;
         case 11:
-            printCentered("Returning to Main Menu...", WIDTH);
+            printCentered("Returning...", WIDTH);
             break;
         default:
             printCentered("Invalid choice. Please try again.", WIDTH);
@@ -428,7 +428,7 @@ void sortingMenu(){
         printCentered("7) Counting Sort", WIDTH);
         printCentered("8) Selection Sort", WIDTH);
         printCentered("9) Bubble Sort", WIDTH);
-        printCentered("10) Exit to Main Menu", WIDTH);
+        printCentered("10) Exit", WIDTH);
         printf("\n");
         printf("Choose Option: ");
         scanf("%d", &choice);
@@ -485,7 +485,7 @@ void searchingMenu() {
         printf("\n");
         printCentered("1) Linear Search", WIDTH);
         printCentered("2) Binary Search", WIDTH);
-        printCentered("3) Exit to Main Menu", WIDTH);
+        printCentered("3) Exit", WIDTH);
         printf("\n");
         printf("Choose Option: ");
         fgetsInput(&choice, "Invalid input. Please enter a valid choice.");
@@ -667,7 +667,7 @@ void searchingMenu() {
             break;
         }
         case 3:
-            printCentered("Returning to Main Menu...", WIDTH);
+            printCentered("Returning...", WIDTH);
             break;
         default:
             printCentered("Invalid choice. Please try again.", WIDTH);
@@ -712,7 +712,7 @@ void treeMenu(){
         printCentered("2) Rooted Trees", WIDTH);
         printCentered("3) Ordered Trees", WIDTH);
         printCentered("4) Binary Trees", WIDTH);
-        printCentered("5) Exit to Non-Linear DS Menu", WIDTH);
+        printCentered("5) Exit", WIDTH);
         printf("\n");
         printf("Choose Option: ");
         scanf("%d", &choice);
@@ -731,7 +731,7 @@ void treeMenu(){
             binaryTree(); // To be made
             break;*/
         case 5:
-            printCentered("Returning to Non-Linear DS Menu...", WIDTH);
+            printCentered("Returning...", WIDTH);
             break;
         default:
             printCentered("Invalid choice. Please try again.", WIDTH);
@@ -2838,7 +2838,7 @@ void arrayMenu() {
         printCentered("4) Search", WIDTH);
         printCentered("5) Sort", WIDTH);
         printCentered("6) Merge", WIDTH);
-        printCentered("7) Exit to Linear DS Menu", WIDTH);
+        printCentered("7) Exit", WIDTH);
         printf("\n");
         printf("Choose Option: ");
         scanf("%d", &choice);
@@ -2866,7 +2866,7 @@ void arrayMenu() {
             break;
         case 7:
             clearScreen();
-            printCentered("Returning to Linear DS Menu...", WIDTH);
+            printCentered("Returning...", WIDTH);
             break;
         default:
             printCentered("Invalid choice. Please try again.", WIDTH);
