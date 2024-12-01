@@ -2820,7 +2820,7 @@ void strSort() {
     printf("Sorted string: %s\n", str);
 }
 
-///arrays
+//arrays
 void arrayMenu() {
     int choice, type;
     do {
