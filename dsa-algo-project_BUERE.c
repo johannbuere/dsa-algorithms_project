@@ -1773,9 +1773,6 @@ void mergeSort() {
 
 
 // Random Sort
-#include <stdlib.h>
-#include <time.h>
-
 // Random Sort (BogoSort) - Generic for int, char, and string
 void randSort() {
     int n, type, iterations = 0;
