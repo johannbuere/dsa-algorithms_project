@@ -56,6 +56,23 @@ After this release, I’ll be working on adding Linear DS, Non-Linear DS, and St
 #define WIDTH 80
 #define HEIGHT 24
 
+
+//typed def data type
+typedef enum { DT_INT, DT_CHAR, DT_STRING } DataType;
+
+// Singly Linked List Node
+typedef struct SinglyNode {
+    void *data;
+    struct SinglyNode *next;
+} SinglyNode;
+
+// Doubly Linked List Node
+typedef struct DoublyNode {
+    void *data;
+    struct DoublyNode *next;
+    struct DoublyNode *prev;
+} DoublyNode;
+
 //terminal commands
 void setTerminalSize();
 void clearScreen();
@@ -187,10 +204,18 @@ void mergeArray(); // Merges two arrays into one (to be implemented)
 
 //func for linked list
 void linkedListMenu();
-void singularLinkedList(); 
+void singularLinkedList();
 void doublyLinkedList();
 void circularLinkedList();
 void circularDoublyLinkedList();
+
+void initializeList(void **head, DataType type, int isDoubly, int isCircular);
+void insertNode(void **head, DataType type, int isDoubly, int isCircular);
+void traverseList(void *head, DataType type, int isDoubly, int isCircular);
+void searchList(void *head, DataType type, int isDoubly, int isCircular);
+void deleteNode(void **head, DataType type, int isDoubly, int isCircular);
+void reverseList(void **head, DataType type, int isDoubly, int isCircular);
+void printList(void *head, DataType type, int isDoubly, int isCircular);
 
 
 
@@ -309,10 +334,10 @@ void linearDSMenu() {
             case 1:
                 arrayMenu(); 
                 break;
-            /*case 2:
-                linkedListMenu(); // To be made
+            case 2:
+                linkedListMenu(); // testing
                 break;
-            case 3:
+            /*case 3:
                 stackMenu(); // To be made
                 break;
             case 4:
@@ -3419,20 +3444,19 @@ void linkedListMenu() {
         printf("\n");
         printf("Choose Option: ");
         scanf("%d", &choice);
-        clearScreen();
 
         switch (choice) {
             case 1:
-                singularLinkedListMenu();
+                singularLinkedList();
                 break;
             case 2:
-                doublyLinkedListMenu();
+                doublyLinkedList();
                 break;
             case 3:
-                circularLinkedListMenu();
+                circularLinkedList();
                 break;
             case 4:
-                circularDoublyLinkedListMenu();
+                circularDoublyLinkedList();
                 break;
             case 5:
                 clearScreen();
@@ -3444,10 +3468,80 @@ void linkedListMenu() {
     } while (choice != 5);
 }
 
-// Placeholder functions for each choice
-void singularLinkedList() {
-    printf("Singular Linked List  - To be implemented\n");
+void initializeList(void **head, DataType type, int isDoubly, int isCircular) {
+    if (*head != NULL) {
+        printf("List already initialized. Clearing existing list...\n");
+        // Clear list logic (e.g., freeing memory)
+        // You can add logic here to free the existing list, if necessary
+    }
+    
+    *head = NULL;  // Initialize the list by setting the head to NULL
+    printf("List initialized.\n");
+
+    // Print the list (it will be empty since head is NULL)
+    printList(*head, type, isDoubly, isCircular);
 }
+
+
+// function for types of linked lists
+void singularLinkedList() {
+    SinglyNode *head = NULL;
+    int choice;
+    DataType type;
+    
+    // Ask user for the data type of the list
+    printf("Choose data type for the Singular Linked List:\n");
+    printf("1) INT\n2) CHAR\n3) STRING\nChoose: ");
+    scanf("%d", &choice);
+    clearInputBuffer();
+    type = (choice == 1) ? DT_INT : (choice == 2) ? DT_CHAR : DT_STRING;
+    clearScreen();
+    do {        
+        // Display available operations
+        printf("\n");
+        printCentered("=== Singular Linked List Operations ===", WIDTH);
+        printCentered("1) Initialize List", WIDTH);
+        printCentered("2) Insert Node", WIDTH);
+        printCentered("3) Traverse List", WIDTH);
+        printCentered("4) Search List", WIDTH);
+        printCentered("5) Delete Node", WIDTH);
+        printCentered("6) Reverse List", WIDTH);
+        printCentered("7) Back to Linked List Menu", WIDTH);
+        printf("\n");
+        printf("Choose Option: ");
+        scanf("%d", &choice);
+        clearScreen();  // Clear the screen to prepare for the next action
+
+        switch (choice) {
+            case 1:
+                initializeList((void **)&head, type, 0, 0);
+                break;
+            case 2:
+                insertNode((void **)&head, type, 0, 0);
+                break;
+            case 3:
+                traverseList(head, type, 0, 0);
+                break;
+            case 4:
+                searchList(head, type, 0, 0);
+                break;
+            case 5:
+                deleteNode((void **)&head, type, 0, 0);
+                break;
+            case 6:
+                reverseList((void **)&head, type, 0, 0);
+                break;
+            case 7:
+                clearScreen();
+                break;
+            default:
+                printCentered("Invalid choice. Please try again.", WIDTH);
+                clearInputBuffer();
+        }
+    } while (choice != 7);
+}
+
+
 
 void doublyLinkedList() {
     printf("Doubly Linked List  - To be implemented\n");
@@ -3459,4 +3553,454 @@ void circularLinkedList() {
 
 void circularDoublyLinkedList() {
     printf("Circular Doubly Linked List  - To be implemented\n");
+}
+
+// Linked List operations
+// Insert Node Function (Handles insertion at start, end, and specific index)
+void insertNode(void **head, DataType type, int isDoubly, int isCircular) {
+    void *newData;
+    int choice, index;
+
+    // Allocate memory for the data based on its type
+    if (type == DT_INT) {
+        newData = malloc(sizeof(int));
+        printf("Enter an integer: ");
+        scanf("%d", (int *)newData);
+    } else if (type == DT_CHAR) {
+        newData = malloc(sizeof(char));
+        printf("Enter a character: ");
+        scanf(" %c", (char *)newData);
+    } else {
+        newData = malloc(50);
+        printf("Enter a string: ");
+        scanf("%s", (char *)newData);
+    }
+
+    printf("\nChoose where to insert the node:\n");
+    printf("1) At the end\n");
+    printf("2) At a specific index\n");
+    printf("3) At the start\n");
+    printf("Choose: ");
+    scanf("%d", &choice);
+
+    if (isDoubly) {
+        DoublyNode *newNode = (DoublyNode *)malloc(sizeof(DoublyNode));
+        newNode->data = newData;
+        newNode->next = NULL;
+        newNode->prev = NULL;
+
+        DoublyNode **dHead = (DoublyNode **)head;
+
+        if (choice == 1) { // Insert at the end
+            if (*dHead == NULL) {
+                *dHead = newNode;
+                if (isCircular) {
+                    newNode->next = newNode;
+                    newNode->prev = newNode;
+                }
+            } else {
+                DoublyNode *tail = *dHead;
+                while (!isCircular && tail->next != NULL) tail = tail->next;
+                if (isCircular) tail = (*dHead)->prev;
+
+                tail->next = newNode;
+                newNode->prev = tail;
+                if (isCircular) {
+                    newNode->next = *dHead;
+                    (*dHead)->prev = newNode;
+                }
+            }
+        } else if (choice == 2) { // Insert at specific index
+            printf("Enter the index to insert at (1-based index): ");
+            scanf("%d", &index);
+
+            // Validate the index (must be >= 1)
+            if (index < 1) {
+                printf("Index out of bounds.\n");
+                free(newData);
+                return;
+            }
+
+            if (index == 1 || *dHead == NULL) { // Insert at start if index is 1 or the list is empty
+                newNode->next = *dHead;
+                if (*dHead != NULL) {
+                    (*dHead)->prev = newNode;
+                }
+                *dHead = newNode;
+                if (isCircular) {
+                    newNode->prev = (*dHead)->prev;
+                    (*dHead)->prev->next = *dHead;
+                }
+            } else {
+                DoublyNode *temp = *dHead;
+                for (int i = 1; temp != NULL && i < index - 1; i++) {
+                    temp = temp->next;
+                }
+
+                if (temp == NULL) {
+                    printf("Index out of range.\n");
+                    free(newData);
+                    return;
+                }
+
+                newNode->next = temp->next;
+                if (temp->next != NULL) {
+                    temp->next->prev = newNode;
+                }
+                temp->next = newNode;
+                newNode->prev = temp;
+
+                if (isCircular && newNode->next == NULL) {
+                    newNode->next = *dHead;
+                    (*dHead)->prev = newNode;
+                }
+            }
+        } else if (choice == 3) { // Insert at the start
+            newNode->next = *dHead;
+            if (*dHead != NULL) {
+                (*dHead)->prev = newNode;
+            }
+            *dHead = newNode;
+            if (isCircular) {
+                newNode->prev = (*dHead)->prev;
+                (*dHead)->prev->next = *dHead;
+            }
+        }
+    } else { // Singly Linked List
+        SinglyNode **sHead = (SinglyNode **)head;
+
+        if (choice == 1) { // Insert at the end
+            SinglyNode *newNode = (SinglyNode *)malloc(sizeof(SinglyNode));
+            newNode->data = newData;
+            newNode->next = NULL;
+
+            if (*sHead == NULL) {
+                *sHead = newNode;
+                if (isCircular) {
+                    newNode->next = newNode; // Circular linking
+                }
+            } else {
+                SinglyNode *tail = *sHead;
+                while (!isCircular && tail->next != NULL) tail = tail->next;
+                if (isCircular) tail = (*sHead)->next;
+
+                tail->next = newNode;
+                if (isCircular) {
+                    newNode->next = *sHead;
+                }
+            }
+        } else if (choice == 2) { // Insert at specific index
+            printf("Enter the index to insert at (1-based index): ");
+            scanf("%d", &index);
+
+            // Validate the index (must be >= 1)
+            if (index < 1) {
+                printf("Index out of bounds.\n");
+                free(newData);
+                return;
+            }
+
+            if (index == 1 || *sHead == NULL) { // Insert at start if index is 1 or the list is empty
+                SinglyNode *newNode = (SinglyNode *)malloc(sizeof(SinglyNode));
+                newNode->data = newData;
+                newNode->next = *sHead;
+                *sHead = newNode;
+                if (isCircular) {
+                    SinglyNode *tail = *sHead;
+                    while (tail->next != *sHead) tail = tail->next;
+                    tail->next = *sHead;
+                }
+            } else {
+                SinglyNode *temp = *sHead;
+                for (int i = 1; temp != NULL && i < index - 1; i++) {
+                    temp = temp->next;
+                }
+
+                if (temp == NULL) {
+                    printf("Index out of range.\n");
+                    free(newData);
+                    return;
+                }
+
+                SinglyNode *newNode = (SinglyNode *)malloc(sizeof(SinglyNode));
+                newNode->data = newData;
+                newNode->next = temp->next;
+                temp->next = newNode;
+                if (isCircular && newNode->next == NULL) {
+                    newNode->next = *sHead;
+                }
+            }
+        } else if (choice == 3) { // Insert at the start
+            SinglyNode *newNode = (SinglyNode *)malloc(sizeof(SinglyNode));
+            newNode->data = newData;
+            newNode->next = *sHead;
+            *sHead = newNode;
+            if (isCircular) {
+                SinglyNode *tail = *sHead;
+                while (tail->next != *sHead) tail = tail->next;
+                tail->next = *sHead;
+            }
+        }
+    }
+
+    printf("Node inserted successfully.\n");
+    // Print the list after insertion
+    printList(*head, type, isDoubly, isCircular);
+}
+
+
+
+void traverseList(void *head, DataType type, int isDoubly, int isCircular) {
+    if (head == NULL) {
+        printf("The list is empty.\n");
+        return;
+    }
+
+    printf("Traversing the list:\n");
+    if (isDoubly) {
+        DoublyNode *current = (DoublyNode *)head;
+        do {
+            if (type == DT_INT) {
+                printf("[%d] ", *(int *)current->data);
+            } else if (type == DT_CHAR) {
+                printf("[%c] ", *(char *)current->data);
+            } else {
+                printf("[%s] ", (char *)current->data);
+            }
+            current = current->next;
+        } while (current != NULL && (current != head || isCircular));
+    } else {
+        SinglyNode *current = (SinglyNode *)head;
+        do {
+            if (type == DT_INT) {
+                printf("[%d] ", *(int *)current->data);
+            } else if (type == DT_CHAR) {
+                printf("[%c] ", *(char *)current->data);
+            } else {
+                printf("[%s] ", (char *)current->data);
+            }
+            current = current->next;
+        } while (current != NULL && (current != head || isCircular));
+    }
+
+    printf("\n");
+}
+
+
+void searchList(void *head, DataType type, int isDoubly, int isCircular) {
+    if (head == NULL) {
+        printf("The list is empty.\n");
+        return;
+    }
+
+    void *searchValue = malloc((type == DT_STRING) ? 50 : sizeof(int));
+    printf("Enter the value to search: ");
+    if (type == DT_INT) {
+        scanf("%d", (int *)searchValue);
+    } else if (type == DT_CHAR) {
+        scanf(" %c", (char *)searchValue);
+    } else {
+        scanf("%s", (char *)searchValue);
+    }
+
+    int position = 1;
+    int found = 0;
+    if (isDoubly) {
+        DoublyNode *current = (DoublyNode *)head;
+        do {
+            if ((type == DT_INT && *(int *)current->data == *(int *)searchValue) ||
+                (type == DT_CHAR && *(char *)current->data == *(char *)searchValue) ||
+                (type == DT_STRING && strcmp((char *)current->data, (char *)searchValue) == 0)) {
+                printf("Value found at position %d\n", position);
+                found = 1;
+                break;
+            }
+            current = current->next;
+            position++;
+        } while (current != NULL && (current != head || isCircular));
+    } else {
+        SinglyNode *current = (SinglyNode *)head;
+        do {
+            if ((type == DT_INT && *(int *)current->data == *(int *)searchValue) ||
+                (type == DT_CHAR && *(char *)current->data == *(char *)searchValue) ||
+                (type == DT_STRING && strcmp((char *)current->data, (char *)searchValue) == 0)) {
+                printf("Value found at position %d\n", position);
+                found = 1;
+                break;
+            }
+            current = current->next;
+            position++;
+        } while (current != NULL && (current != head || isCircular));
+    }
+
+    if (!found) {
+        printf("Value not found in the list.\n");
+    }
+
+    // Print the list after the search operation
+    printf("\nCurrent list:\n");
+    printList(head, type, isDoubly, isCircular);
+
+    free(searchValue);
+}
+
+
+void deleteNode(void **head, DataType type, int isDoubly, int isCircular) {
+    if (*head == NULL) {
+        printf("The list is empty.\n");
+        return;
+    }
+
+    void *deleteValue = malloc((type == DT_STRING) ? 50 : sizeof(int));
+    printf("Enter the value to delete: ");
+    if (type == DT_INT) {
+        scanf("%d", (int *)deleteValue);
+    } else if (type == DT_CHAR) {
+        scanf(" %c", (char *)deleteValue);
+    } else {
+        scanf("%s", (char *)deleteValue);
+    }
+
+    if (isDoubly) {
+        DoublyNode *current = (DoublyNode *)*head, *prev = NULL;
+        do {
+            if ((type == DT_INT && *(int *)current->data == *(int *)deleteValue) ||
+                (type == DT_CHAR && *(char *)current->data == *(char *)deleteValue) ||
+                (type == DT_STRING && strcmp((char *)current->data, (char *)deleteValue) == 0)) {
+                if (prev) prev->next = current->next;
+                if (current->next) current->next->prev = prev;
+                if (current == *head) *head = current->next;
+                if (isCircular && *head == current) *head = NULL;
+                free(current->data);
+                free(current);
+                printf("Node deleted.\n");
+
+                // Print the updated list after deletion
+                printf("\nUpdated list:\n");
+                printList(*head, type, isDoubly, isCircular);
+
+                free(deleteValue);
+                return;
+            }
+            prev = current;
+            current = current->next;
+        } while (current != NULL && (current != *head || isCircular));
+    } else {
+        SinglyNode *current = (SinglyNode *)*head, *prev = NULL;
+        do {
+            if ((type == DT_INT && *(int *)current->data == *(int *)deleteValue) ||
+                (type == DT_CHAR && *(char *)current->data == *(char *)deleteValue) ||
+                (type == DT_STRING && strcmp((char *)current->data, (char *)deleteValue) == 0)) {
+                if (prev) prev->next = current->next;
+                if (current == *head) *head = current->next;
+                if (isCircular && *head == current) *head = NULL;
+                free(current->data);
+                free(current);
+                printf("Node deleted.\n");
+
+                // Print the updated list after deletion
+                printf("\nUpdated list:\n");
+                printList(*head, type, isDoubly, isCircular);
+
+                free(deleteValue);
+                return;
+            }
+            prev = current;
+            current = current->next;
+        } while (current != NULL && (current != *head || isCircular));
+    }
+
+    printf("Value not found.\n");
+    free(deleteValue);
+}
+
+
+void reverseList(void **head, DataType type, int isDoubly, int isCircular) {
+    if (*head == NULL) {
+        printf("The list is empty.\n");
+        return;
+    }
+
+    if (isDoubly) {
+        DoublyNode *current = (DoublyNode *)*head;
+        DoublyNode *temp = NULL;
+        do {
+            temp = current->prev;
+            current->prev = current->next;
+            current->next = temp;
+            current = current->prev; // Move to the previous node
+        } while (current != NULL && (current != *head || isCircular));
+
+        if (temp) *head = temp->prev; // Update head to the new first node
+    } else {
+        SinglyNode *current = (SinglyNode *)*head;
+        SinglyNode *prev = NULL, *next = NULL;
+        do {
+            next = current->next;
+            current->next = prev;
+            prev = current;
+            current = next;
+        } while (current != NULL && (current != *head || isCircular));
+        *head = prev;
+    }
+
+    printf("List reversed.\n");
+    printList(*head, type, isDoubly, isCircular);
+}
+
+void printList(void *head, DataType type, int isDoubly, int isCircular) {
+    if (head == NULL) {
+        printf("The list is empty.\n");
+        return;
+    }
+
+    printf("List: ");
+
+    if (isDoubly) {
+        DoublyNode *current = (DoublyNode *)head;
+        do {
+            // Print data in node with appropriate formatting
+            if (type == DT_INT) {
+                printf("[%d]", *(int *)current->data);
+            } else if (type == DT_CHAR) {
+                printf("[%c]", *(char *)current->data);
+            } else if (type == DT_STRING) {
+                printf("[%s]", (char *)current->data);
+            }
+
+            // Print arrows based on the next and previous nodes
+            if (current->next != NULL) {
+                printf(" <-> ");  // Double arrows for doubly linked list
+            } else {
+                printf(" <-> NULL"); // End of the list
+            }
+
+            current = current->next;
+        } while (current != NULL && (current != head || isCircular));
+
+        printf("\n");
+    } else {
+        SinglyNode *current = (SinglyNode *)head;
+        do {
+            // Print data in node with appropriate formatting
+            if (type == DT_INT) {
+                printf("[%d]", *(int *)current->data);
+            } else if (type == DT_CHAR) {
+                printf("[%c]", *(char *)current->data);
+            } else if (type == DT_STRING) {
+                printf("[%s]", (char *)current->data);
+            }
+
+            // Print arrows for singly linked list
+            if (current->next != NULL) {
+                printf(" -> ");  // Single arrow for singly linked list
+            } else {
+                printf(" -> NULL"); // End of the list
+            }
+
+            current = current->next;
+        } while (current != NULL && (current != head || isCircular));
+
+        printf("\n");
+    }
 }
