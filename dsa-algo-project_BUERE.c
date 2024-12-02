@@ -49,6 +49,7 @@ After this release, I’ll be working on adding Linear DS, Non-Linear DS, and St
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdarg.h>
 #include <time.h>
 
 #define WIDTH 80
@@ -89,6 +90,9 @@ void clearInputBuffer();
 
 // Helper function to print centered text
 void printCentered(const char *text, int width);
+
+//PrintCentered with Dynamic Content
+void printCenteredDynamic(int width, const char *format, ...);
 
 // input
 void getInput(int *n);
@@ -781,6 +785,20 @@ void printCentered(const char *text, int width) {
     } else {
         printf("%s\n", text); // If text is wider than the width, just print it
     }
+}
+
+//PrintCentered with Dynamic Content
+void printCenteredDynamic(int width, const char *format, ...) {
+    char buffer[200]; // Temporary buffer for the formatted message
+
+    // Create the formatted string
+    va_list args;
+    va_start(args, format);
+    vsnprintf(buffer, sizeof(buffer), format, args);
+    va_end(args);
+
+    // Use printCentered to print the formatted message
+    printCentered(buffer, width);
 }
 
 // Function to display the title page and ask the user to continue
@@ -2396,7 +2414,7 @@ void linSearch(void *arr, int size, void *target, int type) {
         int intTarget = *(int *)target;
         for (int i = 0; i < size; i++) {
             if (intArr[i] == intTarget) {
-                printf("Element %d found at index %d.\n", intTarget, i);
+                printCenteredDynamic(WIDTH, "Element %d found at index %d.", intTarget, i);
                 found = 1;
                 break;
             }
@@ -2406,7 +2424,8 @@ void linSearch(void *arr, int size, void *target, int type) {
         char charTarget = *(char *)target;
         for (int i = 0; i < size; i++) {
             if (charArr[i] == charTarget) {
-                printf("Element '%c' found at index %d.\n", charTarget, i);
+                printCenteredDynamic(WIDTH, "Element '%c' found at index %d.", charTarget, i);
+
                 found = 1;
                 break;
             }
@@ -2416,7 +2435,7 @@ void linSearch(void *arr, int size, void *target, int type) {
         char *strTarget = (char *)target;
         for (int i = 0; i < size; i++) {
             if (strcmp(strArr[i], strTarget) == 0) {
-                printf("Element \"%s\" found at index %d.\n", strTarget, i);
+                printCenteredDynamic(WIDTH, "Element \"%s\" found at index %d.", strTarget, i);
                 found = 1;
                 break;
             }
@@ -2446,7 +2465,7 @@ void binSearch(void *arr, int size, void *target, int type) {
         while (low <= high) {
             int mid = (low + high) / 2;
             if (intArr[mid] == intTarget) {
-                printf("Element %d found at index %d.\n", intTarget, mid);
+                printCenteredDynamic(WIDTH, "Element \"%d\" found at index %d.", intTarget, mid);
                 found = 1;
                 break;
             } else if (intArr[mid] < intTarget) {
@@ -2461,7 +2480,7 @@ void binSearch(void *arr, int size, void *target, int type) {
         while (low <= high) {
             int mid = (low + high) / 2;
             if (charArr[mid] == charTarget) {
-                printf("Element '%c' found at index %d.\n", charTarget, mid);
+                printCenteredDynamic(WIDTH, "Element \"%c\" found at index %d.", charTarget, mid);
                 found = 1;
                 break;
             } else if (charArr[mid] < charTarget) {
@@ -2477,7 +2496,7 @@ void binSearch(void *arr, int size, void *target, int type) {
             int mid = (low + high) / 2;
             int cmp = strcmp(strArr[mid], strTarget);
             if (cmp == 0) {
-                printf("Element \"%s\" found at index %d.\n", strTarget, mid);
+                printCenteredDynamic(WIDTH, "Element \"%s\" found at index %d.", strTarget, mid);
                 found = 1;
                 break;
             } else if (cmp < 0) {
@@ -2522,7 +2541,7 @@ void binaryInsertionSort(void *arr, int size, int type) {
             intArr[low] = key;
 
             // Print array after each insertion
-            printArrayMulti(intArr, size, "Binary Insertion Sort - Intermediate", i, 1);
+            printArrayMulti(intArr, size, "Binary Insertion Sort", i, 1);
         }
     } else if (type == 2) { // Character array
         char *charArr = (char *)arr;
@@ -2572,7 +2591,7 @@ void binaryInsertionSort(void *arr, int size, int type) {
             strArr[low] = key;
 
             // Print array after each insertion
-            printArrayMulti(strArr, size, "Binary Insertion Sort - Intermediate", i, 3);
+            printArrayMulti(strArr, size, "Binary Insertion Sort", i, 3);
         }
     }
 
