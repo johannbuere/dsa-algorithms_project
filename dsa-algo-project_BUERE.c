@@ -51,6 +51,7 @@ After this release, I’ll be working on adding Linear DS, Non-Linear DS, and St
 #include <string.h>
 #include <stdarg.h>
 #include <time.h>
+#include <windows.h>
 
 #define WIDTH 80
 #define HEIGHT 24
@@ -203,7 +204,6 @@ int main() {
 
     do {
         system("cls");
-        setTerminalSize();
         printf("\n");
         printf("\n");
         printCentered("Welcome to the Data Structures and Algorithms Menu!", WIDTH);
@@ -240,19 +240,23 @@ int main() {
 
 
 
-//Terminal commands
-void setTerminalSize() { 
-    const int rows = 24;
-    const int cols = WIDTH; // Ensure WIDTH is defined and valid
-    char command[50];
+#include <windows.h>
 
-    sprintf(command, "mode con: cols=%d lines=%d", cols, rows);
+void setTerminalSize() {
+    // Get the console handle
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
-    fflush(stdout); // Flush output before changing terminal size
-    int result = system(command);
+    // Set the buffer size (scrollback buffer)
+    COORD bufferSize;
+    bufferSize.X = 120;  // Set the width of the console screen buffer (no horizontal scroll)
+    bufferSize.Y = 1000; // Set the height of the console screen buffer (scrollback lines)
+    SetConsoleScreenBufferSize(hConsole, bufferSize);
 
-
+    // Set the window size (visible part of the terminal)
+    SMALL_RECT windowSize = {0, 0, 80, 23};  // 120 columns, 24 rows (no horizontal scroll)
+    SetConsoleWindowInfo(hConsole, TRUE, &windowSize);
 }
+
 
 void clearScreen() {
     system("cls");
@@ -342,8 +346,8 @@ void nonlinDSMenu() {
 
 void stringsMenu(){
     int choice;
+    clearScreen();
     do {
-        clearScreen();
         printf("\n");
         printCentered("=== String Menu ===", WIDTH);
         printf("\n");
@@ -2607,18 +2611,25 @@ void strGetChar() {
     printCentered("Find the first occurrence of a character in a string.", WIDTH);
     printCentered("You will provide a character, and the program will display", WIDTH);
     printCentered("its 1-based position, if found.", WIDTH);
+
     char str[100];
     int pos;
-    printf("Enter a string: ");
-    scanf(" %[^\n]", str);
-    printf("Enter position to get character (1-based): ");
-    scanf("%d", &pos);
-    if (pos > 0 && pos <= strlen(str)) {
-        printf("Character at position %d: %c\n", pos, str[pos - 1]);
-    } else {
-        printf("Invalid position.\n");
+    
+    while (1) {  // Loop until a valid position is provided
+        printf("Enter a string: ");
+        scanf(" %[^\n]", str);
+        printf("Enter position to get character (1-based): ");
+        scanf("%d", &pos);
+
+        if (pos > 0 && pos <= strlen(str)) {
+            printf("Character at position %d: %c\n", pos, str[pos - 1]);
+            break;  // Exit the loop when the position is valid
+        } else {
+            printCentered("Invalid position. Out of bounds. Please try again.", WIDTH);  // Error message
+        }
     }
 }
+
 
 void strPutChar() {
     clearScreen();
@@ -2630,19 +2641,25 @@ void strPutChar() {
     char str[100];
     int pos;
     char ch;
-    printf("Enter a string: ");
-    scanf(" %[^\n]", str);
-    printf("Enter position to replace character (1-based): ");
-    scanf("%d", &pos);
-    printf("Enter new character: ");
-    scanf(" %c", &ch);
-    if (pos > 0 && pos <= strlen(str)) {
-        str[pos - 1] = ch;
-        printf("Modified string: %s\n", str);
-    } else {
-        printf("Invalid position.\n");
+    
+    while (1) {  // Loop until a valid position is provided
+        printf("Enter a string: ");
+        scanf(" %[^\n]", str);
+        printf("Enter position to replace character (1-based): ");
+        scanf("%d", &pos);
+        printf("Enter new character: ");
+        scanf(" %c", &ch);
+
+        if (pos > 0 && pos <= strlen(str)) {
+            str[pos - 1] = ch;
+            printf("Modified string: %s\n", str);
+            break;  // Exit the loop when the position is valid
+        } else {
+            printCentered("Invalid position. Out of bounds. Please try again.", WIDTH);  // Error message
+        }
     }
 }
+
 
 void length() {
     clearScreen();
@@ -2718,22 +2735,28 @@ void substring() {
 
     char str[100], sub[100];
     int start, len, i;
-    printf("Enter a string: ");
-    scanf(" %[^\n]", str);
-    printf("Enter starting position (1-based): ");
-    scanf("%d", &start);
-    printf("Enter length of substring: ");
-    scanf("%d", &len);
-    if (start > 0 && start + len - 1 <= strlen(str)) {
-        for (i = 0; i < len; i++) {
-            sub[i] = str[start - 1 + i];
+    
+    while (1) {  // Loop until valid range is provided
+        printf("Enter a string: ");
+        scanf(" %[^\n]", str);
+        printf("Enter starting position (1-based): ");
+        scanf("%d", &start);
+        printf("Enter length of substring: ");
+        scanf("%d", &len);
+        
+        if (start > 0 && start + len - 1 <= strlen(str)) {
+            for (i = 0; i < len; i++) {
+                sub[i] = str[start - 1 + i];
+            }
+            sub[i] = '\0';
+            printf("Substring: %s\n", sub);
+            break;  // Exit loop when valid range is provided
+        } else {
+            printCentered("Invalid range. Please try again.", WIDTH);  // Error message
         }
-        sub[i] = '\0';
-        printf("Substring: %s\n", sub);
-    } else {
-        printf("Invalid range.\n");
     }
 }
+
 
 void strInsert() {
     clearScreen();
@@ -2744,23 +2767,31 @@ void strInsert() {
 
     char str1[100], str2[100], result[200];
     int pos, i = 0, j = 0, k = 0;
+    
     printf("Enter the main string: ");
     scanf(" %[^\n]", str1);
     printf("Enter the string to insert: ");
     scanf(" %[^\n]", str2);
-    printf("Enter the position to insert (1-based): ");
-    scanf("%d", &pos);
 
-    if (pos > 0 && pos <= strlen(str1) + 1) {
-        while (i < pos - 1) result[k++] = str1[i++];
-        while (str2[j] != '\0') result[k++] = str2[j++];
-        while (str1[i] != '\0') result[k++] = str1[i++];
-        result[k] = '\0';
-        printf("Modified string: %s\n", result);
-    } else {
-        printf("Invalid position.\n");
-    }
+    // Loop until the user provides a valid position
+    do {
+        printf("Enter the position to insert (1-based): ");
+        scanf("%d", &pos);
+        
+        if (pos <= 0 || pos > strlen(str1) + 1) {  // Check for invalid position
+            printCentered("Invalid position. Out of bounds. Please try again.", WIDTH);  // Display error
+        }
+    } while (pos <= 0 || pos > strlen(str1) + 1);  // Repeat until position is valid
+
+    // Perform the insertion when position is valid
+    while (i < pos - 1) result[k++] = str1[i++];  // Copy characters from the main string until the insertion point
+    while (str2[j] != '\0') result[k++] = str2[j++];  // Insert the second string
+    while (str1[i] != '\0') result[k++] = str1[i++];  // Append the rest of the main string
+    result[k] = '\0';  // Null-terminate the result string
+
+    printf("Modified string: %s\n", result);
 }
+
 
 void strDel() {
     clearScreen();
@@ -2771,23 +2802,28 @@ void strDel() {
 
     char str[100];
     int start, len, i, j;
-    printf("Enter a string: ");
-    scanf(" %[^\n]", str);
-    printf("Enter starting position (1-based): ");
-    scanf("%d", &start);
-    printf("Enter length of portion to delete: ");
-    scanf("%d", &len);
+    
+    while (1) {  // Loop until valid range is provided
+        printf("Enter a string: ");
+        scanf(" %[^\n]", str);
+        printf("Enter starting position (1-based): ");
+        scanf("%d", &start);
+        printf("Enter length of portion to delete: ");
+        scanf("%d", &len);
 
-    if (start > 0 && start + len - 1 <= strlen(str)) {
-        for (i = start - 1, j = start + len - 1; str[j] != '\0'; i++, j++) {
-            str[i] = str[j];
+        if (start > 0 && start + len - 1 <= strlen(str)) {
+            for (i = start - 1, j = start + len - 1; str[j] != '\0'; i++, j++) {
+                str[i] = str[j];
+            }
+            str[i] = '\0';
+            printf("Modified string: %s\n", str);
+            break;  // Exit loop when valid range is provided
+        } else {
+            printCentered("Invalid range. Please try again.", WIDTH);  // Error message
         }
-        str[i] = '\0';
-        printf("Modified string: %s\n", str);
-    } else {
-        printf("Invalid range.\n");
     }
 }
+
 
 void strComp() {
     clearScreen();
@@ -2814,7 +2850,7 @@ void strComp() {
     printf("Comparison result: %d\n", cmp);
 }
 
-//bubble sort*
+//string sorting is basically bubble sort*
 void strSort() {
     clearScreen();
     printCentered("=== Sort String ===", WIDTH);
@@ -3297,11 +3333,11 @@ void mergeArray() {
         printf("\n");
     } else if (type == 2) { // Character
         char arr1[n1], arr2[n2], merged[n1 + n2];
-        printf("Enter the characters of the first array: ");
+        printf("Enter the characters of the first array (Press Enter for each Character): ");
         for (int i = 0; i < n1; i++) {
             scanf(" %c", &arr1[i]);
         }
-        printf("Enter the characters of the second array: ");
+        printf("Enter the characters of the second array (Press Enter for each Character): ");
         for (int i = 0; i < n2; i++) {
             scanf(" %c", &arr2[i]);
         }
@@ -3321,13 +3357,13 @@ void mergeArray() {
         printf("\n");
     } else if (type == 3) { // String
         char *arr1[n1], *arr2[n2], *merged[n1 + n2];
-        printf("Enter the strings of the first array: ");
+        printf("Enter the strings of the first array (Press Enter for each String): ");
         for (int i = 0; i < n1; i++) {
             arr1[i] = malloc(100 * sizeof(char));
             fgets(arr1[i], 100, stdin);
             arr1[i][strcspn(arr1[i], "\n")] = '\0'; // Remove trailing newline
         }
-        printf("Enter the strings of the second array: ");
+        printf("Enter the strings of the second array (Press Enter for each String): ");
         for (int i = 0; i < n2; i++) {
             arr2[i] = malloc(100 * sizeof(char));
             fgets(arr2[i], 100, stdin);
