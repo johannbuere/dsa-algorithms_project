@@ -177,12 +177,20 @@ void clearInputBuffer();
 
 
 
-//func proto for arrays
+//func  for arrays
 void arrayMenu(); // Main menu for array operations
 void traverseArray(); // Traverses an array and prints its elements
 void insertArray(); // Inserts an element into an array
 void deleteArray(); // Deletes an element from an array
 void mergeArray(); // Merges two arrays into one (to be implemented)
+
+
+//func for linked list
+void linkedListMenu();
+void singularLinkedList(); 
+void doublyLinkedList();
+void circularLinkedList();
+void circularDoublyLinkedList();
 
 
 
@@ -3395,4 +3403,60 @@ void mergeArray() {
     } else {
         printf("Invalid data type.\n");
     }
+}
+
+// LinkedList Menu implementation
+void linkedListMenu() {
+    int choice;
+    do {
+        printf("\n");
+        printCentered("=== Linked List Menu ===", WIDTH);
+        printCentered("1) Singular Linked List", WIDTH);
+        printCentered("2) Doubly Linked List", WIDTH);
+        printCentered("3) Circular Linked List", WIDTH);
+        printCentered("4) Circular Doubly Linked List", WIDTH);
+        printCentered("5) Back to Main Menu", WIDTH);
+        printf("\n");
+        printf("Choose Option: ");
+        scanf("%d", &choice);
+        clearScreen();
+
+        switch (choice) {
+            case 1:
+                singularLinkedListMenu();
+                break;
+            case 2:
+                doublyLinkedListMenu();
+                break;
+            case 3:
+                circularLinkedListMenu();
+                break;
+            case 4:
+                circularDoublyLinkedListMenu();
+                break;
+            case 5:
+                clearScreen();
+                break;
+            default:
+                printCentered("Invalid choice. Please try again.", WIDTH);
+                clearInputBuffer();
+        }
+    } while (choice != 5);
+}
+
+// Placeholder functions for each choice
+void singularLinkedList() {
+    printf("Singular Linked List  - To be implemented\n");
+}
+
+void doublyLinkedList() {
+    printf("Doubly Linked List  - To be implemented\n");
+}
+
+void circularLinkedList() {
+    printf("Circular Linked List  - To be implemented\n");
+}
+
+void circularDoublyLinkedList() {
+    printf("Circular Doubly Linked List  - To be implemented\n");
 }
