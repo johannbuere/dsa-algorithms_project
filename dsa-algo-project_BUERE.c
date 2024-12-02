@@ -770,7 +770,7 @@ void printArrayMulti(void *arr, int n, const char *sortType, int iterations, int
 }
 
 void printSortedArrayMulti(void *arr, int n, int iterations, int type) {
-    printf("\nSorted Array:\n");
+    printCentered("\nSorted Array:\n", WIDTH);
     printArrayMulti(arr, n, "Final Result", iterations, type);
 }
 // Helper function to print centered text
