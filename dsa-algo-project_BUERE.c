@@ -2769,9 +2769,9 @@ void strInsert() {
     int pos, i = 0, j = 0, k = 0;
     
     printf("Enter the main string: ");
-    scanf(" %[^\n]", str1);
+    scanf(" %[^\n]", str1);  // Reads the main string, spaces are preserved
     printf("Enter the string to insert: ");
-    scanf(" %[^\n]", str2);
+    scanf(" %[^\n]", str2);  // Reads the string to insert, spaces are preserved
 
     // Loop until the user provides a valid position
     do {
@@ -2785,12 +2785,13 @@ void strInsert() {
 
     // Perform the insertion when position is valid
     while (i < pos - 1) result[k++] = str1[i++];  // Copy characters from the main string until the insertion point
-    while (str2[j] != '\0') result[k++] = str2[j++];  // Insert the second string
+    while (str2[j] != '\0') result[k++] = str2[j++];  // Insert the second string, preserving spaces
     while (str1[i] != '\0') result[k++] = str1[i++];  // Append the rest of the main string
     result[k] = '\0';  // Null-terminate the result string
 
     printf("Modified string: %s\n", result);
 }
+
 
 
 void strDel() {
