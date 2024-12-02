@@ -2387,7 +2387,9 @@ void bubbleSort() {
 // Linear Search for multiple data types (int, char, string)
 void linSearch(void *arr, int size, void *target, int type) {
     int found = 0;
+    printf("\n");
     printCentered("Performing Linear Search...\n", WIDTH);
+    printf("\n");
 
     if (type == 1) { // Integer array
         int *intArr = (int *)arr;
@@ -2430,8 +2432,9 @@ void linSearch(void *arr, int size, void *target, int type) {
 
 // Binary Search for multiple data types (int, char, string)
 void binSearch(void *arr, int size, void *target, int type) {
+    printf("\n");
     printCentered("Performing Binary Search...\n", WIDTH);
-
+    printf("\n");
     // Sort the array before searching
     binaryInsertionSort(arr, size, type);
 
