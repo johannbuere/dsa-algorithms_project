@@ -2868,7 +2868,6 @@ void arrayMenu() {
     } while (choice != 7);
 }
 
-// Traverse function
 void traverseArray() {
     printf("\n");
     printCentered("=== Traverse Array ===", WIDTH);
@@ -2877,42 +2876,68 @@ void traverseArray() {
     printf("\n");
 
     int n, type;
-    printf("Enter the number of elements: ");
-    scanf("%d", &n);
-    clearInputBuffer();
+    while (1) { // Ensure valid input for number of elements
+        printf("Enter the number of elements: ");
+        if (scanf("%d", &n) == 1 && n > 0) { // Validate positive integer input
+            clearInputBuffer();
+            break;
+        }
+        clearInputBuffer();
+        printf("Invalid input. Please enter a positive integer.\n");
+    }
 
-    printf("Choose Data Type: 1) Integer 2) Character 3) String: ");
-    scanf("%d", &type);
-    clearInputBuffer();
+    while (1) { // Ensure valid data type choice
+        printf("Choose Data Type: 1) Integer 2) Character 3) String: ");
+        if (scanf("%d", &type) == 1 && (type == 1 || type == 2 || type == 3)) {
+            clearInputBuffer();
+            break;
+        }
+        clearInputBuffer();
+        printf("Invalid input. Please choose 1 (Integer), 2 (Character), or 3 (String).\n");
+    }
 
     if (type == 1) { // Integer
         int arr[n];
         printf("Enter the elements: ");
         for (int i = 0; i < n; i++) {
-            scanf("%d", &arr[i]);
+            while (scanf("%d", &arr[i]) != 1) { // Validate each input
+                clearInputBuffer();
+                printf("Invalid input. Please enter an integer: ");
+            }
+            clearInputBuffer();
         }
         printf("Array elements: ");
         for (int i = 0; i < n; i++) {
             printf("%d ", arr[i]);
         }
         printf("\n");
+
     } else if (type == 2) { // Character
         char arr[n];
         printf("Enter the characters: ");
         for (int i = 0; i < n; i++) {
-            scanf(" %c", &arr[i]);
+            while (scanf(" %c", &arr[i]) != 1) { // Validate each input
+                clearInputBuffer();
+                printf("Invalid input. Please enter a character: ");
+            }
+            clearInputBuffer();
         }
         printf("Array elements: ");
         for (int i = 0; i < n; i++) {
             printf("%c ", arr[i]);
         }
         printf("\n");
+
     } else if (type == 3) { // String
         char *arr[n];
-        printf("Enter the strings: ");
+        printf("Enter the strings (Press Enter for Each String): ");
         for (int i = 0; i < n; i++) {
-            arr[i] = malloc(100 * sizeof(char));
-            fgets(arr[i], 100, stdin);
+            arr[i] = malloc(100 * sizeof(char)); // Allocate memory for each string
+            if (!arr[i]) { // Check allocation success
+                printf("Memory allocation failed. Exiting.\n");
+                exit(1);
+            }
+            fgets(arr[i], 100, stdin); // Read the string input
             arr[i][strcspn(arr[i], "\n")] = '\0'; // Remove trailing newline
         }
         printf("Array elements: ");
@@ -2920,6 +2945,7 @@ void traverseArray() {
             printf("%s ", arr[i]);
         }
         printf("\n");
+
         for (int i = 0; i < n; i++) { // Free memory
             free(arr[i]);
         }
