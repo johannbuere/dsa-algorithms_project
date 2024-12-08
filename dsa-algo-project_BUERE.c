@@ -73,6 +73,39 @@ typedef struct DoublyNode {
     struct DoublyNode *prev;
 } DoublyNode;
 
+
+// StackNode struct
+typedef struct StackNode {
+    void *data;
+    struct StackNode *next;
+} StackNode;
+
+// Stack struct
+typedef struct Stack {
+    StackNode *top;
+    int size;
+    int capacity;
+} Stack;
+
+// Stack Function prototypes
+void stackMenu();
+void push(StackNode **top, DataType type, int *size); 
+void pop(StackNode **top, DataType type, int *size); 
+void peek(Stack *stack, DataType type);
+void resetStack(StackNode **top, int *size); 
+int isEmpty(Stack *stack);
+int isFull(Stack *stack);
+void printStack(StackNode *top, DataType type); 
+
+
+// QUEUE Function proto
+void queueMenu();
+void enqueue(StackNode **front, StackNode **rear, DataType type, int *size);
+void dequeue(StackNode **front, StackNode **rear, DataType type, int *size);
+void peekQueue(StackNode *front, DataType type);
+void resetQueue(StackNode **front, StackNode **rear, int *size);
+void printQueue(StackNode *front, DataType type);
+
 //terminal commands
 void setTerminalSize();
 void clearScreen();
@@ -303,7 +336,7 @@ void clearScreen() {
 void mainMenu(int *choice) {
     printf("\n");
     printCentered("=== Main Menu ===", WIDTH);
-    printCentered("1) Linear DS [2/5 Done]", WIDTH);
+    printCentered("1) Linear DS", WIDTH);
     printCentered("2) Non-Linear DS [Not Yet]", WIDTH);
     printCentered("3) Strings", WIDTH);
     printCentered("4) Sorting", WIDTH);
@@ -335,14 +368,14 @@ void linearDSMenu() {
                 arrayMenu(); 
                 break;
             case 2:
-                linkedListMenu(); // testing
+                linkedListMenu();
                 break;
-            /*case 3:
-                stackMenu(); // To be made
+            case 3:
+                stackMenu(); 
                 break;
             case 4:
-                queueMenu(); // To be made
-                break;*/
+                queueMenu();
+                break;
             case 5:
                     clearScreen();
                 break;
@@ -4003,4 +4036,467 @@ void printList(void *head, DataType type, int isDoubly, int isCircular) {
 
         printf("\n");
     }
+}
+
+void stackMenu() {
+    StackNode *top = NULL; // Initialize the stack as a linked list
+    int size = 0, capacity = 0, isFixedSize = 0;
+    DataType type;
+    int choice;
+
+    // Ask user if they want a fixed or dynamic size
+    printf("Do you want a fixed-size stack?\n");
+    printf("1) Yes\n");
+    printf("2) No (Dynamic size)\n");
+    printf("Choose: ");
+    scanf("%d", &isFixedSize);
+    clearInputBuffer();
+
+    if (isFixedSize == 1) {
+        printf("Enter the maximum capacity of the stack: ");
+        scanf("%d", &capacity);
+    } else {
+        printf("Stack will be dynamic in size.\n");
+    }
+
+    // Ask user for data type
+    printf("Choose data type:\n");
+    printf("1) Integer\n");
+    printf("2) Character\n");
+    printf("3) String\n");
+    printf("Choose: ");
+    scanf("%d", &choice);
+
+    switch (choice) {
+        case 1:
+            type = DT_INT;
+            break;
+        case 2:
+            type = DT_CHAR;
+            break;
+        case 3:
+            type = DT_STRING;
+            break;
+        default:
+            printf("Invalid choice. Defaulting to Integer.\n");
+            type = DT_INT;
+    }
+
+    do {
+        // Print the stack at the start of the menu
+        printf("\n=== Current Stack ===\n");
+        printStack(top, type);
+
+        printf("\n=== Stack Menu ===\n");
+        printf("1) Push\n");
+        printf("2) Pop\n");
+        printf("3) Peek\n");
+        printf("4) Reset Stack\n");
+        printf("5) Exit\n");
+        printf("Choose Option: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                if (isFixedSize && size >= capacity) {
+                    printf("Stack is full. Cannot push.\n");
+                } else {
+                    push(&top, type, &size);
+                }
+                break;
+            case 2:
+                pop(&top, type, &size);
+                break;
+            case 3:
+                peek(top, type);
+                break;
+            case 4:
+                resetStack(&top, &size);
+                printf("Stack has been reset.\n");
+                break;
+            case 5:
+                printf("Exiting Stack Menu.\n");
+                clearScreen();
+                break;
+            default:
+                printf("Invalid choice. Please try again.\n");
+        }
+    } while (choice != 5);
+
+    // Ensure to clean up the stack at the end
+    resetStack(&top, &size);
+}
+
+
+void push(StackNode **top, DataType type, int *size) {
+    void *data = NULL;
+    int valid = 0;
+
+    // Validate input based on the selected data type
+    while (!valid) {
+        if (type == DT_INT) {
+            data = malloc(sizeof(int));
+            printf("Enter an integer: ");
+            if (scanf("%d", (int *)data) == 1) {
+                valid = 1;
+            } else {
+                printf("Invalid input. Please enter an integer.\n");
+                clearInputBuffer();
+                free(data);
+                data = NULL;
+            }
+        } else if (type == DT_CHAR) {
+            data = malloc(sizeof(char));
+            printf("Enter a character: ");
+            if (scanf(" %c", (char *)data) == 1 && isalpha(*(char *)data)) {
+                valid = 1;
+            } else {
+                printf("Invalid input. Please enter a single character (a-z, A-Z).\n");
+                clearInputBuffer();
+                free(data);
+                data = NULL;
+            }
+        } else if (type == DT_STRING) {
+            data = malloc(50);
+            printf("Enter a string: ");
+            if (scanf("%s", (char *)data) == 1) {
+                valid = 1;
+            } else {
+                printf("Invalid input. Please enter a valid string.\n");
+                clearInputBuffer();
+                free(data);
+                data = NULL;
+            }
+        }
+    }
+
+    // Push the validated data onto the stack
+    StackNode *newNode = (StackNode *)malloc(sizeof(StackNode));
+    newNode->data = data;
+    newNode->next = *top;
+    *top = newNode;
+    (*size)++;
+
+    printf("Pushed: ");
+    if (type == DT_INT) {
+        printf("%d\n", *(int *)data);
+    } else if (type == DT_CHAR) {
+        printf("%c\n", *(char *)data);
+    } else {
+        printf("%s\n", (char *)data);
+    }
+}
+
+void resetStack(StackNode **top, int *size) {
+    while (*top != NULL) {
+        StackNode *temp = *top;
+        *top = (*top)->next;
+        free(temp->data);
+        free(temp);
+    }
+    *size = 0;
+}
+void pop(StackNode **top, DataType type, int *size) {
+    if (*top == NULL) {
+        printf("Stack is empty. Cannot pop.\n");
+        return;
+    }
+
+    StackNode *temp = *top;
+    *top = (*top)->next;
+    printf("Popped: ");
+    if (type == DT_INT) {
+        printf("%d\n", *(int *)temp->data);
+    } else if (type == DT_CHAR) {
+        printf("%c\n", *(char *)temp->data);
+    } else {
+        printf("%s\n", (char *)temp->data);
+    }
+    free(temp->data);
+    free(temp);
+    (*size)--;
+}
+
+
+void peek(Stack *stack, DataType type) {
+    if (isEmpty(stack)) {
+        printf("Stack is empty. Nothing to peek.\n");
+        return;
+    }
+
+    printf("Top of stack: ");
+    if (type == DT_INT) {
+        printf("%d\n", *(int *)stack->top->data);
+    } else if (type == DT_CHAR) {
+        printf("%c\n", *(char *)stack->top->data);
+    } else {
+        printf("%s\n", (char *)stack->top->data);
+    }
+}
+
+int isEmpty(Stack *stack) {
+    return stack->size == 0;
+}
+
+int isFull(Stack *stack) {
+    return stack->size >= stack->capacity;
+}
+
+void printStack(StackNode *top, DataType type) {
+    if (top == NULL) {
+        printf("Stack is empty.\n");
+        return;
+    }
+
+    printf("\nVisual Representation of Stack:\n");
+    StackNode *current = top;
+    printf("    ----\n");
+    while (current != NULL) {
+        if (type == DT_INT) {
+            printf("   | %2d |\n", *(int *)current->data);
+        } else if (type == DT_CHAR) {
+            printf("   |  %c |\n", *(char *)current->data);
+        } else {
+            printf("   | %s |\n", (char *)current->data);
+        }
+        printf("    ----\n");
+        current = current->next;
+    }
+    printf("\n");
+}
+
+
+void queueMenu() {
+    StackNode *front = NULL, *rear = NULL; // Initialize the queue as a linked list
+    int size = 0, capacity = 0, isFixedSize = 0;
+    DataType type;
+    int choice;
+
+    // Ask user if they want a fixed or dynamic size
+    printf("Do you want a fixed-size queue?\n");
+    printf("1) Yes\n");
+    printf("2) No (Dynamic size)\n");
+    printf("Choose: ");
+    scanf("%d", &isFixedSize);
+    clearInputBuffer();
+
+    if (isFixedSize == 1) {
+        printf("Enter the maximum capacity of the queue: ");
+        scanf("%d", &capacity);
+    } else {
+        printf("Queue will be dynamic in size.\n");
+    }
+
+    // Ask user for data type
+    printf("Choose data type:\n");
+    printf("1) Integer\n");
+    printf("2) Character\n");
+    printf("3) String\n");
+    printf("Choose: ");
+    scanf("%d", &choice);
+
+    switch (choice) {
+        case 1:
+            type = DT_INT;
+            break;
+        case 2:
+            type = DT_CHAR;
+            break;
+        case 3:
+            type = DT_STRING;
+            break;
+        default:
+            printf("Invalid choice. Defaulting to Integer.\n");
+            type = DT_INT;
+    }
+
+    do {
+        // Print the queue at the start of the menu
+        printf("\n=== Current Queue ===\n");
+        printQueue(front, type);
+
+        printf("\n=== Queue Menu ===\n");
+        printf("1) Enqueue\n");
+        printf("2) Dequeue\n");
+        printf("3) Peek\n");
+        printf("4) Reset Queue\n");
+        printf("5) Exit\n");
+        printf("Choose Option: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                if (isFixedSize && size >= capacity) {
+                    printf("Queue is full. Cannot enqueue.\n");
+                } else {
+                    enqueue(&front, &rear, type, &size);
+                }
+                break;
+            case 2:
+                dequeue(&front, &rear, type, &size);
+                break;
+            case 3:
+                peekQueue(front, type);
+                break;
+            case 4:
+                resetQueue(&front, &rear, &size);
+                printf("Queue has been reset.\n");
+                break;
+            case 5:
+                printf("Exiting Queue Menu.\n");
+                clearScreen();
+                break;
+            default:
+                printf("Invalid choice. Please try again.\n");
+        }
+    } while (choice != 5);
+
+    // Ensure to clean up the queue at the end
+    resetQueue(&front, &rear, &size);
+}
+
+void enqueue(StackNode **front, StackNode **rear, DataType type, int *size) {
+    void *data = NULL;
+    int valid = 0;
+
+    // Validate input based on the selected data type
+    while (!valid) {
+        if (type == DT_INT) {
+            data = malloc(sizeof(int));
+            printf("Enter an integer: ");
+            if (scanf("%d", (int *)data) == 1) {
+                valid = 1;
+            } else {
+                printf("Invalid input. Please enter an integer.\n");
+                clearInputBuffer();
+                free(data);
+                data = NULL;
+            }
+        } else if (type == DT_CHAR) {
+            data = malloc(sizeof(char));
+            printf("Enter a character: ");
+            if (scanf(" %c", (char *)data) == 1 && isalpha(*(char *)data)) {
+                valid = 1;
+            } else {
+                printf("Invalid input. Please enter a single character (a-z, A-Z).\n");
+                clearInputBuffer();
+                free(data);
+                data = NULL;
+            }
+        } else if (type == DT_STRING) {
+            data = malloc(50);
+            printf("Enter a string: ");
+            if (scanf("%s", (char *)data) == 1) {
+                valid = 1;
+            } else {
+                printf("Invalid input. Please enter a valid string.\n");
+                clearInputBuffer();
+                free(data);
+                data = NULL;
+            }
+        }
+    }
+
+    // Enqueue the validated data
+    StackNode *newNode = (StackNode *)malloc(sizeof(StackNode));
+    newNode->data = data;
+    newNode->next = NULL;
+
+    if (*rear == NULL) {
+        // Queue is empty
+        *front = *rear = newNode;
+    } else {
+        // Add to the end of the queue
+        (*rear)->next = newNode;
+        *rear = newNode;
+    }
+
+    (*size)++;
+    printf("Enqueued: ");
+    if (type == DT_INT) {
+        printf("%d\n", *(int *)data);
+    } else if (type == DT_CHAR) {
+        printf("%c\n", *(char *)data);
+    } else {
+        printf("%s\n", (char *)data);
+    }
+}
+
+void dequeue(StackNode **front, StackNode **rear, DataType type, int *size) {
+    if (*front == NULL) {
+        printf("Queue is empty. Cannot dequeue.\n");
+        return;
+    }
+
+    StackNode *temp = *front;
+    *front = (*front)->next;
+
+    // If front becomes NULL, set rear to NULL as well
+    if (*front == NULL) {
+        *rear = NULL;
+    }
+
+    printf("Dequeued: ");
+    if (type == DT_INT) {
+        printf("%d\n", *(int *)temp->data);
+    } else if (type == DT_CHAR) {
+        printf("%c\n", *(char *)temp->data);
+    } else {
+        printf("%s\n", (char *)temp->data);
+    }
+
+    free(temp->data);
+    free(temp);
+    (*size)--;
+}
+
+void peekQueue(StackNode *front, DataType type) {
+    if (front == NULL) {
+        printf("Queue is empty. Nothing to peek.\n");
+        return;
+    }
+
+    printf("Front of queue: ");
+    if (type == DT_INT) {
+        printf("%d\n", *(int *)front->data);
+    } else if (type == DT_CHAR) {
+        printf("%c\n", *(char *)front->data);
+    } else {
+        printf("%s\n", (char *)front->data);
+    }
+}
+
+void resetQueue(StackNode **front, StackNode **rear, int *size) {
+    while (*front != NULL) {
+        StackNode *temp = *front;
+        *front = (*front)->next;
+        free(temp->data);
+        free(temp);
+    }
+
+    *rear = NULL;
+    *size = 0;
+}
+
+void printQueue(StackNode *front, DataType type) {
+    if (front == NULL) {
+        printf("Queue is empty.\n");
+        return;
+    }
+
+    printf("\nVisual Representation of Queue:\n");
+    StackNode *current = front;
+    printf("    ----\n");
+    while (current != NULL) {
+        if (type == DT_INT) {
+            printf("   | %2d |\n", *(int *)current->data);
+        } else if (type == DT_CHAR) {
+            printf("   |  %c |\n", *(char *)current->data);
+        } else {
+            printf("   | %s |\n", (char *)current->data);
+        }
+        printf("    ----\n");
+        current = current->next;
+    }
+    printf("\n");
 }
