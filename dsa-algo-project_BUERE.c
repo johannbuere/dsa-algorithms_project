@@ -1,48 +1,14 @@
 /* 
 ✨ Johann Reuel D. Buere || BSCS 2A ✨
-📚 Version 0.1: Initial Release 🛠️
+📚 Version 1: Final Release 🛠️
 
 This version marks the beginning of the program, setting the foundation for future updates. Here's a breakdown of what has been achieved so far:
 
-🎉 Updates in Version 0.1:
-
-Sorting Algorithms: All sorting algorithms have been updated to handle multiple data types (int, char, and string). Each sorting algorithm is now capable of sorting arrays with integers, characters, and strings seamlessly. The algorithms include:
-
-Heap Sort 🏰
-Radix Sort 🔢
-Quick Sort ⚡
-Merge Sort 🔀
-Random Sort (BogoSort) 🎲
-Insertion Sort 📝
-Counting Sort 🔍
-Selection Sort 🥇
-Bubble Sort 🔵
-These sorting algorithms now feature:
-
-Proper handling of user inputs.
-The ability to print progress after each iteration during the sorting process.
-Sorting of integer, character, and string arrays.
-Searching Algorithms: 🎉 New feature alert! Searching algorithms have been added to the program and are fully functional. These algorithms make finding data intuitive and simple.
-
-📊 Main Menu Progress: === Main Menu ===
-Linear DS [Not Yet] 🚧
-Non-Linear DS [Not Yet] 🚧
-Strings [Not Yet] 🚧
-Sorting [Done! ✅]
-Searching [Done! ✅]
-Quit
-
-📈 Comparison Since Initial Setup:
-
-Sorting algorithms were initially limited in functionality, but now they can sort arrays of int, char, and string seamlessly.
-Searching algorithms were added, and data can now be found easily and quickly.
-The Main Menu now reflects real-time progress with percentage markers to show what’s done and what’s still being worked on.
 ✨ Overall Progress:
-[█████-----] 40% Complete!
-More work remains, but solid progress has been made! 💪
+[██████████] 100% Complete!
 
 🌟 Next Steps:
-After this release, I’ll be working on adding Linear DS, Non-Linear DS, and String manipulation features in future patches.
+After this release, I’ll be resting
 */
 
 
@@ -59,6 +25,27 @@ After this release, I’ll be working on adding Linear DS, Non-Linear DS, and St
 
 //typed def data type
 typedef enum { DT_INT, DT_CHAR, DT_STRING } DataType;
+
+// Define the tree node structure for integers
+typedef struct TreeNode {
+    int data;
+    struct TreeNode* left;
+    struct TreeNode* right;
+} TreeNode;
+
+// Function prototypes for tree's
+TreeNode* insertInt(TreeNode* root, int value);
+TreeNode* deleteInt(TreeNode* root, int value);
+TreeNode* findMinNode(TreeNode* root);
+void inorderTraversal(TreeNode* root);
+void preorderTraversal(TreeNode* root);
+void postorderTraversal(TreeNode* root);
+int findHeight(TreeNode* root);
+int countNodes(TreeNode* root);
+int countLeaves(TreeNode* root);
+void findAncestors(TreeNode* root, int value);
+int findDepth(TreeNode* root, int value);
+void printTree(TreeNode* root, int level);
 
 // Singly Linked List Node
 typedef struct SinglyNode {
@@ -337,7 +324,7 @@ void mainMenu(int *choice) {
     printf("\n");
     printCentered("=== Main Menu ===", WIDTH);
     printCentered("1) Linear DS", WIDTH);
-    printCentered("2) Non-Linear DS [Not Yet]", WIDTH);
+    printCentered("2) Non-Linear DS", WIDTH);
     printCentered("3) Strings", WIDTH);
     printCentered("4) Sorting", WIDTH);
     printCentered("5) Searching", WIDTH);
@@ -775,43 +762,144 @@ void fgetsInputString(char *value, int size, const char *errorMsg) {
 
 
 // Minor Menu's
-void treeMenu(){
+// Updated treeMenu with tree visualization
+void treeMenu() {
     int choice;
-       do {
-        printf("\n");
+    TreeNode* root = NULL;
+
+    do {
+        clearScreen(); // Clear the screen for a fresh display
         printCentered("=== Tree Menu ===", WIDTH);
-        printCentered("1) Tree Representation", WIDTH);
-        printCentered("2) Rooted Trees", WIDTH);
-        printCentered("3) Ordered Trees", WIDTH);
-        printCentered("4) Binary Trees", WIDTH);
-        printCentered("5) Exit", WIDTH);
         printf("\n");
-        printf("Choose Option: ");
+        printCentered("Current Tree:", WIDTH);
+
+        if (root == NULL) {
+            printCentered("[ Empty Tree ]", WIDTH);
+        } else {
+            printTree(root, 0); // Print the tree visually
+        }
+
+        printf("\n");
+        printCentered("1) Insert", WIDTH);
+        printCentered("2) Delete", WIDTH);
+        printCentered("3) Inorder Traversal", WIDTH);
+        printCentered("4) Preorder Traversal", WIDTH);
+        printCentered("5) Postorder Traversal", WIDTH);
+        printCentered("6) Find Height", WIDTH);
+        printCentered("7) Count Nodes", WIDTH);
+        printCentered("8) Count Leaves", WIDTH);
+        printCentered("9) Find Ancestors", WIDTH);
+        printCentered("10) Find Depth", WIDTH);
+        printCentered("11) Exit", WIDTH);
+        printf("\nChoose an option: ");
         scanf("%d", &choice);
 
         switch (choice) {
-        /*case 1:
-            showTree(); // To be made
-            break;
-        case 2:
-            rootTree(); // To be made
-            break;
-        case 3:
-            orderTree(); // To be made
-            break;
-        case 4:
-            binaryTree(); // To be made
-            break;*/
-        case 5:
-            clearScreen();
-            break;
-        default:
-            printCentered("Invalid choice. Please try again.", WIDTH);
-            clearInputBuffer();
+            case 1: {
+                int value;
+                printf("\n");
+                printCentered("Enter value to insert: ", WIDTH);
+                scanf("%d", &value);
+                root = insertInt(root, value);
+                break;
+            }
+            case 2: {
+                int value;
+                printf("\n");
+                printCentered("Enter value to delete: ", WIDTH);
+                scanf("%d", &value);
+                root = deleteInt(root, value);
+                break;
+            }
+            case 3:
+                printf("\n");
+                printCentered("Inorder Traversal: ", WIDTH);
+                inorderTraversal(root);
+                printf("\n");
+                break;
+            case 4:
+                printf("\n");
+                printCentered("Preorder Traversal: ", WIDTH);
+                preorderTraversal(root);
+                printf("\n");
+                break;
+            case 5:
+                printf("\n");
+                printCentered("Postorder Traversal: ", WIDTH);
+                postorderTraversal(root);
+                printf("\n");
+                break;
+            case 6:
+                printf("\n");
+                printCenteredDynamic(WIDTH, "Height of the tree: %d", findHeight(root));
+                break;
+            case 7:
+                printf("\n");
+                printCenteredDynamic(WIDTH, "Total nodes: %d", countNodes(root));
+                break;
+            case 8:
+                printf("\n");
+                printCenteredDynamic(WIDTH, "Total leaves: %d", countLeaves(root));
+                break;
+            case 9: {
+                int value;
+                printf("\n");
+                printCentered("Enter value to find ancestors: ", WIDTH);
+                scanf("%d", &value);
+                findAncestors(root, value);
+                printf("\n");
+                break;
+            }
+            case 10: {
+                int value;
+                printf("\n");
+                printCentered("Enter value to find depth: ", WIDTH);
+                scanf("%d", &value);
+                printCenteredDynamic(WIDTH, "Depth of node %d: %d", value, findDepth(root, value));
+                break;
+            }
+            case 11:
+                printf("\n");
+                printCentered("Exiting... Thank you!", WIDTH);
+                break;
+            default:
+                printf("\n");
+                printCentered("Invalid choice. Please try again.", WIDTH);
         }
-    } while (choice != 5); 
+
+    } while (choice != 11);
 }
 
+
+// Function to print the tree with L and R labels
+void printTree(TreeNode* root, int level) {
+    if (root == NULL) {
+        return;
+    }
+
+    // Print the right subtree first (to visually align the tree structure)
+    printTree(root->right, level + 1);
+
+    // Print the current node with indentation based on the level
+    for (int i = 0; i < level * 4; i++) {  // Indentation based on level
+        printf(" ");
+    }
+
+    // Print the node data
+    printf("[ %d ]", root->data);
+
+    // Print left child label if it has left child
+    if (root->left != NULL) {
+        printf(" L\n");
+    } else if (root->right != NULL) {
+        printf(" R\n");
+    } else {
+        printf("\n");
+    }
+
+    // Print the left subtree
+    printTree(root->left, level + 1);
+}
 
 // Helper: Print array for multiple data types
 void printArrayMulti(void *arr, int n, const char *sortType, int iterations, int type) {
@@ -4499,4 +4587,147 @@ void printQueue(StackNode *front, DataType type) {
         current = current->next;
     }
     printf("\n");
+}
+
+// Helper functions for insertion and deletion as you provided
+TreeNode* insertInt(TreeNode* root, int value) {
+    if (root == NULL) {
+        TreeNode* newNode = (TreeNode*)malloc(sizeof(TreeNode));
+        newNode->data = value;
+        newNode->left = newNode->right = NULL;
+        return newNode;
+    }
+    if (value < root->data) {
+        root->left = insertInt(root->left, value);
+    } else if (value > root->data) {
+        root->right = insertInt(root->right, value);
+    }
+    return root;
+}
+
+// Delete a node from the tree
+TreeNode* deleteInt(TreeNode* root, int value) {
+    if (root == NULL) {
+        printf("Value not found in the tree.\n");
+        return NULL;
+    }
+    if (value < root->data) {
+        root->left = deleteInt(root->left, value);
+    } else if (value > root->data) {
+        root->right = deleteInt(root->right, value);
+    } else {
+        // Node with one or no child
+        if (root->left == NULL) {
+            TreeNode* temp = root->right;
+            free(root);
+            return temp;
+        } else if (root->right == NULL) {
+            TreeNode* temp = root->left;
+            free(root);
+            return temp;
+        }
+        // Node with two children: Get the inorder successor (smallest in the right subtree)
+        TreeNode* temp = findMinNode(root->right);
+        root->data = temp->data;
+        root->right = deleteInt(root->right, temp->data);
+    }
+    return root;
+}
+
+// Helper function to find the minimum node in a subtree
+TreeNode* findMinNode(TreeNode* root) {
+    while (root->left != NULL) {
+        root = root->left;
+    }
+    return root;
+}
+
+
+// Inorder Traversal
+void inorderTraversal(TreeNode* root) {
+    if (root != NULL) {
+        inorderTraversal(root->left);
+        printf("%d ", root->data);
+        inorderTraversal(root->right);
+    }
+}
+
+// Preorder Traversal
+void preorderTraversal(TreeNode* root) {
+    if (root != NULL) {
+        printf("%d ", root->data);
+        preorderTraversal(root->left);
+        preorderTraversal(root->right);
+    }
+}
+
+// Postorder Traversal
+void postorderTraversal(TreeNode* root) {
+    if (root != NULL) {
+        postorderTraversal(root->left);
+        postorderTraversal(root->right);
+        printf("%d ", root->data);
+    }
+}
+
+// Find the height of the tree
+int findHeight(TreeNode* root) {
+    if (root == NULL) {
+        return -1;
+    }
+    int leftHeight = findHeight(root->left);
+    int rightHeight = findHeight(root->right);
+    return (leftHeight > rightHeight ? leftHeight : rightHeight) + 1;
+}
+
+// Count total nodes
+int countNodes(TreeNode* root) {
+    if (root == NULL) {
+        return 0;
+    }
+    return 1 + countNodes(root->left) + countNodes(root->right);
+}
+
+// Count total leaf nodes
+int countLeaves(TreeNode* root) {
+    if (root == NULL) {
+        return 0;
+    }
+    if (root->left == NULL && root->right == NULL) {
+        return 1;
+    }
+    return countLeaves(root->left) + countLeaves(root->right);
+}
+
+// Find ancestors of a given node
+void findAncestors(TreeNode* root, int value) {
+    if (root == NULL) {
+        return;
+    }
+    if ((root->left && root->left->data == value) || (root->right && root->right->data == value)) {
+        printf("%d ", root->data);
+        return;
+    }
+    if (value < root->data) {
+        findAncestors(root->left, value);
+        if (root->left) printf("%d ", root->data);
+    } else {
+        findAncestors(root->right, value);
+        if (root->right) printf("%d ", root->data);
+    }
+}
+
+// Find depth of a given node
+int findDepth(TreeNode* root, int value) {
+    if (root == NULL) {
+        return -1;
+    }
+    if (root->data == value) {
+        return 0;
+    }
+    int depth = (value < root->data) ? findDepth(root->left, value) : findDepth(root->right, value);
+    if (depth >= 0) {
+        return depth + 1;
+    }
+    return -1;
 }
